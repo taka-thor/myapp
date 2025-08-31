@@ -71,11 +71,8 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 ### MVPリリース
  - グループ通話機能
- - 部屋トピック自動更新機能
  - セキュリティ関連（HTTPS通信）
- - PWA
  - ニックネーム選択機能
- - アイコン選択機能
 
 
 ### 本リリース
@@ -87,6 +84,9 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 - フィードバック機能
 - 友たち紹介機能
 - ホーム画面アプリ追加の操作ガイド表示
+- アイコン選択機能
+- 部屋トピック自動更新機能
+- PWA
 
 <br>
 
@@ -163,6 +163,5 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 - **DB**
   - ` SQlite`
 
-
 ## 画面遷移図
-　　https://i.gyazo.com/126fa62040bfc33622c59b71d1b8fb4e.png
+　　https://www.figma.com/design/3i7eU7Nla26IkW4hCed57u/%E3%82%A2%E3%83%97%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E7%94%BB%E9%9D%A2?node-id=37-54&p=f&t=s5gPAgQKy4ryVrW9-0
