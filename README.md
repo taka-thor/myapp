@@ -163,6 +163,5 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 - **DB**
   - ` SQlite`
 
-
 ## 画面遷移図
 　　https://i.gyazo.com/126fa62040bfc33622c59b71d1b8fb4e.png
