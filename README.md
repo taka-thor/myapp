@@ -102,8 +102,9 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 <br>
 
-- **P2P通話（メッシュ）**(シグナリング用)
-  - `Action cable`
+- **P2P通話（メッシュ）**
+  - `Action cable`(シグナリング用)
+  - `tricle ICE`
 
 <br>
 
