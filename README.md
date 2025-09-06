@@ -67,7 +67,6 @@ Q5. ひとこと（任意）
 https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content=DAGvTB2sPF4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ## 機能候補
-現状作ろうと思っている機能、案段階の機能をしっかりと固まっていなくても構わないのでMVPリリース時に作っていたいもの、本リリースまでに作っていたいものをそれぞれ分けて教えてください。
 
 ### MVPリリース
  - グループ通話機能
@@ -92,8 +91,6 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 
 ## 機能の実装方針予定
-
-一般的なCRUD以外の実装予定の機能について、それぞれどのようなイメージ（使用するAPIやgemなど）で実装する予定なのか、現状考えているもので良いので教えて下さい。
 
 <br>
 
