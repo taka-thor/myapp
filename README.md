@@ -67,7 +67,6 @@ Q5. ひとこと（任意）
 https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content=DAGvTB2sPF4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ## 機能候補
-現状作ろうと思っている機能、案段階の機能をしっかりと固まっていなくても構わないのでMVPリリース時に作っていたいもの、本リリースまでに作っていたいものをそれぞれ分けて教えてください。
 
 ### MVPリリース
  - グループ通話機能
@@ -92,8 +91,6 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 
 ## 機能の実装方針予定
-
-一般的なCRUD以外の実装予定の機能について、それぞれどのようなイメージ（使用するAPIやgemなど）で実装する予定なのか、現状考えているもので良いので教えて下さい。
 
 <br>
 
@@ -155,7 +152,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 - **サーバー等**
   - ` AWS EC2（OS:Ubuntu、coturnを常時稼働）`
 　　　 coturnを用いてSTUN/TURNサーバーを運用(Turn fallback)
-      (最終的にはDockerでrailsなどをコンテナ化し、EC2にデプロイする予定)
+    (最終的にはDockerでrailsなどをコンテナ化し、EC2にデプロイする予定)
  
   -`Nginx(リバースプロキシ)`
 <br>
@@ -165,4 +162,5 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 ## 画面遷移図
 　　https://www.figma.com/design/3i7eU7Nla26IkW4hCed57u/%E3%82%A2%E3%83%97%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E7%94%BB%E9%9D%A2?node-id=37-54&p=f&t=s5gPAgQKy4ryVrW9-0
+
 
