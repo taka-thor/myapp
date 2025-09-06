@@ -166,5 +166,3 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 ## 画面遷移図
 　　https://www.figma.com/design/3i7eU7Nla26IkW4hCed57u/%E3%82%A2%E3%83%97%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E7%94%BB%E9%9D%A2?node-id=37-54&p=f&t=s5gPAgQKy4ryVrW9-0
 
-## ER図
-　https://gyazo.com/6710a1c2ce3a7cc64ffe966a2e74a788
