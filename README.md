@@ -155,7 +155,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 - **サーバー等**
   - ` AWS EC2（OS:Ubuntu、coturnを常時稼働）`
 　　　 coturnを用いてSTUN/TURNサーバーを運用(Turn fallback)
-      (最終的にはDockerでrailsなどをコンテナ化し、EC2にデプロイする予定)
+    (最終的にはDockerでrailsなどをコンテナ化し、EC2にデプロイする予定)
  
   -`Nginx(リバースプロキシ)`
 <br>
