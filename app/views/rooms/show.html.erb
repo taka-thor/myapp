@@ -1,0 +1,136 @@
+<div style="max-width:720px;margin:24px auto;font-family:sans-serif">
+  <h2>Room: <%= @room_id %></h2>
+  <p>Client: <%= @client_id %></p>
+  <div style="display:flex;gap:8px;margin:8px 0;">
+    <button id="btnJoin">Join (get mic)</button>
+    <button id="btnCall">Call</button>
+    <button id="btnHangup">Hangup</button>
+  </div>
+  <audio id="localAudio" autoplay muted></audio>
+  <audio id="remoteAudio" autoplay></audio>
+  <pre id="log" style="background:#111;color:#ddd;padding:10px;max-height:220px;overflow:auto"></pre>
+</div>
+
+<script type="module">
+  import { subscribeRoom } from "/assets/channels/room_channel.js";
+
+  // ===== env =====
+  const ROOM_ID = "<%= @room_id %>";
+  const CLIENT_ID = "<%= @client_id %>";
+
+  // TURN をあなたの EC2/coturn に合わせて設定
+  const TURN_HOST = "turn.turn-kt.com";
+  const TURN_USER = "aaa";
+  const TURN_PASS = "bbb";
+
+  const iceServers = [
+    { urls: [`stun:${TURN_HOST}:3478`] },
+    { urls: [`turn:${TURN_HOST}:3478?transport=udp`], username: TURN_USER, credential: TURN_PASS },
+    { urls: [`turn:${TURN_HOST}:3478?transport=tcp`], username: TURN_USER, credential: TURN_PASS },
+    { urls: [`turns:${TURN_HOST}:5349?transport=tcp`], username: TURN_USER, credential: TURN_PASS },
+  ];
+
+  // ===== DOM =====
+  const $log = document.getElementById("log");
+  const $local = document.getElementById("localAudio");
+  const $remote = document.getElementById("remoteAudio");
+  const $join = document.getElementById("btnJoin");
+  const $call = document.getElementById("btnCall");
+  const $hang = document.getElementById("btnHangup");
+
+  const log = (...a) => { $log.textContent += a.join(" ") + "\n"; $log.scrollTop = $log.scrollHeight; };
+
+  // ===== State =====
+  let pc, localStream, remoteStream;
+  const sub = subscribeRoom(ROOM_ID, { onSignal });
+
+  function send(msg) { sub.sendSignal({ room: ROOM_ID, from: CLIENT_ID, ...msg }); }
+
+  function newPC() {
+    pc = new RTCPeerConnection({ iceServers, bundlePolicy: "balanced" });
+
+    pc.addEventListener("icecandidate", (e) => {
+      if (e.candidate) send({ type: "candidate", candidate: e.candidate });
+    });
+    pc.addEventListener("connectionstatechange", () => log("connection:", pc.connectionState));
+    pc.addEventListener("iceconnectionstatechange", () => log("ice:", pc.iceConnectionState));
+
+    remoteStream = new MediaStream();
+    $remote.srcObject = remoteStream;
+    pc.addEventListener("track", (ev) => {
+      remoteStream.addTrack(ev.track);
+      $remote.play().catch(() => log("iOS対策: 画面を一度タップして再生許可"));
+    });
+
+    if (localStream) localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+    return pc;
+  }
+
+  async function ensureLocalStream() {
+    if (!localStream) {
+      localStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        video: false
+      });
+      $local.srcObject = localStream;
+      $local.muted = true;
+    }
+  }
+
+  // ===== Handlers =====
+  async function onSignal(msg) {
+    if (msg.from === CLIENT_ID) return;
+
+    switch (msg.type) {
+      case "offer": {
+        if (!pc) newPC();
+        await pc.setRemoteDescription(msg.sdp);
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        send({ type: "answer", sdp: pc.localDescription });
+        log("← offer 受信 → answer 送信");
+        break;
+      }
+      case "answer": {
+        if (!pc) return;
+        await pc.setRemoteDescription(msg.sdp);
+        log("← answer 受信：接続確立を待機");
+        break;
+      }
+      case "candidate": {
+        if (!pc) return;
+        try { await pc.addIceCandidate(msg.candidate); } catch(e) { log("ICE add err:", e.message); }
+        break;
+      }
+    }
+  }
+
+  // ===== UI actions =====
+  $join.addEventListener("click", async () => {
+    try {
+      await ensureLocalStream();
+      if (!pc) newPC();
+      log("Join: mic OK / RTCPeerConnection ready");
+    } catch (e) { log("getUserMedia err:", e.message); }
+  });
+
+  $call.addEventListener("click", async () => {
+    try {
+      if (!pc) newPC();
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      send({ type: "offer", sdp: pc.localDescription });
+      log("→ offer 送信");
+    } catch (e) { log("createOffer err:", e.message); }
+  });
+
+  $hang.addEventListener("click", () => {
+    try { pc?.close(); } catch(_) {}
+    pc = null;
+    localStream?.getTracks().forEach(t => t.stop());
+    remoteStream?.getTracks().forEach(t => t.stop());
+    localStream = remoteStream = null;
+    $local.srcObject = null; $remote.srcObject = null;
+    log("Hangup");
+  });
+</script>

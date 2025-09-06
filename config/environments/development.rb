@@ -58,4 +58,17 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+# Host制限：ngrokドメイン許可（どちらのTLDでも通るように）
+config.hosts << /.*\.ngrok\.io/
+config.hosts << /.*\.ngrok(-free)?\.app/
+
+# Action Cableの許可オリジン（WebSocket）
+config.action_cable.allowed_request_origins = [
+  %r{\Ahttps?://[a-z0-9-]+\.ngrok\.io\z},
+  %r{\Ahttps?://[a-z0-9-]+\.ngrok(-free)?\.app\z}
+]
+
+# Cable のマウントは /cable のままでOK（相対パス）。ngrok で一緒に中継される。
+
 end
