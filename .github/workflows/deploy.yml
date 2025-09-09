@@ -1,0 +1,21 @@
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519_ci
+          chmod 600 ~/.ssh/id_ed25519_ci
+          echo -e "Host myapp-ec2\n  HostName 54.238.19.164\n  User deploy\n  IdentityFile ~/.ssh/id_ed25519_ci\n  IdentitiesOnly yes" >> ~/.ssh/config
+
+      - name: Deploy
+        run: |
+          ssh myapp-ec2 'echo Connected OK'
+          # ここで rsync/scp で /var/www/myapp/releases/<ts>/ に転送
+          # current 切替 & puma reload など
+
+
