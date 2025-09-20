@@ -71,7 +71,6 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 ### MVPリリース
  - グループ通話機能
  - セキュリティ関連（HTTPS通信）
- - ニックネーム選択機能
 
 
 ### 本リリース
@@ -88,6 +87,8 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 - PWA
 
 <br>
+
+
 
 
 ## 機能の実装方針予定
