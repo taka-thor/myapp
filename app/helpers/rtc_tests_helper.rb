@@ -1,0 +1,2 @@
+module RtcTestsHelper
+end

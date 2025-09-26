@@ -1,45 +1,42 @@
-source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+source "https://rubygems.org" # Gemファイルに書いたgem同士の依存関係の情報をここから取得し、"bundle install"の時に依存解決する。依存解決されたものを、gemlockファイルで、バージョンを固定する。
 
-ruby '3.2'
+ruby "~> 3.2"
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 7.2.2", ">= 7.2.2.2"
+# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "sprockets-rails"
+# Use sqlite3 as the database for Active Record
+gem "sqlite3", ">= 1.4"
+# Use the Puma web server [https://github.com/puma/puma]
+gem "puma", ">= 5.0"
+# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem "jbuilder"
+gem "importmap-rails"
+# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+# gem "kredis"
 
-gem 'rails', '~> 7.1.3.4'
-gem 'sqlite3'
-gem 'puma', '~> 4.3.6'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.2'
-gem 'turbolinks', '~> 5'
-gem 'bootsnap', '>= 1.1.0', require: false
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~> 3.1.7"
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data", platforms: %i[ windows jruby ]
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
 
 group :development, :test do
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'faker'
-  gem "tailwindcss-rails"
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  # gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
+
+  gem "rubocop", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '>= 3.0.5', '< 3.2'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
-  # activate these gems
-  # gem 'better_errors' # render better error page
-  # gem 'binding_of_caller' # use irb on better_errors
-  gem 'pry-rails' # use binding.pry
-  gem 'pry-byebug' # use step over on binding.pry
-  gem 'pry-doc' # extend pry document support
-  gem 'rubocop'
-  gem 'rails_best_practices'
-  gem "tailwindcss-rails"
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
 end
-
-group :test do
-  gem 'capybara', '>= 2.15'
-  gem 'webdrivers'
-  gem 'rspec-rails'
-  gem 'rspec_junit_formatter'
-  gem "tailwindcss-rails"
-end
-
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
