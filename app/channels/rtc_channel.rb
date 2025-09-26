@@ -3,7 +3,7 @@ class RtcChannel < ApplicationCable::Channel
   def subscribed
     raw_room = params[:room].presence || "rtc_room"
     # ハイフンをアンダースコアに変換して正規化
-    @room = raw_room.to_s.tr("-", "_")  
+    @room = raw_room.to_s.tr("-", "_")
     stream_from stream_key
   end
 
