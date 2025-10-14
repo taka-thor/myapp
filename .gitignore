@@ -1,0 +1,51 @@
+# Bundler
+/.bundle/
+
+# Env files（テンプレ除く）
+/.env
+/.env.*
+!/.env*.erb
+
+# Logs & tmp
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# PIDs（ディレクトリは残す）
+/tmp/pids/*
+!/tmp/pids/.keep
+
+# Storage（開発のアップロード等）
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
+
+# ビルド生成物
+/public/assets/
+/public/packs/
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+# 依存物
+/node_modules/
+/vendor/bundle/
+/vendor/cache/
+
+# SQLite（ローカルDB）
+/db/*.sqlite3
+/db/*.sqlite3-*
+
+# 資格情報（鍵ファイルのみ除外。*.yml.enc はコミットOK）
+/config/master.key
+/config/credentials/*.key
+
+# ノイズ
+/.DS_Store
+/.vscode/
+/.idea/
+coverage/
+spec/examples.txt
+.byebug_history
+*.swp
