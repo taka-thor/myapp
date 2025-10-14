@@ -1,0 +1,24 @@
+<!-- app/views/rtc_tests/show.html.erb（元の構成） -->
+<div id="rtc-test-page" style="padding:16px;">
+  <h1>話題:AIについて</h1>
+
+  <div style="display:flex; gap:12px; margin-top:8px; align-items:center;">
+    <div>
+      <div style="font-weight:600;">Local (自分)</div>
+      <audio id="localAudio" autoplay muted playsinline></audio>
+    </div>
+    <div>
+      <div style="font-weight:600;">Remote（相手）</div>
+      <audio id="remoteAudio" autoplay playsinline></audio>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:12px; align-items:center; margin:12px 0;">
+    <button id="startBtn">入室する</button>
+    <button id="hangupBtn" disabled>退出する</button>
+  </div>
+
+  <pre id="status" style="background:#111;color:#eee;padding:6px;border-radius:6px;height:180px;overflow:auto;"></pre>
+</div>
+
+<%= javascript_import_module_tag "rtc-test" %>
