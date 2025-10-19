@@ -1,37 +1,17 @@
-default: &default #defaultの設定を定義　各環境の*defaultで参照している
-    20    adapter: sqlite3
-    21    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    22    timeout: 5000
-    23    encoding: utf8
-    24
-    25
-    26  development:
-    27    <<: *default
-    28    database: db/development.sqlite3
-    29
-    30
-    31  test:
-    32    <<: *default
-    33    database: db/test.sqlite3
-    34
-    35
-    36  # As with config/credentials.yml.enc, you never want to store sensitive
-    37  # information, like your database password, in your source code. If your
-    38  # source code is ever seen by anyone, they now have access to your database.
-    39  #
-    40  # Instead, provide the password or data source name using:
-    41  #   * The `DATABASE_URL` environment variable
-    42  #   * The `url` configuration option
-    43  #   * `config/application.rb`
-    44  #   * `config/database.yml` within the `production:` environment
-    45  #   * `db/production.yml` and `config/environments/production.rb`
-    46  #
-    47  #       url: <%= ENV.fetch("DATABASE_URL") %>
-    48  #
-    49  # NOTE: Using `rails credentials:edit` will store the password in the environment
-    50  #       instead of the source code.
-    51
-    52
-    53  production:
-    54    <<: *default
-    55    database: db/production.sqlite3
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  timeout: 5000
+  encoding: utf8
+
+development:
+  <<: *default
+  database: db/development.sqlite3
+
+test:
+  <<: *default
+  database: db/test.sqlite3
+
+production:
+  <<: *default
+  database: db/production.sqlite3
