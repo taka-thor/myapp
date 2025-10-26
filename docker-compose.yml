@@ -7,11 +7,10 @@ services:
       TZ: Asia/Tokyo
       RAILS_ENV: development   # or production
     volumes:
-      - .:/app                 # ソースコードを共有
+      #- .:/app                 # ホスト側のcompose fileが置いてあるディレクトリ（/に置いている）をコンテナ内/appにそのまま差し込む＝bind mount（Docker file で既にCOPYしているので、ここでさらにマウントしなくてもOK）
       - sqlite_data:/app/db    # SQLiteファイルを永続化（コンテナの /app/db ディレクトリ全体を、外部（ボリューム）に出す」という意味）コンテナ再起動時でもDBのデータが消えないようにするため
     ports:
       - "3000:3000"
 
 volumes:
   sqlite_data:
-#
