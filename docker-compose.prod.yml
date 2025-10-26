@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    env_file:
+      - .env.production
+    environment:
+      RAILS_ENV: production
+      TZ: Asia/Tokyo
+
+    ports:
+      - "127.0.0.1:3000:3000"
+    #ホストIP : ホスト側ポート : コンテナ側ポート[Nginxの入り口(プロキシ)の場所：127.0.0.0.1に加えて、その入り口のポートを3000に指定(3000出なくてもOK)。このプロキシの場所とコンテナのPuma listening port3000をつなげている]
+    volumes:
+      - sqlite_data:/app/db
+
+volumes:
+  sqlite_data:
