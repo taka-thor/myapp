@@ -133,7 +133,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 ### 使用予定APIなど
 ---
 
-- **グループ通話機能**(１部屋最大４人のイメージで実装)
+- **グループ通話機能**(１部屋最大４〜８人のイメージで実装)
   - `Web RTC`（P2P クライアントサイド方式）
 
 <br>
