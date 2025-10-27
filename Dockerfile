@@ -37,6 +37,9 @@ COPY . .
 # 任意（速くなる）
 RUN bundle exec bootsnap precompile app/ lib/ || true
 
+# ビルド時にアセットを生成（本番用）
+RUN bash -lc 'RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:clobber && bundle exec rails assets:precompile'
+
 # コンテナはポート3000番を解放
 EXPOSE 3000
 
