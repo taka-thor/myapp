@@ -37,8 +37,11 @@ COPY . .
 # 任意（速くなる）
 RUN bundle exec bootsnap precompile app/ lib/ || true
 
+# ビルド時にアセットを生成（本番用）
+RUN bash -lc 'RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:clobber && bundle exec rails assets:precompile'
+
 # コンテナはポート3000番を解放
 EXPOSE 3000
 
-# ★ server.pid を消してから起動（再起動安定化）
+# server.pid を消してから起動（再起動安定化）
 CMD ["bash", "-lc", "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"]
