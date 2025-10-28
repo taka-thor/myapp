@@ -125,8 +125,8 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 <br>
 
 - **その他**
-  - `Ruby:3.2.4`
-  - `Rails:7.1.3.4 (Puma)`
+  - `Ruby:3.2系`
+  - `Rails:7.1系`
 
 <br>
 
@@ -151,13 +151,21 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 ### インフラ関連
 ---
-- **サーバー等**
-  - ` AWS EC2（OS:Ubuntu、coturnを常時稼働）`
-　　　 coturnを用いてSTUN/TURNサーバーを運用(Turn fallback)
-    (最終的にはDockerでrailsなどをコンテナ化し、EC2にデプロイする予定)
- 
-  -`Nginx(リバースプロキシ)`
-<br>
+- **Webサーバー**
+  - ` AWS EC2（OS:Ubuntu)`
+
+- **STUN/TURNサーバー**
+  - `CoTURN (EC2常駐)(TURN fallback)`
+
+- **シグナリングサーバー**
+  - `Action Cable`
+
+- **Docker**
+  - `GHCRから、コンテナイメージをEC2でpullして運用`
+  - `コンテナイメージ：ruby3.2系`
+
+- **リバースプロキシ**
+  - `Nginx(EC2常駐)`
 
 - **DB**
   - ` SQlite`
