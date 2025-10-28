@@ -7,7 +7,7 @@ FROM ruby:3.2.3-slim
 RUN apt-get update -qq \
 && apt-get install --no-install-recommends -y \
     build-essential libsqlite3-dev sqlite3 \
-    nodejs tzdata git curl \
+    nodejs npm tzdata git curl \
 && rm -rf /var/lib/apt/lists/*
 
 
@@ -29,6 +29,10 @@ ENV PATH="$BUNDLE_BIN:$PATH"
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
+# JS依存（esbuild等）をインストール
+COPY package.json package-lock.json ./
+RUN npm ci
+
 #COPY . /appと同じ意味　
 #COPY . . はホスト側のカレントディレクトリ（docker-compose.ymlがあるディレクトリ[1つ目の.]）を
 #コンテナ内のカレントディレクトリ（/app）[2つ目の.]にコピー
@@ -36,6 +40,9 @@ COPY . .
 
 # 任意（速くなる）
 RUN bundle exec bootsnap precompile app/ lib/ || true
+
+# JSビルド（application.js → app/assets/builds/* を生成）
+RUN npm run build
 
 # ビルド時にアセットを生成（本番用）
 RUN bash -lc 'RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:clobber && bundle exec rails assets:precompile'
