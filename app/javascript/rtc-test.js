@@ -1,9 +1,12 @@
 // app/javascript/rtc-test.js
 // WebRTC P2P (audio only) up to 4 peers, signaling via Action Cable
 
-console.log("[rtc-test] loaded");
 
-import consumer from "channels/consumer"; // ← 共通の consumer を使用
+console.log("[rtc-test] loaded");
+// console.log("loaded. room=rtc_test me=", me, "\n", new Error().stack);
+
+
+import consumer from "./channels/consumer";
 
 (() => {
   // ====== UI ======

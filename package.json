@@ -1,0 +1,18 @@
+{
+  "name": "myapp",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "@hotwired/stimulus": "latest",
+    "@hotwired/turbo-rails": "latest",
+    "@rails/actioncable": "latest"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  },
+  "scripts": {
+    "build:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
+    "build:rtc": "esbuild app/javascript/rtc-test.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
+    "build": "npm run build:app && npm run build:rtc"
+  }
+}

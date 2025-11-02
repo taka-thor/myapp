@@ -1,5 +1,0 @@
-pin "application"
-pin "rtc-test", to: "rtc-test.js"
-# ActionCableをESMで使うなら下行を残す。不要なら削除。
-pin "@rails/actioncable", to: "https://cdn.jsdelivr.net/npm/@rails/actioncable@7.2.0/app/assets/javascripts/actioncable.esm.js"
-pin_all_from "app/javascript/channels", under: "channels"
