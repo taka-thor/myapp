@@ -49,3 +49,5 @@ coverage/
 spec/examples.txt
 .byebug_history
 *.swp
+
+/node_modules

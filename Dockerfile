@@ -41,11 +41,14 @@ COPY . .
 # 任意（速くなる）
 RUN bundle exec bootsnap precompile app/ lib/ || true
 
-# JSビルド（application.js → app/assets/builds/* を生成）
+# jsbundling(esbuild)の古い生成物をクリーン
+# JSビルド
+RUN bash -lc 'rm -rf app/assets/builds/*'
 RUN npm run build
 
-# ビルド時にアセットを生成（本番用）
-RUN bash -lc 'RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:clobber && bundle exec rails assets:precompile'
+# ビルド時にアセットを生成
+# --- 追加: Railsアセットキャッシュもクリアしてから実行 ---
+RUN bash -lc 'rm -rf tmp/cache/assets/* && RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:clobber && bundle exec rails assets:precompile'
 
 # コンテナはポート3000番を解放
 EXPOSE 3000

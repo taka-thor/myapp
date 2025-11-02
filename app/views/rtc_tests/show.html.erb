@@ -1,4 +1,4 @@
-<!-- app/views/rtc_tests/show.html.erb（元の構成） -->
+
 <div id="rtc-test-page" style="padding:16px;">
   <h1>話題:AIについて</h1>
 
@@ -21,4 +21,5 @@
   <pre id="status" style="background:#111;color:#eee;padding:6px;border-radius:6px;height:180px;overflow:auto;"></pre>
 </div>
 
-<%= javascript_import_module_tag "rtc-test" %>
+<%= javascript_include_tag "rtc-test", type: "module", defer: true %>
+
