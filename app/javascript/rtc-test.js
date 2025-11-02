@@ -1,5 +1,23 @@
 // app/javascript/rtc-test.js
 // WebRTC P2P (audio only) up to 4 peers, signaling via Action Cable
+// rtc-test.js の先頭に一時的に入れる
+// --- module 多重ロード検知 ---
+console.debug("[rtc-test] MODULE LOAD", new Error().stack);
+
+// （調査中の二重実行を止めたい場合は以下のガードをON）
+if (window.__rtc_init__) {
+  console.debug("[rtc-test] duplicate init skipped");
+  // return;   // ← 調査を優先して二重動作を止めたいならコメント解除
+}
+window.__rtc_init__ = true;
+
+
+if (window.__rtc_module_loaded__) {
+  console.debug("[rtc-test] duplicated module load", new Error().stack);
+} else {
+  window.__rtc_module_loaded__ = true;
+  console.debug("[rtc-test] module first load", new Error().stack);
+}
 
 
 console.log("[rtc-test] loaded");
