@@ -1,6 +1,26 @@
 services:
+  assets-export:
+    image: ghcr.io/taka-thor/myapp:latest
+    pull_policy: always
+    command: >
+      bash -lc '
+        set -e
+        # /assets だけをミラーリング（不要分は --delete で掃除）
+        if ! mountpoint -q /host-assets; then
+          echo "ERROR: /host-assets not mounted"; exit 1
+        fi
+        rsync -a --delete /app/public/assets/ /host-assets/
+        #とりあえずpublic/assets以下を全部コピー。manifest.jsonもここに入ってるので一緒にコピーされる(他のfaviconとかは入ってないので後で追加)
+        rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
+        chown -R 33:33 /host-assets
+      '
+    volumes:
+      - /var/www/myapp/current/public/assets:/host-assets
+    restart: "no"
+
   web:
     image: ghcr.io/taka-thor/myapp:latest
+    pull_policy: always
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     env_file:
       - .env.production
@@ -9,13 +29,14 @@ services:
       TZ: Asia/Tokyo
       RAILS_SERVE_STATIC_FILES: "true"
       RAILS_LOG_TO_STDOUT: "true"
-
     ports:
       - "127.0.0.1:3000:3000"
-    #ホストIP(127.0.0.1) : ホスト側ポート(3000) : コンテナ側ポート(3000)
-    #[Nginxの入り口(プロキシ)の場所：127.0.0.0.1に加えて、その入り口のポートを3000に指定(3000出なくてもOK)。このプロキシの場所とコンテナのPuma listening port3000をつなげている]
     volumes:
       - sqlite_data:/app/db
+    depends_on:
+      assets-export:
+        condition: service_completed_successfully
+    restart: unless-stopped
 
 volumes:
   sqlite_data:
