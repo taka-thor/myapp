@@ -1,6 +1,7 @@
 services:
   assets-export:
     image: ghcr.io/taka-thor/myapp:latest
+    #毎回最新イメージをpull
     pull_policy: always
     command: >
       bash -lc '

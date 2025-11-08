@@ -49,13 +49,13 @@ import consumer from "./channels/consumer";
 //    (location.pathname.split("/").filter(Boolean).join("-")) || "rtc-room";
 
    // ---- ルーム名を「アンダースコア」に正規化（/rtc_test → "rtc_test"）----
-   const path = location.pathname; // 例: "/rtc_test"
-   const base = path.split("/").filter(Boolean).at(-1) || "rtc_test";
+  const path = location.pathname; // 例: "/rtc_test"
+  const base = path.split("/").filter(Boolean).at(-1) || "rtc_test";
    // Safari など古い環境も考慮するなら replaceAll の代わりに正規表現版を使用
-   const roomId = (base.replaceAll ? base.replaceAll("-", "_") : base.replace(/-/g, "_"));
+  const roomId = (base.replaceAll ? base.replaceAll("-", "_") : base.replace(/-/g, "_"));
 
    // ---- TURN / STUN（coturn on EC2）----
-   const ICE_SERVERS = [
+  const ICE_SERVERS = [
     { urls: "stun:stun.l.google.com:19302" },
     { urls: "stun:stun1.l.google.com:19302" },
     { urls: "stun:turn.turn-kt.com:3478" } // ,
@@ -64,8 +64,8 @@ import consumer from "./channels/consumer";
 //        "turn:turn.turn-kt.com:3478?transport=udp",
 //        "turn:turn.turn-kt.com:3478?transport=tcp",
 //      ],
-//      username: "773F5CCA-F12C-4B77-B387-A61468E5177D",
-//      credential: "26CEB226-94B1-45F0-917D-41CD660EB8FB",
+//      username: "dummy",
+//      credential: "dummy",
 //    },
   ];
 
