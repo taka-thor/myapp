@@ -5,7 +5,7 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment:
       TZ: Asia/Tokyo
-      RAILS_ENV: development   # or production
+      RAILS_ENV: development
     volumes:
       #- .:/app                 # ホスト側のcompose fileが置いてあるディレクトリ（/に置いている）をコンテナ内/appにそのまま差し込む＝bind mount（Docker file で既にCOPYしているので、ここでさらにマウントしなくてもOK）
       - sqlite_data:/app/db    # SQLiteファイルを永続化（コンテナの /app/db ディレクトリ全体を、外部（ボリューム）に出す」という意味）コンテナ再起動時でもDBのデータが消えないようにするため
