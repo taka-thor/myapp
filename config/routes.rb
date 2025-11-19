@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # WebSocket
   mount ActionCable.server => "/cable"
 
-  root "home#index"
+  root "home#top"
 
   resources :rtc_tests, only: [ :show ]
 
