@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
+    <meta charset="UTF-8">
     <title><%= content_for(:title) || "声友" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -16,14 +18,20 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <%# フォント読み込み（全ページ共通） %>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap">
+
+    <%# Tailwind + Rails標準のCSS/JS %>
     <script src="https://cdn.tailwindcss.com"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap">
   </head>
-  <body>
+
+  <body
+    class="min-h-screen flex items-center justify-center bg-[rgba(248,201,139,0.45)]"
+    style="font-family: 'M PLUS Rounded 1c', system-ui, sans-serif;"
+  >
     <%= yield %>
   </body>
 </html>
