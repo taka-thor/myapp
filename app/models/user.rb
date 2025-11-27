@@ -5,6 +5,6 @@ class User < ApplicationRecord
             length:  { maximum: 10 },
             format:  {
               with: /\A\p{Hiragana}+\z/,
-              message: 'ニックネームは、ひらがなで入力してください'
+              message: "ニックネームは、ひらがなで入力してください"
             }
 end
