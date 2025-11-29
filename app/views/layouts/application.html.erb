@@ -29,9 +29,12 @@
   </head>
 
   <body
-    class="min-h-screen flex items-center justify-center bg-[rgba(248,201,139,0.45)]"
-    style="font-family: 'M PLUS Rounded 1c', system-ui, sans-serif;"
-  >
+  class="min-h-screen bg-white flex items-center justify-center"
+  style="font-family: 'M PLUS Rounded 1c', system-ui, sans-serif;"
+>
+  <div class="w-full max-w-[425px] min-h-screen bg-[rgba(248,201,139,0.45)] flex items-center justify-center">
     <%= yield %>
-  </body>
+  </div>
+</body>
+
 </html>

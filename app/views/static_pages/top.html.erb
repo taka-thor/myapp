@@ -1,13 +1,13 @@
 <% content_for :title, "声友 - グループ通話アプリ" %>
-<style>
+<%# <style>
   * { outline: 1px solid red; }
-</style>
+</style> %>
 <div
-  class="relative min-h-screen w-full flex flex-col items-center shadow-[0_4px_4px_rgba(0,0,0,0.25)] min-[420px]:w-[420px]"
+  class="relative w-full flex flex-col items-center min-[420px]:w-[420px]"
 >
   <!-- タイトルセクション -->
-  <div class="relative mt-1 flex flex-col items-center">
-    <p class="text-[32px] text-[#4fce8c] max-[360px]:text-[22px] mt-[35px]">
+  <div class="relative flex flex-col items-center">
+    <p class="text-[32px] text-[#4fce8c] max-[360px]:text-[22px] mt-[-30px]">
       無料グループ通話アプリ
     </p>
     <p
@@ -19,7 +19,7 @@
 
   <!-- トップ画像 -->
   <div
-    class="w-[90vw] max-w-[600px] mt-2 flex justify-center items-center min-[420px]:w-[90%]"
+    class="w-[90vw] max-w-[600px] flex justify-center items-center min-[420px]:w-[90%]"
   >
     <%= image_tag "top.png", alt: "声友トップイメージ", class: "block w-full
     h-auto object-contain rounded-[24px]" %>
