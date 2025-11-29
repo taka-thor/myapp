@@ -1,39 +1,69 @@
-<div class="bodycontainer bg-white w-full h-screen flex items-center justify-center">
-<div class="page-container w-[320px] h-[580px] relative">
-<!-- タイトル -->
-<p class="absolute left-1/2 top-[40px] -translate-x-1/2 text-center whitespace-pre">
-    <span class="text-[28px]">ニックネーム</span><span class="text-[22px]">を入力してください</span>
-</p>
+<style>
+html,
+body {
+margin: 0;
+padding: 0;
+height: 100%;
+overflow: hidden; /* スクロールを発生させない */
+}
 
-<!-- 説明テキスト -->
-<div class="absolute left-1/2 top-[120px] -translate-x-1/2 text-center text-[24px]">
-    <p class="mb-0">黄色の部分を触って入力</p>
-    <p>↓</p>
-</div>
+/* 画面全体すべての要素に赤いアウトライン（デバッグ用） */
+* {
+outline: 1px solid red;
+}
 
-<!-- 黄色い入力ボックス -->
-<div class="absolute left-[40px] top-[200px] w-[200px] bg-[#f6f271] flex items-center justify-center gap-[10px] p-[10px]">
-    <!-- carbon:touch-1 icon -->
-    <div class="relative shrink-0 size-[40px]" data-name="carbon:touch-1">
-    <svg class="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 63 63">
-        <g id="carbon:touch-1">
-        <path d="M39.375 15.75H35.4375C35.4375 13.1393 34.4004 10.6355 32.5543 8.78942C30.7083 6.94336 28.2045 5.90625 25.5938 5.90625C22.983 5.90625 20.4792 6.94336 18.6332 8.78942C16.7871 10.6355 15.75 13.1393 15.75 15.75H11.8125C11.8125 12.095 13.2644 8.58967 15.8489 6.00518C18.4334 3.4207 21.9387 1.96875 25.5938 1.96875C29.2488 1.96875 32.7541 3.4207 35.3386 6.00518C37.9231 8.58967 39.375 12.095 39.375 15.75Z" fill="black" id="Vector" />
-        <path d="M49.2188 29.5312C48.2016 29.5349 47.2034 29.8065 46.3247 30.3187C45.7939 29.4769 45.059 28.7828 44.1882 28.3009C43.3174 27.8191 42.339 27.5651 41.3438 27.5625C40.3266 27.5662 39.3284 27.8378 38.4497 28.35C37.7334 27.2229 36.6563 26.3719 35.3942 25.9357C34.1321 25.4995 32.7593 25.5039 31.5 25.9481V15.75C31.5 14.1836 30.8777 12.6813 29.7701 11.5737C28.6625 10.466 27.1602 9.84375 25.5937 9.84375C24.0273 9.84375 22.525 10.466 21.4174 11.5737C20.3098 12.6813 19.6875 14.1836 19.6875 15.75V37.6031L15.2972 34.6106C14.2907 33.8611 13.0673 33.4602 11.8125 33.4688C10.6411 33.4659 9.4952 33.8114 8.52064 34.4614C7.54607 35.1114 6.78682 36.0366 6.33941 37.1192C5.892 38.2019 5.77665 39.3931 6.00801 40.5415C6.23938 41.6899 6.80702 42.7435 7.63875 43.5684L23.3887 57.9403C25.6185 59.9361 28.5075 61.037 31.5 61.0312H41.3438C44.9988 61.0312 48.5041 59.5793 51.0886 56.9948C53.6731 54.4103 55.125 50.905 55.125 47.25V35.4375C55.125 33.8711 54.5027 32.3688 53.3951 31.2611C52.2875 30.1535 50.7852 29.5312 49.2188 29.5312ZM51.1875 47.25C51.1875 49.8607 50.1504 52.3645 48.3043 54.2106C46.4583 56.0566 43.9545 57.0938 41.3438 57.0938H31.5C29.51 57.1178 27.579 56.4182 26.0662 55.125L10.4147 40.7531C10.051 40.3864 9.84592 39.8915 9.84375 39.375C9.84375 39.0094 9.94556 38.651 10.1378 38.34C10.33 38.0289 10.605 37.7776 10.932 37.6141C11.2591 37.4506 11.6252 37.3814 11.9893 37.4142C12.3534 37.447 12.7013 37.5806 12.9937 37.8L23.625 45.0844V15.75C23.625 15.2279 23.8324 14.7271 24.2016 14.3579C24.5708 13.9887 25.0716 13.7812 25.5937 13.7812C26.1159 13.7812 26.6167 13.9887 26.9859 14.3579C27.3551 14.7271 27.5625 15.2279 27.5625 15.75V37.4062H31.5V31.5C31.5 30.9779 31.7074 30.4771 32.0766 30.1079C32.4458 29.7387 32.9466 29.5312 33.4687 29.5312C33.9909 29.5312 34.4917 29.7387 34.8609 30.1079C35.2301 30.4771 35.4375 30.9779 35.4375 31.5V37.4062H39.375V33.4688C39.375 32.9466 39.5824 32.4458 39.9516 32.0766C40.3208 31.7074 40.8216 31.5 41.3438 31.5C41.8659 31.5 42.3667 31.7074 42.7359 32.0766C43.1051 32.4458 43.3125 32.9466 43.3125 33.4688V37.4062H47.25V35.4375C47.25 34.9154 47.4574 34.4146 47.8266 34.0454C48.1958 33.6762 48.6966 33.4688 49.2188 33.4688C49.7409 33.4688 50.2417 33.6762 50.6109 34.0454C50.9801 34.4146 51.1875 34.9154 51.1875 35.4375V47.25Z" fill="black" id="Vector_2" />
-        </g>
-    </svg>
+/* bodycontainer だけ青い枠線 */
+.bodycontainer {
+outline: 2px solid blue;
+}
+
+/* page-container だけ緑の枠線 */
+.page-container {
+outline: 2px solid green;
+}
+</style>
+
+<div class="bodycontainer w-full h-screen flex flex-col items-center justify-center">
+    <div class="page-container w-[320px] h-[580px] relative flex flex-col">
+        <!-- タイトル -->
+        <p class="relative  mt-[60px] text-center ">
+        <span class="text-[32px]">ニックネームを入力</span>
+        </p>
+
+        <!-- 説明テキスト -->
+        <div class="relative mt-[40px] text-center text-[24px]">
+        <p class="mb-0">黄色の部分を押して入力</p>
+        </div>
+
+        <div class="formcontainer mt-[70px]">
+        <%= form_with model: @user do |f| %>
+            <div class="flex items-center gap-3 pl-4">
+                <%= f.text_field :name,
+                    placeholder: "ここを押して入力",
+                    class: "w-[220px]
+                            rounded-md border border-gray-300 px-10 py-3 bg-yellow-200
+                            shadow-sm focus:outline-none focus:ring-2
+                            focus:ring-indigo-500 focus:border-indigo-500" %>
+
+                <%= f.submit "決定",
+                    class: "px-4 py-2 rounded-md border border-indigo-500
+                            text-indigo-600 text-lg font-semibold
+                            hover:bg-indigo-50 active:bg-indigo-100" %>
+            </div>
+        <% end %>
+        </div>
+
+        <div
+        class="w-[60px] h-[70px] max-[360px]:w-[50px] max-[360px]:h-[60px] animate-bounce"
+      >
+        <%= image_tag "fingericon.svg", class: "block w-full h-full" %>
+      </div>
+
+        <!-- 注意テキスト -->
+        <div class="absolute left-1/2 top-[350px] -translate-x-1/2 text-center text-[18px] text-[#fb5f5f] ">
+        <p class="mb-0">注意</p>
+        <p class="mb-0">ニックネームは通話のお相手に表示される</p>
+        <p class="mb-0">お名前になります</p>
+        </div>
     </div>
-</div>
-
-<!-- さん -->
-<p class="absolute left-[260px] top-[208px] w-[60px] h-[50px] text-center text-[28px]">
-    さん
-</p>
-
-<!-- 注意テキスト -->
-<div class="absolute left-1/2 top-[350px] -translate-x-1/2 text-center text-[18px] text-[#fb5f5f] whitespace-pre">
-    <p class="mb-0">注意</p>
-    <p class="mb-0">ニックネームは通話のお相手に表示される</p>
-    <p>お名前になります</p>
-</div>
-</div>
 </div>

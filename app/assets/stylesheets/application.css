@@ -13,13 +13,16 @@
  *= require_tree .
  *= require_self
  */
-/* @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap'); */
 
-/* 全体のフォント指定 */
-/* body {
-    font-family: 'M PLUS Rounded 1c',
-                'Hiragino Maru Gothic ProN',
-                'Yu Gothic',
-                'メイリオ',
-                sans-serif;
-} */
+.finger-icon {
+  width: 60px;
+  height: 70px;
+}
+
+/* 画面幅が360px以下のときに、以下の幅と高さに調整 */
+@media (max-width: 360px) {
+  .finger-icon {
+    width: 50px;
+    height: 60px;
+  }
+}
