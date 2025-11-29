@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   root "static_pages#top"
   # root "users#new"
 
-  resources :users,only: %i[new create]
+  resources :users, only: %i[new create]
   resources :rtcs, only: %i[show]
 
   # ヘルスチェック
