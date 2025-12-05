@@ -1,13 +1,18 @@
 class UsersController < ApplicationController
   def new
-    @user = User.new;end
+    @user = User.new
+  end
 
   def create
-    # 既存ユーザーであれば、redirect to home
+    @user = User.new(user_params)
+    if @user.save
+      redirect to root_path
+    end
   end
 end
 
+private
 
-
-
-# toppageから次へを押すと、新規ユーザーか既存ユーザーかを条件分岐
+def user_params
+  params.require.(:user).permit(:name, :avatar_url)
+end
