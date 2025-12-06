@@ -14,42 +14,41 @@ outline: 1px solid red;
 </style>
 
 <div class="page-container w-full h-screen relative flex flex-col items-center ">
+  <div class="relative  mt-[40px] text-center ">
+      <p class="text-[30px]">ニックネームを入力</p>
+  </div>
 
-    <div class="relative  mt-[40px] text-center ">
-        <p class="text-[30px]">ニックネームを入力</p>
+  <div class="mt-[45px]">
+      <%= render 'alart_display_name'%>
+  </div>
+
+  <div class="formcontainer mt-[50px] mx-auto w-[100vw] max-w-[370px] h-auto">
+    <div class="character-limit">
+      <p class="mb-[8px] text-[15px] text-center">
+          ひらがな１０文字以内で記入してください
+      </p>
+
+      <%= form_with model: @user do |f| %>
+      <div class="flex items-center gap-3">
+        <%= f.text_field :name,
+        placeholder: "ここを押して入力",
+        class: "w-full
+              rounded-md border border-gray-300 px-3 py-3 bg-yellow-200
+              shadow-sm focus:outline-none focus:ring-2
+              focus:ring-indigo-500 focus:border-indigo-500 text-lg" %>
+
+        <%= f.submit "決定",
+        class: "shrink-0 px-4 py-2 rounded-md border border-orange-400
+              text-orange-400 text-lg font-semibold
+              hover:bg-indigo-50 active:bg-indigo-100 cursor-pointer" %>
+      </div>
+
+      <div class="w-[15vw] h-[18vw] max-w-[60px] max-h-[70px]
+        max-[360px]:w-[50px] max-[360px]:h-[60px]
+        ml-[110px] animate-bounce">
+        <%= image_tag "fingericon.svg", class: "block w-full h-full" %>
+      <% end %>
+      </div>
     </div>
-
-    <div class=mt-[45px]>
-        <%= render 'alart_display_name'%>
-    </div>
-
-    <div class="formcontainer mt-[50px] mx-auto w-[100vw] max-w-[370px] h-auto">
-        <div class="character-limit">
-            <p class="mb-[8px] text-[15px] text-center">
-                ひらがな１０文字以内で記入してください
-            </p>
-            <%= form_with model: @user do |f| %>
-
-            <div class="flex items-center gap-3">
-            <%= f.text_field :name,
-            placeholder: "ここを押して入力",
-            class: "w-full
-                    rounded-md border border-gray-300 px-3 py-3 bg-yellow-200
-                    shadow-sm focus:outline-none focus:ring-2
-                    focus:ring-indigo-500 focus:border-indigo-500 text-lg" %>
-
-            <%= f.submit "決定",
-            class: "shrink-0 px-4 py-2 rounded-md border border-orange-400
-                    text-orange-400 text-lg font-semibold
-                    hover:bg-indigo-50 active:bg-indigo-100 cursor-pointer" %>
-            </div>
-
-            <div class="w-[15vw] h-[18vw] max-w-[60px] max-h-[70px]
-                max-[360px]:w-[50px] max-[360px]:h-[60px]
-                ml-[110px] animate-bounce">
-            <%= image_tag "fingericon.svg", class: "block w-full h-full" %>
-            <% end %>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
