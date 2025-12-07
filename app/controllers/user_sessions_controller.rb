@@ -1,8 +1,8 @@
 class UserSessionsController < ApplicationController
   def create
-      uuid = cookies.encrypted[:user_uuid]
-      @user = User.find_by(user_uuid: uuid) if uuid.present?
-      # if uuid.present? && (@user = User.find_by(user_uuid: uuid))と同じ
+      user_id = session[:user_id] # 読み取りだけ
+      @user = User.find_by(id: user_id) if user_id.present?
+      # if user_id.present? && (@user = User.find_by(id: user_id))と同じ
 
       if @user
         session[:user_id] = @user.id
