@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   root "static_pages#top"
   get "static_pages/home", to: "static_pages#home"
+  get "users/update", to: "users#select_icon"
 
   resources :users, only: %i[new create]
   resources :user_sessions, only: %i[create]

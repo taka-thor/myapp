@@ -1,0 +1,57 @@
+name: Deploy Icons to S3
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "app/icons_src/**" # アイコン元画像に変更があった時だけ実行
+
+jobs:
+  build-and-upload-icons:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Install ImageMagick (for MiniMagick)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
+      - name: Bundle install
+        run: bundle install --jobs 4 --retry 3
+
+      - name: Build icons with MiniMagick
+        env:
+          RAILS_ENV: production
+        run: |
+          bin/rails icons:build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          aws --version
+
+      - name: Upload icons to S3
+        env:
+          S3_ICON_BUCKET_NAME: ${{ secrets.S3_ICON_BUCKET_NAME }}
+        run: |
+          aws s3 sync tmp/icons_build s3://$S3_ICON_BUCKET_NAME/icons \
+            --delete \
+            --cache-control "public, max-age=31536000"
