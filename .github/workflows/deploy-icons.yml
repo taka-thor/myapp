@@ -26,12 +26,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-      - name: Bundle install
-        run: bundle install --jobs 4 --retry 3
-
       - name: Build icons with MiniMagick
         env:
-          RAILS_ENV: production
+          RAILS_ENV: development
+          SECRET_KEY_BASE: dummy
         run: |
           bin/rails icons:build
 
@@ -42,16 +40,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install AWS CLI
+      - name: Ensure AWS CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
+          if ! command -v aws >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y awscli
+          fi
           aws --version
 
       - name: Upload icons to S3
         env:
           S3_ICON_BUCKET_NAME: ${{ secrets.S3_ICON_BUCKET_NAME }}
         run: |
-          aws s3 sync tmp/icons_build s3://$S3_ICON_BUCKET_NAME/icons \
+          aws s3 sync tmp/icons_build "s3://$S3_ICON_BUCKET_NAME/icons" \
             --delete \
             --cache-control "public, max-age=31536000"
