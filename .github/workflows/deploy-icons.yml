@@ -1,11 +1,13 @@
 name: Deploy Icons to S3
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
     paths:
       - "app/icons_src/**" # アイコン元画像に変更があった時だけ実行
+      - ".github/workflows/deploy-icons.yml"
 
 jobs:
   build-and-upload-icons:
@@ -26,9 +28,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-      - name: Bundle install
-        run: bundle install --jobs 4 --retry 3
-
       - name: Build icons with MiniMagick
         env:
           RAILS_ENV: production
@@ -43,16 +42,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
-          aws --version
+      - name: Set up AWS CLI (official action)
+        uses: aws-actions/setup-aws-cli@v2
 
       - name: Upload icons to S3
         env:
           S3_ICON_BUCKET_NAME: ${{ secrets.S3_ICON_BUCKET_NAME }}
         run: |
-          aws s3 sync tmp/icons_build s3://$S3_ICON_BUCKET_NAME/icons \
+          aws --version
+          aws s3 sync tmp/icons_build "s3://$S3_ICON_BUCKET_NAME/icons" \
             --delete \
             --cache-control "public, max-age=31536000"
