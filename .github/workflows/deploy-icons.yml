@@ -6,7 +6,7 @@ on:
     branches:
       - master
     paths:
-      - "app/icons_src/**" # アイコン元画像に変更があった時だけ実行
+      - "app/icons_src/**"
       - ".github/workflows/deploy-icons.yml"
 
 jobs:
@@ -42,14 +42,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Set up AWS CLI (official action)
-        uses: aws-actions/setup-aws-cli@v2
+      - name: Check AWS CLI
+        run: |
+          aws --version
 
       - name: Upload icons to S3
         env:
           S3_ICON_BUCKET_NAME: ${{ secrets.S3_ICON_BUCKET_NAME }}
         run: |
-          aws --version
           aws s3 sync tmp/icons_build "s3://$S3_ICON_BUCKET_NAME/icons" \
             --delete \
             --cache-control "public, max-age=31536000"
