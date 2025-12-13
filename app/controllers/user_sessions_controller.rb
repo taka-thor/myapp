@@ -9,7 +9,7 @@ class UserSessionsController < ApplicationController
         redirect_to static_pages_home_path
 
       else
-      redirect_to new_user_path
+      redirect_to new_user_nicknames_path
 
       end
   end
