@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_21_114204) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_13_024201) do
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.text "avatar_url"
-    t.string "user_uuid"
     t.datetime "created_at", null: false
+    t.text "icon_url"
+    t.string "name"
     t.datetime "updated_at", null: false
+    t.string "user_uuid"
   end
 end

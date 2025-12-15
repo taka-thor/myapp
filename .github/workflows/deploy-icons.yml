@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -48,8 +48,54 @@ jobs:
 
       - name: Upload icons to S3
         env:
-          S3_ICON_BUCKET_NAME: ${{ secrets.S3_ICON_BUCKET_NAME }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
         run: |
-          aws s3 sync tmp/icons_build "s3://$S3_ICON_BUCKET_NAME/icons" \
+          aws s3 sync tmp/icons_build "s3://$S3_BUCKET_NAME/icons" \
             --delete \
             --cache-control "public, max-age=31536000"
+
+      - name: Generate manifest.json
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          ruby - <<'RUBY'
+          require "json"
+          require "time"
+
+          bucket = ENV.fetch("S3_BUCKET_NAME")
+          region = ENV.fetch("AWS_REGION")
+
+          base_dir = "tmp/icons_build"
+          files = Dir.glob("#{base_dir}/**/*.{png,jpg,jpeg,webp,gif}", File::FNM_CASEFOLD).sort
+
+          icons = files.map do |path|
+            rel = path.sub("#{base_dir}/", "")
+            key = "icons/#{rel}" # 同一バケット内のキー
+
+            {
+              "key" => key,
+              "filename" => File.basename(rel),
+              "path" => rel,
+              "url" => "https://#{bucket}.s3.#{region}.amazonaws.com/#{key}",
+              "size" => File.size(path)
+            }
+          end
+
+          manifest = {
+            "generated_at" => Time.now.utc.iso8601,
+            "count" => icons.length,
+            "icons" => icons
+          }
+
+          File.write("manifest.json", JSON.pretty_generate(manifest) + "\n")
+          puts "Wrote manifest.json (#{icons.length} icons)"
+          RUBY
+
+      - name: Upload manifest.json to S3 (assets folder)
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+        run: |
+          aws s3 cp manifest.json "s3://$S3_BUCKET_NAME/assets/icons_manifest.json" \
+            --content-type "application/json" \
+            --cache-control "no-cache"
