@@ -48,7 +48,7 @@ jobs:
 
       - name: Upload icons to S3
         env:
-          S3_BUCKET_NAME: ${{ S3_secrets.S3_ICON_BUCKET_NAME }}
+          S3_BUCKET_NAME: ${{ secrets.S3_ICON_BUCKET_NAME }}
         run: |
           aws s3 sync tmp/icons_build "s3://$S3_BUCKET_NAME/icons" \
             --delete \
