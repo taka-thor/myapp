@@ -30,7 +30,8 @@
   </main>
 
   <!-- 決定ボタン（最初は非表示） -->
-  <%= form_with url: icon_selection_path, method: :post, id: "icon-form", class:
+  <%= form_with model: @user, url: icon_selection_path, method: :post, id: "icon-form",
+  class:
   "fixed bottom-0 left-0 right-0 px-6 pb-6 pointer-events-none" do %>
   <input type="hidden" name="user[icon_id]" id="selected-icon-id" />
 
