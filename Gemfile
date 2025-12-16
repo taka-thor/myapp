@@ -12,7 +12,7 @@ gem "puma", ">= 5.0"
 gem "jbuilder"
 gem "rails-i18n"
 # Gemfile
-gem "aws-sdk-s3", "~> 1.150"
+gem "aws-sdk-s3", "~> 1.207"
 gem "mini_magick"
 
 # gem "importmap-rails"
