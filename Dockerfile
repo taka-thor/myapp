@@ -18,8 +18,9 @@ RUN apt-get update -qq \
 
 WORKDIR /app
 
-#コンテナ内の/appにGemfileとGemfile.lockをコピーする。
-ENV BUNDLE_PATH=/bundle \
+#bundle installされたファイルなどの保存場所を指定(これらは環境変数で指定されている)
+#BUNDLE_JOBSは、並行してインストールするファイル数
+ENV BUNDLE_PATH=/vendor/bundle \
     BUNDLE_BIN=/bundle/bin \
     BUNDLE_JOBS=4 \
     BUNDLE_RETRY=3
