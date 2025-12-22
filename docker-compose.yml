@@ -1,6 +1,8 @@
 services:
   web: # docker compose build をすると、compose が docker-compose.yml を読み込み → build: に書かれた場所を探しに行く
     build: . #「このディレクトリ（.）にある Dockerfile を使ってイメージを作る」→ ルート直下の Dockerfile が読み込まれる
+    env_file:
+      - .env
     platform: linux/amd64
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment:
