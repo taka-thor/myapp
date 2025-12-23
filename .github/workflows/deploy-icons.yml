@@ -67,7 +67,8 @@ jobs:
           region = ENV.fetch("AWS_REGION")
 
           base_dir = "tmp/icons_build"
-          files = Dir.glob("#{base_dir}/**/*.{png,jpg,jpeg,webp,gif}", File::FNM_CASEFOLD).sort
+          files = Dir.glob("#{base_dir}/**/*.{png,jpg,jpeg,webp,gif,svg}", File::FNM_CASEFOLD).sort
+
 
           icons = files.map do |path|
             rel = path.sub("#{base_dir}/", "")
