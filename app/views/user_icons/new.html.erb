@@ -1,4 +1,3 @@
-<!-- app/views/icons/index.html.erb など -->
 
 <div class="min-h-screen bg-slate-900 text-white flex flex-col">
   <!-- タイトル -->
@@ -9,17 +8,18 @@
   <!-- アイコン一覧 -->
   <main class="flex-1 overflow-y-auto px-6 pb-28">
     <div class="grid grid-cols-4 gap-4 justify-items-center">
+
       <% @icons.each do |icon| %>
       <button
         type="button"
         class="icon-option relative rounded-full p-[3px] transition ring-0 ring-offset-2 ring-offset-slate-900 focus:outline-none"
-        data-icon-id="<%= icon.id %>"
+        data-icon-id="<%= icon %>"
       >
         <div
           class="w-16 h-16 rounded-full overflow-hidden bg-slate-800 flex items-center justify-center"
         >
           <img
-            src="<%= icon.url %>"
+            src="<%= icon %>"
             alt="アイコン"
             class="w-full h-full object-cover"
           />
@@ -30,7 +30,7 @@
   </main>
 
   <!-- 決定ボタン（最初は非表示） -->
-  <%= form_with model: @user, url: icon_selection_path, method: :post, id: "icon-form",
+  <%= form_with model: @user, url: user_icons_path, method: :post, id: "icon-form",
   class:
   "fixed bottom-0 left-0 right-0 px-6 pb-6 pointer-events-none" do %>
   <input type="hidden" name="user[icon_id]" id="selected-icon-id" />
