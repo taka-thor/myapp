@@ -6,6 +6,8 @@ namespace :icons do
     src_dir  = Rails.root.join("app/icons_src")
     dest_dir = Rails.root.join("tmp/icons_build")
 
+    # いったんビルド先を掃除しておくと古いファイルが残らない
+    FileUtils.rm_rf(dest_dir)
     FileUtils.mkdir_p(dest_dir)
 
     Dir.glob(src_dir.join("**/*.{png,jpg,jpeg,svg}"), File::FNM_CASEFOLD).each do |path|
@@ -13,26 +15,16 @@ namespace :icons do
       ext      = File.extname(path).downcase
 
       if ext == ".svg"
-
-        out_path = dest_dir.join(rel_path).sub_ext(".png")
+        # ✅ SVGはそのままコピー（拡張子も中身も変えない）
+        out_path = dest_dir.join(rel_path)
         FileUtils.mkdir_p(out_path.dirname)
-        puts "Processing SVG: #{rel_path}"
-
-        image = MiniMagick::Image.open(path)
-        image.format "png"
-
-        image.combine_options do |i|
-          i.resize "256x256"
-          i.background "none"
-          i.gravity "center"
-          i.extent "256x256"
-        end
-
-        image.write(out_path.to_s)
+        puts "Copy SVG as-is: #{rel_path}"
+        FileUtils.cp(path, out_path)
       else
+        # ✅ それ以外はこれまで通り JPG に変換
         out_path = dest_dir.join(rel_path).sub_ext(".jpg")
         FileUtils.mkdir_p(out_path.dirname)
-        puts "Processing: #{rel_path}"
+        puts "Processing raster image: #{rel_path}"
 
         image = MiniMagick::Image.open(path)
 
