@@ -1,5 +1,5 @@
-
-<div class="min-h-screen bg-slate-900 text-white flex flex-col">
+<%= debug(@icons)%>
+<div class="min-h-screen flex flex-col">
   <!-- タイトル -->
   <header class="px-6 pt-6 pb-4">
     <h1 class="text-lg font-semibold text-center">アイコンを選んでください</h1>
@@ -10,38 +10,37 @@
     <div class="grid grid-cols-4 gap-4 justify-items-center">
 
       <% @icons.each do |icon| %>
-      <button
-        type="button"
-        class="icon-option relative rounded-full p-[3px] transition ring-0 ring-offset-2 ring-offset-slate-900 focus:outline-none"
-        data-icon-id="<%= icon %>"
-      >
-        <div
-          class="w-16 h-16 rounded-full overflow-hidden bg-slate-800 flex items-center justify-center"
+        <button
+          type="button"
+          class="icon-option relative rounded-full p-[3px] transition ring-0 focus:outline-none"
+          data-icon-id="<%= icon %>"
         >
-          <img
-            src="<%= icon %>"
-            alt="アイコン"
-            class="w-full h-full object-cover"
-          />
-        </div>
-      </button>
+          <div
+            class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center"
+          >
+            <img
+              src="<%= icon %>"
+              alt="アイコン"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </button>
       <% end %>
     </div>
   </main>
 
   <!-- 決定ボタン（最初は非表示） -->
   <%= form_with model: @user, url: user_icons_path, method: :post, id: "icon-form",
-  class:
-  "fixed bottom-0 left-0 right-0 px-6 pb-6 pointer-events-none" do %>
-  <input type="hidden" name="user[icon_id]" id="selected-icon-id" />
+        class: "fixed bottom-0 left-0 right-0 px-6 pb-6 pointer-events-none" do %>
+    <input type="hidden" name="user[icon_id]" id="selected-icon-id" />
 
-  <button
-    type="submit"
-    id="icon-submit"
-    class="w-full py-3 rounded-xl bg-purple-500 text-white font-semibold shadow-lg opacity-0 translate-y-4 transition pointer-events-none"
-  >
-    決定
-  </button>
+    <button
+      type="submit"
+      id="icon-submit"
+      class="w-full py-3 rounded-xl bg-purple-500 text-white font-semibold shadow-lg opacity-0 translate-y-4 transition pointer-events-none"
+    >
+      決定
+    </button>
   <% end %>
 </div>
 
