@@ -15,13 +15,11 @@ namespace :icons do
       ext      = File.extname(path).downcase
 
       if ext == ".svg"
-        # ✅ SVGはそのままコピー（拡張子も中身も変えない）
         out_path = dest_dir.join(rel_path)
         FileUtils.mkdir_p(out_path.dirname)
         puts "Copy SVG as-is: #{rel_path}"
         FileUtils.cp(path, out_path)
       else
-        # ✅ それ以外はこれまで通り JPG に変換
         out_path = dest_dir.join(rel_path).sub_ext(".jpg")
         FileUtils.mkdir_p(out_path.dirname)
         puts "Processing raster image: #{rel_path}"
