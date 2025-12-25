@@ -1,14 +1,16 @@
+<%# <style>
+  * { outline: 1px solid red; }
+</style> %>
 
 <div class="min-h-screen flex flex-col">
   <!-- タイトル -->
   <header class="px-6 pt-6 pb-4">
-    <h1 class="text-lg font-semibold text-center">アイコンを選んでください</h1>
+    <h1 class="text-[26px] font-semibold text-center text-[#4B4642]">アイコンを選んでください</h1>
   </header>
 
   <!-- アイコン一覧 -->
-  <main class="flex-1 overflow-y-auto px-6 pb-28">
+  <main class="flex-1 overflow-y-auto pt-1 px-6 pb-28">
     <div class="grid grid-cols-4 gap-4 justify-items-center">
-
       <% @icons.each do |icon| %>
         <button
           type="button"
@@ -16,12 +18,12 @@
           data-icon-id="<%= icon %>"
         >
           <div
-            class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center"
+            class="w-[74px] h-[74px] rounded-full overflow-hidden bg-slate-100 flex items-center justify-center"
           >
             <img
               src="<%= icon %>"
               alt="アイコン"
-              class="w-full h-full object-cover"
+              class="w-[85%] h-[85%] object-contain"
             />
           </div>
         </button>
@@ -31,13 +33,13 @@
 
   <!-- 決定ボタン（最初は非表示） -->
   <%= form_with model: @user, url: user_icons_path, method: :post, id: "icon-form",
-        class: "fixed bottom-0 left-0 right-0 px-6 pb-6 pointer-events-none" do %>
+        class: "fixed bottom-0 left-0 right-0 pb-6 pointer-events-none flex justify-center" do %>
     <input type="hidden" name="user[icon_id]" id="selected-icon-id" />
 
     <button
       type="submit"
       id="icon-submit"
-      class="w-full py-3 rounded-xl bg-purple-500 text-white font-semibold shadow-lg opacity-0 translate-y-4 transition pointer-events-none"
+      class="w-[40vw] max-w-[425px] mx-auto py-3 rounded-xl bg-sky-500 text-white font-semibold shadow-lg opacity-0 translate-y-4 transition pointer-events-none"
     >
       決定
     </button>
@@ -54,10 +56,10 @@
     options.forEach((option) => {
       option.addEventListener("click", () => {
         // 他の選択状態をリセット
-        options.forEach((o) => o.classList.remove("ring-4", "ring-purple-400"));
+        options.forEach((o) => o.classList.remove("ring-4", "ring-sky-400"));
 
-        // クリックしたものだけ外枠をつける
-        option.classList.add("ring-4", "ring-purple-400");
+        // クリックしたものだけ外枠をつける（水色・青強め）
+        option.classList.add("ring-4", "ring-sky-400");
 
         // hidden に選択中の icon_id をセット
         hiddenInput.value = option.dataset.iconId;
