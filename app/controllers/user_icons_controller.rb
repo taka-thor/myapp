@@ -5,7 +5,7 @@ class UserIconsController < ApplicationController
   end
 
   def create
-    name = session[:name] #仮にニックネーム設定後、ブラウザから離脱するとセッションは残るが、ここで再度セッションを上書きするため問題なし
+    name = session[:name] # 仮にニックネーム設定後、ブラウザから離脱するとセッションは残るが、ここで再度セッションを上書きするため問題なし
 
     icon_url = user_params[:icon_url] # user_paramsの素の状態は、ハッシュなので、その中の取得したい値を指定する必要がある。icon_urlの中身がハッシュにならないように。
 
