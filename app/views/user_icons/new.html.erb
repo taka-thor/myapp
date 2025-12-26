@@ -1,7 +1,6 @@
 <%# <style>
   * { outline: 1px solid red; }
 </style> %>
-
 <div class="min-h-screen flex flex-col">
   <!-- タイトル -->
   <header class="px-6 pt-6 pb-4">
@@ -34,8 +33,7 @@
   <!-- 決定ボタン（最初は非表示） -->
   <%= form_with model: @user, url: user_icons_path, method: :post, id: "icon-form",
         class: "fixed bottom-0 left-0 right-0 pb-6 pointer-events-none flex justify-center" do %>
-    <input type="hidden" name="user[icon_id]" id="selected-icon-id" />
-
+    <input type="hidden" name="user[icon_url]" id="selected-icon-id" />
     <button
       type="submit"
       id="icon-submit"
@@ -47,7 +45,7 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("turbo:load", () => {
     const options = document.querySelectorAll(".icon-option");
     const hiddenInput = document.getElementById("selected-icon-id");
     const submitBtn = document.getElementById("icon-submit");
@@ -61,7 +59,7 @@
         // クリックしたものだけ外枠をつける（水色・青強め）
         option.classList.add("ring-4", "ring-sky-400");
 
-        // hidden に選択中の icon_id をセット
+        // hidden に選択中の icon_url をセット
         hiddenInput.value = option.dataset.iconId;
 
         // 決定ボタンを表示 & 有効化
