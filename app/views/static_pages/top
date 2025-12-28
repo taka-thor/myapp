@@ -1,0 +1,40 @@
+<% content_for :title, "声友 - グループ通話アプリ" %>
+<%# <style>
+  * { outline: 1px solid red; }
+</style> %>
+<div class="relative w-full flex flex-col items-center min-[420px]:w-[420px]">
+  <!-- タイトルセクション -->
+  <div class="relative flex flex-col items-center">
+    <p class="text-[32px] text-[#4fce8c] max-[360px]:text-[22px] mt-[-30px]">無料グループ通話アプリ</p>
+    <p class="text-[43px] text-[#63ee44] leading-normal max-[360px]:text-[32px] font-bold">声友</p>
+  </div>
+
+  <!-- トップ画像 -->
+  <div
+    class="w-[90vw] max-w-[600px] flex justify-center items-center min-[420px]:w-[90%]">
+    <%= image_tag "top.png", alt: "声友トップイメージ", class: "block w-full h-auto object-contain rounded-[24px]" %>
+  </div>
+
+  <!-- 次へボタン＋指アイコン＋テキスト -->
+  <div class="relative mt-4 flex flex-col items-center">
+    <!-- 次へボタン枠とその中の「次へ」テキスト -->
+    <%= link_to user_sessions_path, data: { turbo_method: :post } do %>
+    <div
+      class="relative mt-2 w-[90vw] max-w-[250px] h-[100px]
+              max-[360px]:max-w-[200px] max-[360px]:h-[100px]
+              bg-[#93e2a08c] rounded-[30px] flex items-center justify-center
+              cursor-pointer hover:bg-green-300 active:bg-green-200">
+      <span class="text-[30px] max-[360px]:text-[28px] font-bold text-[#32646A] tracking-[0.2em]">始める</span>
+    </div>
+    <% end %>
+
+<!-- 指 -->
+    <div class="mt-[-5px] flex items-center justify-center gap-3 max-[360px]:gap-2">
+      <div
+        class="w-[60px] h-[70px] max-[360px]:w-[50px] max-[360px]:h-[60px] animate-bounce">
+        <%= image_tag "fingericon.svg", class: "block w-full h-full" %>
+      </div>
+      <%# <p class="text-[30px] text-black leading-[1.2] text-center max-[360px]:text-[18px]">次へを押す</p> %>
+    </div>
+  </div>
+</div>
