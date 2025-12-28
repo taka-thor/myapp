@@ -1,7 +1,13 @@
 class UserNicknamesController < ApplicationController
   def new
+    user_nickname = session[:name]
+    if user_nickname.present?
+      @user = User.new(name: user_nickname)
+    else
     @user = User.new
+    end
   end
+
 
   def create
     @user = User.new(user_params)
