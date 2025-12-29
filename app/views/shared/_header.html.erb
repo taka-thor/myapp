@@ -1,23 +1,33 @@
-<div class="bg-[#bdf091] h-[90px] w-full flex items-center justify-center relative">
-  <% if @current_user.present? %>
-    <%# --- ログイン後：アイコン + ニックネーム --- %>
-    <% if @current_user.icon_url.present? %>
-      <div class="absolute left-[313px] top-[8px] w-[74px] h-[74px] rounded-full overflow-hidden">
-        <%= image_tag @current_user.icon_url,
-          alt: "#{@current_user.name || 'ユーザー'} さんのアイコン",
-          class: "absolute h-[245.32%] left-[-129.31%] max-w-none top-[-14.87%] w-[246.16%]" %>
-      </div>
-    <% end %>
+<div class="bg-[#f7f0e6] h-[90px] w-full flex items-center px-6 relative">
 
-    <% if @current_user.name.present? %>
-      <p class="absolute left-[547px] top-[34px] -translate-x-1/2 text-center whitespace-nowrap text-black">
-        <%= @current_user.name %> さん
-      </p>
-    <% end %>
+  <% if @current_user.present? %>
+
+    <div class="flex items-center gap-4">
+
+      <%# --- ユーザーアイコン（丸く自然に収める） --- %>
+      <% if @current_user.icon_url.present? %>
+        <div class="w-[64px] h-[64px] rounded-full overflow-hidden bg-white shadow">
+          <%= image_tag @current_user.icon_url,
+            alt: "#{@current_user.name || 'ユーザー'} さんのアイコン",
+            class: "w-full h-full object-cover" %>
+        </div>
+      <% end %>
+
+      <%# --- ユーザー名（アイコンの右側） --- %>
+      <% if @current_user.name.present? %>
+        <p class="text-black text-lg font-medium whitespace-nowrap">
+          <%= @current_user.name %> さん
+        </p>
+      <% end %>
+
+    </div>
+
   <% else %>
-    <%# --- 未ログイン/ユーザー登録前：シンプルなロゴだけ --- %>
-    <p class="text-[#4B4642] text-xl font-semibold">
+
+    <%# --- 未ログイン：ロゴのみ --- %>
+    <p class="text-[#4B4642] text-xl font-semibold mx-auto">
       声友
     </p>
+
   <% end %>
 </div>
