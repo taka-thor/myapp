@@ -1,0 +1,33 @@
+<div class="bg-[#f7f0e6] h-[90px] w-full flex items-center px-6 relative">
+
+  <% if @current_user.present? %>
+
+    <div class="flex items-center gap-4">
+
+      <%# --- ユーザーアイコン（丸く自然に収める） --- %>
+      <% if @current_user.icon_url.present? %>
+        <div class="w-[64px] h-[64px] rounded-full overflow-hidden bg-white shadow">
+          <%= image_tag @current_user.icon_url,
+            alt: "#{@current_user.name || 'ユーザー'} さんのアイコン",
+            class: "w-full h-full object-cover" %>
+        </div>
+      <% end %>
+
+      <%# --- ユーザー名（アイコンの右側） --- %>
+      <% if @current_user.name.present? %>
+        <p class="text-black text-lg font-medium whitespace-nowrap">
+          <%= @current_user.name %> さん
+        </p>
+      <% end %>
+
+    </div>
+
+  <% else %>
+
+    <%# --- 未ログイン：ロゴのみ --- %>
+    <p class="text-[#4B4642] text-xl font-semibold mx-auto">
+      声友
+    </p>
+
+  <% end %>
+</div>

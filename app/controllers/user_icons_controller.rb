@@ -1,4 +1,6 @@
 class UserIconsController < ApplicationController
+  skip_before_action :current_user, only: %i[new create]
+
   def new
     @user = User.new
     @icons = Icons::GetUrlFromS3.call
@@ -12,7 +14,7 @@ class UserIconsController < ApplicationController
     @user = User.new(name: name, icon_url: icon_url)
 
     if @user.save
-      session[:id] = @user.id
+      session[:user_info] = @user.id
 
       redirect_to static_pages_home_path
     else

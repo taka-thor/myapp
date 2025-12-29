@@ -36,6 +36,45 @@
               class: "block w-full object-contain" %>
       </div>
 
+<style>
+  @keyframes wiggle-x {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(10px);
+    }
+  }
+  .animate-wiggle-x {
+    animation: wiggle-x 1.2s ease-in-out infinite;
+  }
+</style>
+
+<div class="min-h-screen bg-[#F6D6A8] text-[#7A5A3A]">
+  <!-- ヒーロー -->
+  <section class="px-6 pt-10 pb-8">
+    <div class="mx-auto max-w-md text-center">
+      <p class="text-2xl tracking-[0.2em] text-[#8C6B4B]">無料グループ通話</p>
+
+      <div class="mt-4 flex items-center justify-center gap-3">
+
+        <h1 class="text-4xl font-bold tracking-[0.08em]">声友</h1>
+      </div>
+
+      <div class="mt-6 rounded-[24px] bg-white/70 shadow-[0_18px_40px_rgba(122,90,58,0.25)] ring-1 ring-white/70 overflow-hidden">
+        <%= image_tag "top.png",
+              alt: "声友ビジュアル",
+              class: "block w-full object-contain" %>
+      </div>
+
+      <div class="mt-6 flex items-center justify-center -ml-16 gap-4 ">
+        <div class="flex items-center justify-center gap-3 ">
+          <!-- 指アイコン（左右バウンス） -->
+          <div class="h-10 w-10 animate-wiggle-x">
+            <%= image_tag "fingericon.svg",
+                  class: "block h-full w-full rotate-90" %>
+          </div>
       <div class="mt-6 flex items-center justify-center -ml-16 gap-4 ">
         <div class="flex items-center justify-center gap-3 ">
           <!-- 指アイコン（左右バウンス） -->
@@ -54,6 +93,16 @@
 
         </div>
       </div>
+          <!-- 始めるボタン -->
+
+          <%= link_to user_sessions_path,
+            data: { turbo_method: :post },
+            class: "flex items-center justify-center gap-2 rounded-full bg-white/80 px-11 py-5 text-[#7A5A3A] shadow-lg ring-1 ring-white/80" do %>
+            <span class="text-xl font-semibold">始める</span>
+          <% end %>
+
+        </div>
+      </div>
     </div>
   </section>
 
@@ -62,7 +111,8 @@
     <div class="mx-auto max-w-4xl">
       <div class="rounded-[28px] bg-white/60 p-6 shadow-[0_12px_30px_rgba(122,90,58,0.2)]">
         <div class="text-center sm:text-lg text-slate-700 leading-relaxed">
-          <p>声友（こえとも）には、簡単・安全に使える</p>
+          <p>声友（こえとも）には、</p>
+          <p>簡単・安全・安心に使える</p>
           <p>3つの特徴があります。</p>
         </div>
 
@@ -108,6 +158,114 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="px-6 pb-12">
+    <div class="mx-auto max-w-4xl rounded-[28px] bg-white/60 p-6 shadow-[0_12px_30px_rgba(122,90,58,0.2)]">
+      <div class="text-center mt-2 mb-6">
+        <h2 class="inline-block px-4 py-2 rounded-full bg-[#C88951] text-white text-lg sm:text-2xl font-bold">
+          声友のご利用方法について
+        </h2>
+      </div>
+
+      <ol class="space-y-8 mt-8">
+        <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold">1</div>
+            </div>
+            <div class="flex-1 space-y-3">
+              <h3 class="font-semibold text-sm sm:text-base text-slate-900">ニックネームを入力する</h3>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                はじめに、呼ばれたい名前を入力します（ひらがな推奨）。
+                本名である必要はありません。
+              </p>
+              <div class="mt-2">
+                <div class="relative w-full rounded-xl border-2 border-dashed border-slate-300 aspect-[16/9] flex items-center justify-center text-[11px] sm:text-xs text-slate-400 bg-white/40">
+                  ニックネーム入力画面のスクリーンショットをここに表示
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold">2</div>
+            </div>
+            <div class="flex-1 space-y-3">
+              <h3 class="font-semibold text-sm sm:text-base text-slate-900">アイコンを選択する</h3>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                用意されたアイコンの中から、好きなものを1つタップして選びます。
+                直感的に選べるので、ここまでで約30秒で終了です。
+              </p>
+              <div class="mt-2">
+                <div class="relative w-full rounded-xl border-2 border-dashed border-slate-300 aspect-[16/9] flex items-center justify-center text-[11px] sm:text-xs text-slate-400 bg-white/40">
+                  アイコン選択画面のスクリーンショットをここに表示
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold">3</div>
+            </div>
+            <div class="flex-1 space-y-3">
+              <h3 class="font-semibold text-sm sm:text-base text-slate-900">通話部屋を選ぶ・作る</h3>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                登録が終わると、通話部屋の一覧が表示されます。気になる部屋に入ることも、
+                自分で新しい部屋を作ることもできます。
+              </p>
+              <div class="mt-2">
+                <div class="relative w-full rounded-xl border-2 border-dashed border-slate-300 aspect-[16/9] flex items-center justify-center text-[11px] sm:text-xs text-slate-400 bg-white/40">
+                  通話部屋一覧画面のスクリーンショットをここに表示
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold">4</div>
+            </div>
+            <div class="flex-1 space-y-3">
+              <h3 class="font-semibold text-sm sm:text-base text-slate-900">通話を楽しむ</h3>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                入室・退出はワンタップ。声だけでゆったり話せる、シンプルな通話画面です。
+                初めての方やご高齢の方でも迷いにくいデザインを心がけています。
+              </p>
+              <div class="mt-2">
+                <div class="relative w-full rounded-xl border-2 border-dashed border-slate-300 aspect-[16/9] flex items-center justify-center text-[11px] sm:text-xs text-slate-400 bg-white/40">
+                  通話中画面のスクリーンショットをここに表示
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold">5</div>
+            </div>
+            <div class="flex-1 space-y-3">
+              <h3 class="font-semibold text-sm sm:text-base text-slate-900">次回からは0秒でスタート</h3>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                一度登録したニックネームとアイコンはそのまま使えます。
+                次にアクセスしたときは、すぐに通話部屋に入ることができます。
+              </p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
   </section>
 
   <section class="px-6 pb-12">
