@@ -1,0 +1,121 @@
+
+<div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
+
+  <%# --- ヘッダー（ユーザー情報表示） --- %>
+  <%= render "shared/header" %>
+
+  <main class="flex-1 px-6 pb-10 pt-12 space-y-10">
+
+    <%# --- こえきちアイコン + 吹き出し（左上） --- %>
+    <section class="flex items-start gap-3">
+
+      <%# 小さめアイコン %>
+      <div class="w-20 h-20 rounded-full overflow-hidden shadow-md shrink-0">
+        <img
+          src="<%= asset_path 'こえきち首輪ver.png' %>"
+          alt="こえきち"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <%# 吹き出し（左向き） %>
+      <div class="relative bg-white shadow-md rounded-2xl px-4 py-3 text-slate-800 text-sm sm:text-base leading-relaxed">
+        たくさん遊んでいってね
+
+        <div class="absolute -left-2 top-4 w-0 h-0
+                    border-t-[8px] border-t-transparent
+                    border-b-[8px] border-b-transparent
+                    border-r-[12px] border-r-white">
+        </div>
+      </div>
+
+    </section>
+
+    <%# --- メニュー部分 --- %>
+    <section class="space-y-6 pt-3">
+
+      <%# 1. 通話部屋を探す %>
+      <%= link_to "#", class: "block" do %>
+        <div
+          class="w-full rounded-2xl bg-white/80 shadow-md
+                 px-5 py-5 sm:px-6 sm:py-6
+                 flex items-center justify-between gap-4
+                 transition-transform duration-150 hover:scale-[1.02] active:scale-95"
+        >
+          <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100">
+              <span class="text-2xl sm:text-3xl" role="img">🗣️</span>
+            </div>
+
+            <div>
+              <p class="text-base sm:text-lg font-semibold text-slate-900">
+                通話部屋を探す
+              </p>
+              <p class="text-xs sm:text-sm text-slate-600">
+                参加できる通話部屋を一覧から探します
+              </p>
+            </div>
+          </div>
+
+        </div>
+      <% end %>
+
+      <%# 2. 友達に紹介する %>
+      <%= link_to "#", class: "block" do %>
+        <div
+          class="w-full rounded-2xl bg-white/80 shadow-md
+                 px-5 py-5 sm:px-6 sm:py-6
+                 flex items-center justify-between gap-4
+                 transition-transform duration-150 hover:scale-[1.02] active:scale-95"
+        >
+          <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-sky-100">
+              <span class="text-2xl sm:text-3xl" role="img">👥</span>
+            </div>
+
+            <div>
+              <p class="text-base sm:text-lg font-semibold text-slate-900">
+                友達に紹介する
+              </p>
+              <p class="text-xs sm:text-sm text-slate-600">
+                声友の招待リンクを友達にシェアします
+              </p>
+            </div>
+          </div>
+
+        </div>
+      <% end %>
+
+      <%# ⭐ 3. 追加：ショップに行く ⭐ %>
+      <%= link_to "#", class: "block" do %>
+        <div
+          class="w-full rounded-2xl bg-white/80 shadow-md
+                 px-5 py-5 sm:px-6 sm:py-6
+                 flex items-center justify-between gap-4
+                 transition-transform duration-150 hover:scale-[1.02] active:scale-95"
+        >
+          <div class="flex items-center gap-3">
+
+            <%# ショップアイコン（袋 or 買い物） %>
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100">
+              <span class="text-2xl sm:text-3xl" role="img">🛍️</span>
+            </div>
+
+            <div>
+              <p class="text-base sm:text-lg font-semibold text-slate-900">
+                ショップに行く
+              </p>
+              <p class="text-xs sm:text-sm text-slate-600">
+                アイテムやアイコンをチェックできます
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      <% end %>
+
+    </section>
+
+  </main>
+</div>

@@ -1,6 +1,13 @@
 class UserNicknamesController < ApplicationController
+  skip_before_action :current_user, only: %i[new create]
+
   def new
+    user_name = session[:name]
+    if user_name.present?
+        @user = User.new(name: user_name)
+    else
     @user = User.new
+    end
   end
 
   def create

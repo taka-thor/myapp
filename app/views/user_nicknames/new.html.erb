@@ -32,6 +32,7 @@ outline: 1px solid red;
           ひらがな１０文字以内で記入してください
       </p>
 
+      
       <%= form_with model: @user, url:user_nicknames_path do |f| %>
         <%= render 'shared/error_messages', object: @user %>
 

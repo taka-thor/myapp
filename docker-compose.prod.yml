@@ -1,7 +1,6 @@
 services:
   assets-export:
     image: ghcr.io/taka-thor/myapp:latest
-    #毎回最新イメージをpull
     pull_policy: always
     command: >
       bash -lc '
@@ -11,7 +10,7 @@ services:
           echo "ERROR: /host-assets not mounted"; exit 1
         fi
         rsync -a --delete /app/public/assets/ /host-assets/
-        #とりあえずpublic/assets以下を全部コピー。manifest.jsonもここに入ってるので一緒にコピーされる(他のfaviconとかは入ってないので後で追加)
+        # manifest をassets直下でも使うなら一緒に同期（任意）
         rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
         chown -R 33:33 /host-assets
       '
@@ -33,11 +32,8 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
-      - sqlite_data:/app/db
+      - /var/www/myapp/shared/db:/app/db
     depends_on:
       assets-export:
         condition: service_completed_successfully
     restart: unless-stopped
-
-volumes:
-  sqlite_data:
