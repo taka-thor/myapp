@@ -189,4 +189,4 @@ https://www.figma.com/design/3i7eU7Nla26IkW4hCed57u/%E3%82%A2%E3%83%97%E3%83%AA%
 
 ## ER 図
 
-https://app.diagrams.net/#G1dRuVsenafISYRi8ysW3P0VrHD6K1GAiR#%7B%22pageId%22%3A%22lGxgucOKedk6m3YhQ0gJ%22%7D
+https://drive.google.com/file/d/1dRuVsenafISYRi8ysW3P0VrHD6K1GAiR/view?usp=sharing

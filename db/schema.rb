@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_13_024201) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_31_030456) do
+  create_table "rooms", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "topic"
+    t.datetime "topic_updated"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "icon_url"
