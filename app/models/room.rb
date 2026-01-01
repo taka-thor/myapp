@@ -1,3 +1,4 @@
 class Room < ApplicationRecord
-  belongs_to :user
+  validates :topic, length: { maximum: 12},
+              
 end

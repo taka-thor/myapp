@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_31_030456) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_31_072440) do
+  create_table "ng_words", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "word", null: false
+    t.index ["word"], name: "index_ng_words_on_word", unique: true
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "topic"
