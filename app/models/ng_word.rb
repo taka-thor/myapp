@@ -3,7 +3,6 @@ class NgWord < ApplicationRecord
   # このネスト内のメソッド全てをクラスメソッドとして扱うよってこと。self.⚪︎⚪︎って書かなくてOK
   class << self
     def word_filter(text)
-
       return "" if text.blank?
 
       s = text.to_s.dup
@@ -33,11 +32,9 @@ class NgWord < ApplicationRecord
       return false if filtered_word.blank?
 
       NgWord.pluck(:word).any? do |db_word|
-
         filtered_db_word = word_filter(db_word)
         filtered_word.include?(filtered_db_word)
       end
-
     end
   end
 end

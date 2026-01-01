@@ -1,4 +1,3 @@
 class Room < ApplicationRecord
-  validates :topic, length: { maximum: 12},
-              
+  validates :topic, length: { maximum: 12 }
 end
