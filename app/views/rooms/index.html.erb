@@ -1,16 +1,36 @@
-<p style="color: green"><%= notice %></p>
+<div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
+<% Rails.logger.debug "@room = #{@rooms.inspect}" %>
 
-<% content_for :title, "Rooms" %>
+  <%# --- ヘッダー（レイアウト背景＆ shared/header を使用） --- %>
+  <%= render "shared/header" %>
 
-<h1>Rooms</h1>
+  <main class="flex-1 px-6 pb-10 pt-12 space-y-6">
 
-<div id="rooms">
-  <% @rooms.each do |room| %>
-    <%= render room %>
-    <p>
-      <%= link_to "Show this room", room %>
-    </p>
-  <% end %>
+    <%# タイトル %>
+    <section>
+      <h1 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center leading-relaxed">
+        入室する部屋を選択しましょう
+      </h1>
+    </section>
+
+    <%# 部屋名一覧（部屋カード全体がリンク） %>
+    <section class="space-y-4">
+      <% @rooms.each do |room| %>
+
+        <%= link_to room_path(room),
+                    class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
+          <div
+            class="w-full rounded-2xl bg-white/80 shadow-md
+                   px-5 py-5 sm:px-6 sm:py-6
+                   flex items-center"
+          >
+            <p class="text-lg sm:text-xl font-semibold text-slate-900">
+              <%= room.topic %>
+            </p>
+          </div>
+        <% end %>
+      <% end %>
+    </section>
+
+  </main>
 </div>
-
-<%= link_to "New room", new_room_path %>

@@ -1,5 +1,5 @@
 class NgWordValidator < ActiveModel::EachValidator
-  def validate_each(record,attribute,value)
+  def validate_each(record, attribute, value)
       return if value.blank?
 
       if NgWord.ng?(value)
