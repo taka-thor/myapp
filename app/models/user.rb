@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :room_participants
+  has_many :rooms, through: :room_participants
   validates :name,
             presence:   true,
             uniqueness: true,
