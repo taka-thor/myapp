@@ -1,4 +1,3 @@
-# config/locales/ja.yml
 ja:
   errors:
     format: "%{message}"
@@ -17,3 +16,4 @@ ja:
               taken: "「%{value}」は既に使われています"
               too_long: "%{attribute}は%{count}文字以内で入力してください"
               invalid: "ひらがな以外の記号や空白はご使用できません"
+              ng_word: "%{attribute}に不適切な表現が含まれています"
