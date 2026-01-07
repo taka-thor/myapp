@@ -1,10 +1,15 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: %i[ show edit update destroy ]
 
-  # GET /rooms or /rooms.json
-  def index
-    @rooms = Room.all
-  end
+# GET /rooms or /rooms.json
+# app/controllers/rooms_controller.rb
+# rooms_controller.rb
+def index
+  @rooms = Room.all
+  @active_counts = RoomParticipant.where(is_active: true).group(:room_id).count
+end
+
+
 
   # GET /rooms/1 or /rooms/1.json
   def show
@@ -58,13 +63,12 @@ class RoomsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_room
-      @room = Room.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def room_params
-      params.expect(room: [ :topic, :topic_updated, :user_id ])
-    end
+  def set_room
+    @room = Room.find(params[:id])
+  end
+
+  def room_params
+    params.require(:room).permit(:topic, :topic_updated, :user_id)
+  end
 end

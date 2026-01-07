@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_02_102715) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_06_045201) do
   create_table "ng_words", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -22,12 +22,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_02_102715) do
     t.datetime "created_at", null: false
     t.boolean "is_active"
     t.datetime "joined_at"
+    t.datetime "last_seen_at"
     t.datetime "left_at"
     t.integer "room_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["room_id"], name: "index_room_participants_on_room_id"
     t.index ["user_id"], name: "index_room_participants_on_user_id"
+    t.index ["user_id"], name: "index_room_participants_unique_active_user", unique: true, where: "is_active = 1"
   end
 
   create_table "rooms", force: :cascade do |t|
