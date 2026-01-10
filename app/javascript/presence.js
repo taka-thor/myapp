@@ -1,38 +1,44 @@
+console.log("[presence] presence.js loaded");
+
 function csrfToken() {
   const meta = document.querySelector('meta[name="csrf-token"]');
   if (!meta) throw new Error("[presence] csrf-token meta not found");
   return meta.content;
 }
 
-function post(url) {
-  return fetch(url, {
-    method: "POST",
-    headers: { "X-CSRF-Token": csrfToken() },
-    keepalive: true,
-  });
+async function post(url) {
+  if (!url) {
+    console.warn("[presence] url empty");
+    return;
+  }
+
+  console.log("[presence] (A) before fetch");
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "X-CSRF-Token": csrfToken(), Accept: "application/json" },
+      credentials: "same-origin",
+      keepalive: true,
+    });
+
+    console.log("[presence] (B) after fetch", res.status);
+
+    if (!res.ok) {
+      console.log("[presence] (C) res not ok, reading body...");
+      const body = await res.text();
+      console.log("[presence] (D) body read:", body.slice(0, 200));
+    }
+
+    console.log("[presence] (E) returning res");
+    return res;
+  } catch (e) {
+    console.error("[presence] (X) fetch error", e);
+  } finally {
+    console.log("[presence] (Z) finally");
+  }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const root = document.querySelector("[data-presence-ping-url]"); //HTMLにあらかじめ埋め込んたURLを、[]内の属性セレクタ名で探す。
-  if (!root) return;
-
-  const pingUrl = root.dataset.presencePingUrl; //fetch先のURLを変数pingURLへ代入
-  const leaveUrl = root.dataset.presenceLeaveUrl;
-  const intervalMs = Number(root.dataset.presenceHeartbeatMs || "15000");
-
-  // 入室（active true）
-  post(pingUrl);
-
-  // heartbeat
-  const timerId = setInterval(() => post(pingUrl), intervalMs);
-
-  // 離脱（active false）
-  window.addEventListener(
-    "beforeunload",
-    () => {
-      clearInterval(timerId);
-      post(leaveUrl);
-    },
-    { once: true }
-  );
-});
+// ✅ ここがトップレベル（関数の外）
+window.presenceDebug = { post, csrfToken };
+console.log("[presence] exposed to window.presenceDebug");
