@@ -1,3 +1,12 @@
+
+<div
+  id="presence-hook"
+  data-room-id="<%= @room.id %>"
+  data-presence-ping-url="<%= ping_room_presence_path(@room) %>"
+  data-presence-leave-url="<%= leave_room_presence_path(@room) %>"
+  data-presence-heartbeat-ms="5000"
+></div>
+
 <div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
 
   <%# --- ヘッダー（レイアウト背景＆ shared/header を使用） --- %>
@@ -9,16 +18,16 @@
     <section>
       <div
         class="w-full rounded-2xl bg-sky-300/90
-               px-4 py-3 sm:px-5 sm:py-4
-               flex items-center justify-between gap-3"
+                px-4 py-3 sm:px-5 sm:py-4
+                flex items-center justify-between gap-3"
       >
         <%# 話題変更ボタン %>
         <button
           type="button"
           class="shrink-0 rounded-xl bg-orange-400 text-white
-                 px-4 py-2 sm:px-5 sm:py-2.5
-                 text-base sm:text-lg font-semibold
-                 hover:opacity-90 active:scale-95 transition"
+                  px-4 py-2 sm:px-5 sm:py-2.5
+                  text-base sm:text-lg font-semibold
+                  hover:opacity-90 active:scale-95 transition"
         >
           変更
         </button>
@@ -50,7 +59,6 @@
 
             <%# アバター %>
             <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-100 shadow-sm">
-              <%# 実装に合わせて icon_url 等のカラム名は調整してください %>
               <% if user.respond_to?(:icon_url) && user.icon_url.present? %>
                 <%= image_tag user.icon_url, alt: user.name, class: "w-full h-full object-cover" %>
               <% else %>
@@ -65,8 +73,7 @@
               <%= user.name %>
             </p>
 
-            <%# スピーカーアイコン（発言中ユーザー用・デフォルト非表示）
-                speaking 状態を判定できるようになったら条件を差し替えてください %>
+            <%# スピーカーアイコン（発言中ユーザー用・デフォルト非表示） %>
             <% if defined?(user.speaking?) && user.speaking? %>
               <div class="mt-1">
                 <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 82 77" fill="none">

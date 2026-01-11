@@ -11,5 +11,24 @@ services:
     volumes:
       - .:/app #compose.ymlを置いている場所.とコンテナ内ディレクトリ/appをbindmount
       - ./db:/app/db
+      - node_modules:/app/node_modules # ★追加：Macのnode_modules混入を防ぐ（esbuild Exec format error対策）
     ports:
       - "3000:3000"
+
+  js: # ★追加：JSをwatchして app/assets/builds を更新し続ける人（esbuild --watch）
+    build: . # web と同じDockerfileを使う（このDockerfileで nodejs / npm を入れているのでOK）
+    env_file:
+      - .env
+    platform: linux/amd64
+    # ★package.json に "watch" を追加した前提（npm run watch = watch:app & watch:rtc）
+    command: bash -lc "npm run watch"
+    environment:
+      TZ: Asia/Tokyo
+      RAILS_ENV: development
+    volumes:
+      - .:/app # web と同じ /app を共有しないと、jsが生成した builds を web が配信できない
+      - ./db:/app/db
+      - node_modules:/app/node_modules # ★追加：web と同じnode_modules(volume)を使う
+
+volumes:
+  node_modules: # ★追加：コンテナ専用node_modules置き場（named volume）
