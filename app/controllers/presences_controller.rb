@@ -8,12 +8,12 @@ class PresencesController < ApplicationController
 
   def leave
     RoomParticipant.leave!(room: @room, user: current_user)
-    #Rails.logger.debug "current_user = #{curren_user.inspect}"
+    # Rails.logger.debug "current_user = #{curren_user.inspect}"
     head :no_content
   end
 
   private
   def set_room
-    @room = Room.find(params[:room_id]) #pingやleaveでfetchするときにdocumentから取得するURLからのparameter =>rooms/id/presence/ping
+    @room = Room.find(params[:room_id]) # pingやleaveでfetchするときにdocumentから取得するURLからのparameter =>rooms/id/presence/ping
   end
 end
