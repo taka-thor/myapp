@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title><%= content_for(:title) || "声友" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <%= csrf_meta_tags %>
@@ -25,7 +26,7 @@
     <%# Tailwind + Rails標準のCSS/JS %>
     <script src="https://cdn.tailwindcss.com"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+<%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body
