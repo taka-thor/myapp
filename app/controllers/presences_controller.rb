@@ -2,12 +2,12 @@ class PresencesController < ApplicationController
   before_action :set_room, only: %i[ping leave]
 
   def ping
-    RoomParticipant.touch!(room: @room, user: current_user)
+    RoomParticipants::Ping.call(room: @room, user: current_user)
     head :no_content # bodyを空にしてレスポンス(特段返すものない)
   end
 
   def leave
-    RoomParticipant.leave!(room: @room, user: current_user)
+    RoomParticipants::Leave.call(room: @room, user: current_user)
     # Rails.logger.debug "current_user = #{curren_user.inspect}"
     head :no_content
   end
