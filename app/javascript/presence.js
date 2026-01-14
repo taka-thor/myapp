@@ -105,7 +105,10 @@ function startHeartbeat({ pingUrl, intervalMs }) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const root = document.querySelector("[data-presence-ping-url]");
-  if (!root) return;
+  if (!root) {
+    dwarn("[presence] root not found: data-presence-ping-url");
+    return;
+  }
 
   const pingUrl = root.dataset.presencePingUrl;
   const leaveUrl = root.dataset.presenceLeaveUrl;
@@ -139,20 +142,4 @@ document.addEventListener("DOMContentLoaded", () => {
       startHeartbeat({ pingUrl, intervalMs });
     }
   });
-
-  // デバッグ用：コンソールから叩けるように（不要なら消してOK）
-  // window.presenceDebug = {
-  //   post,
-  //   postOnLeave,
-  //   csrfToken,
-  //   startHeartbeat: () => startHeartbeat({ pingUrl, intervalMs }),
-  //   stopHeartbeat,
-  //   urls: { pingUrl, leaveUrl, intervalMs },
-  //   flags: () => ({
-  //     started,
-  //     leaving,
-  //     timerId: !!timerId,
-  //     visibility: document.visibilityState,
-  //   }),
-  // };
 });

@@ -16,10 +16,12 @@
             data: { turbo: false },
             class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
 
-          <div class="relative w-full rounded-2xl bg-white/80 shadow-md
-                      px-5 py-5 sm:px-6 sm:py-6
-                      flex items-center overflow-visible">
-
+          <div
+            class="relative w-full rounded-2xl bg-white/80 shadow-md
+                    px-5 py-5 sm:px-6 sm:py-6
+                    flex items-center overflow-visible"
+            data-room-id="<%= room.id %>"
+          >
             <!-- 人数バッジ（必ず表示） -->
             <div class="absolute top-3 right-3 z-50">
               <span class="inline-flex items-center gap-1 rounded-full
@@ -27,7 +29,7 @@
                             text-xs sm:text-sm font-semibold
                             px-2.5 py-1">
                 <span aria-hidden="true">👤</span>
-                <span><%= active_count %></span>
+                入室中: <span data-active-count><%= active_count %></span>
               </span>
             </div>
 
