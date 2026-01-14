@@ -82,14 +82,14 @@ function startHeartbeat({ pingUrl, intervalMs }) {
   // 入室（active true）
   dlog("[presence] ping (enter)", pingUrl);
   post(pingUrl)
-    .then((res) => dlog("[presence] ping ok:", res.status))
+    .then((res) => dlog("[presence] ping:", res.status))
     .catch((e) => {
       // ここはベストエフォート。頻発するなら DEBUG を false に
       derr("[presence] ping failed (ignored):", e);
     });
 
   // heartbeat
-  const ms = Number(intervalMs || 15000);
+  const ms = Number(intervalMs || 5000);
   timerId = setInterval(() => {
     if (!canPingNow()) return;
 
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pingUrl = root.dataset.presencePingUrl;
   const leaveUrl = root.dataset.presenceLeaveUrl;
-  const intervalMs = Number(root.dataset.presenceHeartbeatMs || "15000");
+  const intervalMs = Number(root.dataset.presenceHeartbeatMs || "5000");
 
   startHeartbeat({ pingUrl, intervalMs });
 
@@ -141,18 +141,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // デバッグ用：コンソールから叩けるように（不要なら消してOK）
-  window.presenceDebug = {
-    post,
-    postOnLeave,
-    csrfToken,
-    startHeartbeat: () => startHeartbeat({ pingUrl, intervalMs }),
-    stopHeartbeat,
-    urls: { pingUrl, leaveUrl, intervalMs },
-    flags: () => ({
-      started,
-      leaving,
-      timerId: !!timerId,
-      visibility: document.visibilityState,
-    }),
-  };
+  // window.presenceDebug = {
+  //   post,
+  //   postOnLeave,
+  //   csrfToken,
+  //   startHeartbeat: () => startHeartbeat({ pingUrl, intervalMs }),
+  //   stopHeartbeat,
+  //   urls: { pingUrl, leaveUrl, intervalMs },
+  //   flags: () => ({
+  //     started,
+  //     leaving,
+  //     timerId: !!timerId,
+  //     visibility: document.visibilityState,
+  //   }),
+  // };
 });

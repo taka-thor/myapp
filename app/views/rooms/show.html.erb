@@ -4,7 +4,6 @@
   data-room-id="<%= @room.id %>"
   data-presence-ping-url="<%= ping_room_presence_path(@room) %>"
   data-presence-leave-url="<%= leave_room_presence_path(@room) %>"
-  data-presence-heartbeat-ms="5000"
 ></div>
 
 <div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
@@ -102,8 +101,8 @@
     <section class="mt-4">
       <div
         class="w-full max-w-sm mx-auto rounded-2xl bg-red-50
-               px-4 py-4 sm:px-5 sm:py-5
-               text-center text-red-600 space-y-2 text-sm sm:text-base"
+                px-4 py-4 sm:px-5 sm:py-5
+                text-center text-red-600 space-y-2 text-sm sm:text-base"
       >
         <p class="font-semibold">
           個人情報に関する会話にご注意ください
