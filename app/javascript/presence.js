@@ -1,6 +1,6 @@
 console.log("[presence] presence.js loaded");
 
-const DEBUG = true; // 本番は false 推奨
+const DEBUG = false; // 本番は false 推奨
 
 function dlog(...args) {
   if (DEBUG) console.log(...args);
@@ -67,7 +67,7 @@ function stopHeartbeat() {
   }
 }
 
-function canPingNow() {
+function is_showing_page() {
   return document.visibilityState === "visible";
 }
 
@@ -84,14 +84,13 @@ function startHeartbeat({ pingUrl, intervalMs }) {
   post(pingUrl)
     .then((res) => dlog("[presence] ping:", res.status))
     .catch((e) => {
-      // ここはベストエフォート。頻発するなら DEBUG を false に
       derr("[presence] ping failed (ignored):", e);
     });
 
   // heartbeat
   const ms = Number(intervalMs || 5000);
   timerId = setInterval(() => {
-    if (!canPingNow()) return;
+    if (!is_showing_page()) return;
 
     post(pingUrl)
       .then((res) => dlog("[presence] heartbeat ok:", res.status))
@@ -112,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pingUrl = root.dataset.presencePingUrl;
   const leaveUrl = root.dataset.presenceLeaveUrl;
-  const intervalMs = Number(root.dataset.presenceHeartbeatMs || "5000");
+  const intervalMs = Number("5000");
 
   startHeartbeat({ pingUrl, intervalMs });
 
@@ -129,14 +128,12 @@ document.addEventListener("DOMContentLoaded", () => {
     dlog("[presence] pagehide -> leave fired (persisted:", !!e.persisted, ")");
     stopHeartbeat();
 
-    // leave はベストエフォート（設計上、失敗しても TTL が真実）
     postOnLeave(leaveUrl);
   });
 
-  // 復帰時の保険：可視化されたのにタイマーが無ければ張り直す
   document.addEventListener("visibilitychange", () => {
     if (!started) return;
-    if (!canPingNow()) return;
+    if (!is_showing_page()) return;
     if (!timerId) {
       dlog("[presence] visibility back -> restart heartbeat");
       startHeartbeat({ pingUrl, intervalMs });
