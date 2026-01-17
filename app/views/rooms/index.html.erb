@@ -1,4 +1,4 @@
-<div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
+<div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col" data-page="rooms-index">
   <%= render "shared/header" %>
 
   <main class="flex-1 px-6 pb-10 pt-12 space-y-6">
@@ -10,16 +10,17 @@
 
     <section class="space-y-4">
       <% @rooms.each do |room| %>
-        <% active_count = (@active_counts || {})[room.id] || 0 %>
-
+        <% active_user_count = (@active_user_counts || {})[room.id] || 0 %>
         <%= link_to room_path(room),
             data: { turbo: false },
             class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
 
-          <div class="relative w-full rounded-2xl bg-white/80 shadow-md
-                      px-5 py-5 sm:px-6 sm:py-6
-                      flex items-center overflow-visible">
-
+          <div
+            class="relative w-full rounded-2xl bg-white/80 shadow-md
+                    px-5 py-5 sm:px-6 sm:py-6
+                    flex items-center overflow-visible"
+            data-room-id="<%= room.id %>"
+          >
             <!-- 人数バッジ（必ず表示） -->
             <div class="absolute top-3 right-3 z-50">
               <span class="inline-flex items-center gap-1 rounded-full
@@ -27,7 +28,7 @@
                             text-xs sm:text-sm font-semibold
                             px-2.5 py-1">
                 <span aria-hidden="true">👤</span>
-                <span><%= active_count %></span>
+                <span data-active-count class="text-blue-800"><%= active_user_count %></span>
               </span>
             </div>
 

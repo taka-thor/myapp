@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  # WebSocket
   mount ActionCable.server => "/cable"
 
   root "static_pages#top"
   get "static_pages/home", to: "static_pages#home"
+  get "active_users/index", to: "active_users#index"
 
   resources :users, only: %i[new create]
   resources :user_sessions, only: %i[create]
