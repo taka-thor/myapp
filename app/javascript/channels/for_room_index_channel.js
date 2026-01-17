@@ -7,13 +7,6 @@ function updateActiveCount(roomId, activeCount) {
     `[data-room-id="${roomId}"] [data-active-count]`
   );
   if (el) el.textContent = String(activeCount);
-
-  // const showEl = document.querySelector("[data-show-active-count]");
-  // const showRoomId = document.querySelector("[data-show-room-id]")?.dataset
-  //   ?.showRoomId;
-  // if (showEl && String(showRoomId) === String(roomId)) {
-  //   showEl.textContent = String(activeCount);
-  // }
 }
 
 export function startForRoomIndexChannel() {

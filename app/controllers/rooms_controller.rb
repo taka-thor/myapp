@@ -6,10 +6,8 @@ class RoomsController < ApplicationController
 # rooms_controller.rb
 def index
   @rooms = Room.all
-  @active_counts = RoomParticipant.where(is_active: true).group(:room_id).count
+  @active_user_counts = RoomParticipant.active.group(:room_id).count
 end
-
-
 
   # GET /rooms/1 or /rooms/1.json
   def show

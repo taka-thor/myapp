@@ -10,8 +10,7 @@
 
     <section class="space-y-4">
       <% @rooms.each do |room| %>
-        <% active_count = (@active_counts || {})[room.id] || 0 %>
-
+        <% active_user_count = (@active_user_counts || {})[room.id] || 0 %>
         <%= link_to room_path(room),
             data: { turbo: false },
             class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
@@ -29,7 +28,7 @@
                             text-xs sm:text-sm font-semibold
                             px-2.5 py-1">
                 <span aria-hidden="true">👤</span>
-                <span data-active-count class="text-blue-800"><%= active_count %></span>
+                <span data-active-count class="text-blue-800"><%= active_user_count %></span>
               </span>
             </div>
 

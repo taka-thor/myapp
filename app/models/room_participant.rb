@@ -6,6 +6,7 @@ class RoomParticipant < ApplicationRecord
   scope :active, -> { where(is_active: true) }
   # Room_participants.where(is_active: true) = Room_participants.activeとなる（エイリアスのようなもの）
 
+  # 購読先にdataオブジェクトを送る。中身はbroadcastした分
   private
     def broadcast_room_active_users
         ActionCable.server.broadcast(
