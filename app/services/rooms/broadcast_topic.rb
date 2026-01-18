@@ -1,4 +1,4 @@
-class Room::BroadcastTopic
+class Rooms::BroadcastTopic
   def self.call(room_id:)
     room = Room.find(room_id)
     topic = room.topic

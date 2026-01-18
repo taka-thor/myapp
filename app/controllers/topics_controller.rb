@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
 
   def update
     if @room.update(topic_params)
-      Room::BroadcastTopic.call(room_id: @room.id)
+      Rooms::BroadcastTopic.call(room_id: @room.id)
 
       respond_to do |format|
         format.turbo_stream do

@@ -1,4 +1,4 @@
-class Rooms::BroadcastActiveUserCount
+class RoomParticipants::BroadcastActiveUserCount
   def self.call(room_id:)
     room = Room.find(room_id)
     active_count = room.room_participants.active.count
