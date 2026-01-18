@@ -1,9 +1,6 @@
 class RoomsController < ApplicationController
-  before_action :set_room, only: %i[ show edit update destroy ]
+  before_action :set_room, only: %i[ show edit update ]
 
-# GET /rooms or /rooms.json
-# app/controllers/rooms_controller.rb
-# rooms_controller.rb
 def index
   @rooms = Room.all
   @active_user_counts = RoomParticipant.active.group(:room_id).count
@@ -13,51 +10,15 @@ end
   def show
   end
 
-  # GET /rooms/new
-  def new
-    @room = Room.new
-  end
+  def edit; end
 
-  # GET /rooms/1/edit
-  def edit
-  end
-
-  # POST /rooms or /rooms.json
-  def create
-    @room = Room.new(room_params)
-
-    respond_to do |format|
-      if @room.save
-        format.html { redirect_to @room, notice: "Room was successfully created." }
-        format.json { render :show, status: :created, location: @room }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /rooms/1 or /rooms/1.json
   def update
-    respond_to do |format|
-      if @room.update(room_params)
-        format.html { redirect_to @room, notice: "Room was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @room }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @room.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  @room = Room.find(params[:id])
+  @room.update!(room_params)
 
-  # DELETE /rooms/1 or /rooms/1.json
-  def destroy
-    @room.destroy!
+  Room::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
 
-    respond_to do |format|
-      format.html { redirect_to rooms_path, notice: "Room was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
+  redirect_to @room
   end
 
   private

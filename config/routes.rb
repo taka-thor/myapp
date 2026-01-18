@@ -10,11 +10,12 @@ Rails.application.routes.draw do
   resource :user_nicknames, only: %i[new create]
   resource :user_icons, only: %i[new create]
   resources :rtcs, only: %i[show]
-  resources :rooms, only: %i[index show] do
+  resources :rooms, only: %i[index show update] do
     resource :presence, only: [] do
       post :ping
       post :leave
     end
+    resource :topic, only: %i[ update ]
   end
 
 

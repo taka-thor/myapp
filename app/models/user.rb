@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :room_participants
+  has_many :room_participants, dependent: :destroy
   has_many :rooms, through: :room_participants
   validates :name,
             presence:   true,
