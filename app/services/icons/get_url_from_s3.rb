@@ -1,3 +1,6 @@
+require "net/http"
+require "uri"
+
 class Icons::GetUrlFromS3
   def self.call(url: ENV["ICONS_JSON_URL"])
     new(url).call
