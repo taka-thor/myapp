@@ -16,7 +16,7 @@
         <% active_user_count = (@active_user_counts || {})[room.id] || 0 %>
 
         <%= link_to room_path(room),
-            data: { turbo: true },
+            data: { turbo: false },
             class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
 
           <div
@@ -34,7 +34,7 @@
                 <span aria-hidden="true">👤</span>
 
                 <span
-                  id="room_<%= room.id %>_active_user_count"
+                  id="room_<%= room.id %>_active_count"
                   data-active-count
                   class="text-blue-800"
                 >

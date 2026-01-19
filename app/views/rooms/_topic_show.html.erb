@@ -1,5 +1,5 @@
-<div id="room_topic" class="w-full">
+<div id="room_<%= room.id %>_topic" class="w-full">
   <p class="text-base sm:text-lg font-semibold text-slate-900">
-    <%= topic.presence || "（トピックなし）" %>
+    <%= topic || "（トピックなし）" %>
   </p>
 </div>

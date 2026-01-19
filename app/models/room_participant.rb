@@ -9,9 +9,14 @@ class RoomParticipant < ApplicationRecord
   # 購読先にdataオブジェクトを送る。中身はbroadcastした分
   private
     def broadcast_room_active_users
-        ActionCable.server.broadcast(
+        active_user_count = self.room.room_participants.active.count
+
+        Turbo::StreamsChannel.broadcast_replace_to(
         "for_room_index",
-        { room_id: room_id, active_count: room.room_participants.active.count } # =self.room.room_participants.active.count
-        )
+        target: "room_#{room.id}_active_count",
+        partial: "rooms/active_count",
+        locals: { room: room,
+                  active_user_count: active_user_count }
+      )
     end
 end

@@ -4,10 +4,12 @@ class RoomsController < ApplicationController
 def index
   @rooms = Room.all
   @active_user_counts = RoomParticipant.active.group(:room_id).count
+  # response.set_header("Turbo-Cache-Control", "no-cache")
 end
 
   # GET /rooms/1 or /rooms/1.json
   def show
+    @room = Room.find(params[:id])
   end
 
   def edit; end
@@ -16,7 +18,7 @@ end
   @room = Room.find(params[:id])
   @room.update!(room_params)
 
-  Room::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
+  Rooms::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
 
   redirect_to @room
   end
