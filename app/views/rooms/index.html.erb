@@ -1,6 +1,6 @@
 <div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col" data-page="rooms-index">
   <%= render "shared/header" %>
-
+  <%= turbo_page_requires_reload %>
   <main class="flex-1 px-6 pb-10 pt-12 space-y-6">
     <section>
       <h1 class="text-xl sm:text-2xl font-semibold text-slate-900 text-center leading-relaxed">
@@ -8,7 +8,6 @@
       </h1>
     </section>
 
-    <!-- ✅ 一覧ページ全員が購読（topic / active_user_count の配信用） -->
     <%= turbo_stream_from "for_room_index" %>
 
     <section class="space-y-4">
@@ -16,7 +15,7 @@
         <% active_user_count = (@active_user_counts || {})[room.id] || 0 %>
 
         <%= link_to room_path(room),
-            data: { turbo: false },
+            data: { turbo: true },
             class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
 
           <div
@@ -25,25 +24,16 @@
                     flex items-center overflow-visible"
             data-room-id="<%= room.id %>"
           >
-            <!-- ✅ 人数バッジ（数値部分は id を付けて差し替え可能に） -->
             <div class="absolute top-3 right-3 z-50">
               <span class="inline-flex items-center gap-1 rounded-full
                             bg-slate-200 text-white
                             text-xs sm:text-sm font-semibold
                             px-2.5 py-1">
                 <span aria-hidden="true">👤</span>
-
-                <span
-                  id="room_<%= room.id %>_active_count"
-                  data-active-count
-                  class="text-blue-800"
-                >
-                  <%= active_user_count %>
-                </span>
+                <%= render "rooms/active_count", room: room,
+                active_user_count: active_user_count%>
               </span>
             </div>
-
-            <!-- ✅ topic はパーシャルにして id を一致させる -->
             <%= render "rooms/topic_index", room: room, topic: room.topic %>
           </div>
         <% end %>

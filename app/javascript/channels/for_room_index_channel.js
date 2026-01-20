@@ -1,45 +1,45 @@
-import consumer from "./consumer";
+// import consumer from "./consumer";
 
-let sub = null;
+// let sub = null;
 
-function updateActiveCount(roomId, activeCount) {
-  const el = document.querySelector(
-    `[data-room-id="${roomId}"] [data-active-count]`
-  );
-  if (el) el.textContent = String(activeCount);
-}
+// function updateActiveCount(roomId, activeCount) {
+//   const el = document.querySelector(
+//     `[data-room-id="${roomId}"] [data-active-count]`
+//   );
+//   if (el) el.textContent = String(activeCount);
+// }
 
-export function startForRoomIndexChannel() {
-  if (sub) return sub;
+// export function startForRoomIndexChannel() {
+//   if (sub) return sub;
 
-  console.log("[cable] for_room_index_channel start");
+//   console.log("[cable] for_room_index_channel start");
 
-  sub = consumer.subscriptions.create("ForRoomIndexChannel", {
-    connected() {
-      console.log("[ForRoomIndexChannel] connected");
-    },
-    disconnected() {
-      console.log("[ForRoomIndexChannel] disconnected");
-    },
-    received(data) {
-      console.log("[ForRoomIndexChannel] received", data);
+//   sub = consumer.subscriptions.create("ForRoomIndexChannel", {
+//     connected() {
+//       console.log("[ForRoomIndexChannel] connected");
+//     },
+//     disconnected() {
+//       console.log("[ForRoomIndexChannel] disconnected");
+//     },
+//     received(data) {
+//       console.log("[ForRoomIndexChannel] received", data);
 
-      if (!data) return;
-      const roomId = data.room_id;
-      const activeCount = data.active_count;
-      if (roomId == null || activeCount == null) return;
+//       if (!data) return;
+//       const roomId = data.room_id;
+//       const activeCount = data.active_count;
+//       if (roomId == null || activeCount == null) return;
 
-      updateActiveCount(roomId, activeCount);
-    },
-  });
+//       updateActiveCount(roomId, activeCount);
+//     },
+//   });
 
-  return sub;
-}
+//   return sub;
+// }
 
-export function stopForRoomIndexChannel() {
-  if (!sub) return;
+// export function stopForRoomIndexChannel() {
+//   if (!sub) return;
 
-  console.log("[cable] for_room_index_channel stop");
-  sub.unsubscribe();
-  sub = null;
-}
+//   console.log("[cable] for_room_index_channel stop");
+//   sub.unsubscribe();
+//   sub = null;
+// }
