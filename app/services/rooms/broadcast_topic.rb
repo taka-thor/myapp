@@ -4,16 +4,9 @@ class Rooms::BroadcastTopic
     topic = room.topic
 
     Turbo::StreamsChannel.broadcast_replace_to(
-      room,
-      target: "room_topic",
-      partial: "rooms/topic_show",
-      locals: { room: room, topic: topic }
-    )
-
-    Turbo::StreamsChannel.broadcast_replace_to(
       "for_room_index",
       target: "room_#{room.id}_topic",
-      partial: "rooms/topic_index",
+      partial: "rooms/topic_index_and_show",
       locals: { room: room, topic: topic }
     )
   end

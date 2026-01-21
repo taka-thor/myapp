@@ -1,17 +1,7 @@
-<div class="absolute top-3 right-3 z-50">
-  <span class="inline-flex items-center gap-1 rounded-full
-                bg-slate-200 text-white
-                text-xs sm:text-sm font-semibold
-                px-2.5 py-1">
-    <span aria-hidden="true">👤</span>
-
-    <!-- Turbo Streams の target にするため id を付ける -->
     <span
-      id="room_<%= room.id %>_active_user_count"
-      data-active-count
-      class="text-blue-800"
-    >
-      <%= active_user_count %>
-    </span>
-  </span>
-</div>
+  id="room_<%= room.id %>_active_count"
+  data-active-count
+  class="text-blue-800"
+>
+  <%= active_user_count %>
+</span>
