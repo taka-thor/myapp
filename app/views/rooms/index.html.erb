@@ -1,3 +1,8 @@
+<%# <style>
+  * { outline: 1px solid red; }
+</style> %>
+
+
 <div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col" data-page="rooms-index">
   <%= render "shared/header" %>
   <%= turbo_page_requires_reload %>
@@ -34,7 +39,7 @@
                 active_user_count: active_user_count%>
               </span>
             </div>
-            <%= render "rooms/topic_index", room: room, topic: room.topic %>
+            <%= render "rooms/topic_index_and_show", room: room, topic: room.topic %>
           </div>
         <% end %>
       <% end %>

@@ -1,8 +1,9 @@
-<style>
+<%# <style>
   * { outline: 1px solid red; }
-</style>
+</style> %>
 
 <%= turbo_page_requires_reload %>
+<%= turbo_stream_from "for_room_index" %>
 
 <div
   id="presence-hook"
@@ -33,7 +34,7 @@
 
           <%# ✅ 変更ボタンの右側にトピックを表示（Turbo Stream target を維持） %>
           <div class="flex-1 min-w-0">
-            <%= render "rooms/topic_show", room: @room, topic: @room.topic %>
+            <%= render "rooms/topic_index_and_show", room: @room, topic: @room.topic %>
           </div>
 
           <%# 編集エリア（初期は非表示） %>
