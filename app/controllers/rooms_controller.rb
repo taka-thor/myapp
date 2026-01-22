@@ -10,6 +10,7 @@ end
   # GET /rooms/1 or /rooms/1.json
   def show
     @room = Room.find(params[:id])
+    binding.pry
   end
 
   def edit; end

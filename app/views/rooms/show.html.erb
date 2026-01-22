@@ -4,6 +4,8 @@
 
 <%= turbo_page_requires_reload %>
 <%= turbo_stream_from "for_room_index" %>
+<%= turbo_stream_from @room %>
+
 
 <div
   id="presence-hook"
@@ -33,7 +35,7 @@
           </button>
 
           <%# ✅ 変更ボタンの右側にトピックを表示（Turbo Stream target を維持） %>
-          <div class="flex-1 min-w-0">
+          <div class="flex-1 min-w-0 text-[20px]">
             <%= render "rooms/topic_index_and_show", room: @room, topic: @room.topic %>
           </div>
 
@@ -63,59 +65,12 @@
       </div>
 
       <p class="mt-4 text-center text-sm sm:text-base text-slate-700 leading-relaxed">
-        「変更」を押すと、この部屋で話す話題を変更できます
+        「変更」を押すと、話題を変更できます
       </p>
     </section>
 
     <%# --- ユーザーアイコンエリア（最大4人） --- %>
-    <section class="space-y-3">
-      <h2 class="text-base sm:text-lg font-semibold text-slate-900">
-        参加中のメンバー
-      </h2>
-
-      <%# 2×2 のグリッドで最大4人を表示 %>
-      <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
-        <% @room.users.limit(4).each do |user| %>
-          <div class="flex flex-col items-center gap-2">
-            <%# アバター %>
-            <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-100 shadow-sm">
-              <% if user.respond_to?(:icon_url) && user.icon_url.present? %>
-                <%= image_tag user.icon_url, alt: user.name, class: "w-full h-full object-cover" %>
-              <% else %>
-                <div class="w-full h-full flex items-center justify-center text-3xl sm:text-4xl">
-                  🐾
-                </div>
-              <% end %>
-            </div>
-
-            <%# ユーザー名 %>
-            <p class="text-sm sm:text-base font-medium text-slate-900 truncate max-w-[8rem] text-center">
-              <%= user.name %>
-            </p>
-
-            <%# スピーカーアイコン（発言中ユーザー用・デフォルト非表示） %>
-            <% if defined?(user.speaking?) && user.speaking? %>
-              <div class="mt-1">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 82 77" fill="none">
-                  <circle cx="41" cy="38.5" r="36.25" fill="#22C55E" />
-                  <circle cx="41" cy="38.5" r="32.125" stroke="white" stroke-width="2" opacity="0.8" />
-                  <path d="M23.87 32.8358H35.5841L47.2984 21.8358V54.8358L35.5841 43.8358H23.8699V32.8358Z" fill="white" />
-                  <path d="M54.94 15.8262C59.1789 18.1239 62.699 21.4288 65.1464 25.409C67.5938 29.3891 68.8822 33.904 68.8822 38.5C68.8822 43.096 67.5938 47.6109 65.1464 51.591C62.699 55.5712 59.1789 58.8761 54.94 61.1738" stroke="white" stroke-linecap="round" stroke-width="3" />
-                  <path d="M58.63 9.82575C63.9903 12.7317 68.4415 16.9115 71.5363 21.9449C74.631 26.9783 76.2603 32.6879 76.2603 38.5C76.2603 44.3121 74.631 50.0217 71.5363 55.0551C68.4415 60.0885 63.9903 64.2683 58.63 67.1742" stroke="white" stroke-linecap="round" stroke-width="3" />
-                </svg>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%# 参加者がいない場合の文言 %>
-        <% if @room.users.blank? %>
-          <p class="col-span-2 text-sm sm:text-base text-slate-500 text-center">
-            まだ誰も入室していません。あなたが最初の参加者です！
-          </p>
-        <% end %>
-      </div>
-    </section>
+    <%= render "rooms/participants", room: @room%>
 
     <section class="mt-4">
       <div
