@@ -3,12 +3,11 @@ class PresencesController < ApplicationController
 
   def ping
     RoomParticipants::Ping.call(room: @room, user: current_user)
-    head :no_content # bodyを空にしてレスポンス(特段返すものない)
+    head :no_content
   end
 
   def leave
     RoomParticipants::Leave.call(room: @room, user: current_user)
-    # Rails.logger.debug "current_user = #{curren_user.inspect}"
     head :no_content
   end
 
