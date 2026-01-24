@@ -2,6 +2,7 @@
   * { outline: 1px solid red; }
 </style> %>
 
+<%= turbo_page_requires_reload %>
 <%= turbo_stream_from "for_room_index" %>
 <%= turbo_stream_from @room %>
 
