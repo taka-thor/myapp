@@ -3,8 +3,6 @@
 </style> %>
 
 <%= turbo_stream_from "for_room_index" %>
-<%= turbo_stream_from @room %>
-
 
 <div
   id="presence-hook"
@@ -68,8 +66,21 @@
       </p>
     </section>
 
-    <%# --- ユーザーアイコンエリア（最大4人） --- %>
-    <%= render "rooms/participants", room: @room%>
+    <%= turbo_stream_from @room %>
+
+    <%# --- ユーザーアイコンエリア（最大4人） ---
+        ✅ idはshow側に出す（targetのため）
+        ✅ 見た目維持のため、gridはpartial側に持たせる
+    %>
+    <section class="space-y-3">
+      <h2 class="text-base sm:text-lg font-semibold text-slate-900">
+        参加中のメンバー
+      </h2>
+
+      <div id="room_<%= @room.id %>_participants">
+        <%= render "rooms/participants", room: @room %>
+      </div>
+    </section>
 
     <section class="mt-4">
       <div
