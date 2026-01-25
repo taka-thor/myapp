@@ -66,20 +66,17 @@
       </p>
     </section>
 
+    <%# ✅ room ストリーム（部屋詳細用） %>
     <%= turbo_stream_from @room %>
 
-    <%# --- ユーザーアイコンエリア（最大4人） ---
-        ✅ idはshow側に出す（targetのため）
-        ✅ 見た目維持のため、gridはpartial側に持たせる
-    %>
+    <%# --- ユーザーアイコンエリア（最大4人） --- %>
     <section class="space-y-3">
       <h2 class="text-base sm:text-lg font-semibold text-slate-900">
         参加中のメンバー
       </h2>
 
-      <div id="room_<%= @room.id %>_participants">
-        <%= render "rooms/participants", room: @room %>
-      </div>
+      <%# ✅ wrapper(id付き)は partial 側が必ず返す。ここでdivを作らない %>
+      <%= render "rooms/participants", room: @room %>
     </section>
 
     <section class="mt-4">
