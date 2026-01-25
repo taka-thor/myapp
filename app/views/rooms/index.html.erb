@@ -20,7 +20,7 @@
         <% active_user_count = (@active_user_counts || {})[room.id] || 0 %>
 
         <%= link_to room_path(room),
-            data: { turbo: true },
+            data: { turbo: false },
             class: "block transition-transform duration-150 hover:scale-[1.02] active:scale-95" do %>
 
           <div
