@@ -1,6 +1,6 @@
 console.log("[presence] presence.js loaded");
 
-const DEBUG = false; // 本番は false 推奨
+const DEBUG = false;
 
 function dlog(...args) {
   if (DEBUG) console.log(...args);
@@ -57,10 +57,15 @@ function postOnLeave(url) {
 }
 
 let timerId = null;
+let firstPingTimeoutId = null; // ✅ 初回ping遅延用
 let started = false;
 let leaving = false;
 
 function stopHeartbeat() {
+  if (firstPingTimeoutId) {
+    clearTimeout(firstPingTimeoutId);
+    firstPingTimeoutId = null;
+  }
   if (timerId) {
     clearInterval(timerId);
     timerId = null;
@@ -79,16 +84,27 @@ function startHeartbeat({ pingUrl, intervalMs }) {
   started = true;
   leaving = false;
 
-  // 入室（active true）
-  dlog("[presence] ping (enter)", pingUrl);
-  post(pingUrl)
-    .then((res) => dlog("[presence] ping:", res.status))
-    .catch((e) => {
-      derr("[presence] ping failed (ignored):", e);
-    });
-
-  // heartbeat
   const ms = Number(intervalMs || 5000);
+  const firstDelayMs = 300; // ✅ 入室後 0.3 秒で初回 ping
+
+  // ✅ 初回 ping（enter）だけ遅らせる
+  firstPingTimeoutId = setTimeout(() => {
+    firstPingTimeoutId = null;
+
+    if (!is_showing_page()) {
+      dlog("[presence] first ping skipped (hidden)");
+      return;
+    }
+
+    dlog("[presence] ping (enter, delayed)", pingUrl);
+    post(pingUrl)
+      .then((res) => dlog("[presence] ping:", res.status))
+      .catch((e) => {
+        derr("[presence] ping failed (ignored):", e);
+      });
+  }, firstDelayMs);
+
+  // ✅ heartbeat（2回目以降は通常通り）
   timerId = setInterval(() => {
     if (!is_showing_page()) return;
 
@@ -99,7 +115,7 @@ function startHeartbeat({ pingUrl, intervalMs }) {
       });
   }, ms);
 
-  dlog("[presence] heartbeat started:", ms, "ms");
+  dlog("[presence] heartbeat started:", ms, "ms / first ping delay:", firstDelayMs, "ms");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -134,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("visibilitychange", () => {
     if (!started) return;
     if (!is_showing_page()) return;
+
     if (!timerId) {
       dlog("[presence] visibility back -> restart heartbeat");
       startHeartbeat({ pingUrl, intervalMs });
