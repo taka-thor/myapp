@@ -87,7 +87,7 @@ function startHeartbeat({ pingUrl, intervalMs }) {
   const ms = Number(intervalMs || 5000);
   const firstDelayMs = 300;
 
-  // ✅ 初回 ping（enter）だけ遅らせる
+  //初回 ping（enter）だけ遅らせる(showアクションtrueと併用)
   firstPingTimeoutId = setTimeout(() => {
     firstPingTimeoutId = null;
 
@@ -104,7 +104,6 @@ function startHeartbeat({ pingUrl, intervalMs }) {
       });
   }, firstDelayMs);
 
-  // ✅ heartbeat（2回目以降は通常通り）
   timerId = setInterval(() => {
     if (!is_showing_page()) return;
 
