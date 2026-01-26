@@ -57,7 +57,7 @@ function postOnLeave(url) {
 }
 
 let timerId = null;
-let firstPingTimeoutId = null; // ✅ 初回ping遅延用
+let firstPingTimeoutId = null;
 let started = false;
 let leaving = false;
 
@@ -85,7 +85,7 @@ function startHeartbeat({ pingUrl, intervalMs }) {
   leaving = false;
 
   const ms = Number(intervalMs || 5000);
-  const firstDelayMs = 300; // ✅ 入室後 0.3 秒で初回 ping
+  const firstDelayMs = 300;
 
   // ✅ 初回 ping（enter）だけ遅らせる
   firstPingTimeoutId = setTimeout(() => {
