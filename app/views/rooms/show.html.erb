@@ -31,12 +31,10 @@
             変更
           </button>
 
-          <%# ✅ 変更ボタンの右側にトピックを表示（Turbo Stream target を維持） %>
           <div class="flex-1 min-w-0 text-[20px]">
             <%= render "rooms/topic_index_and_show", room: @room, topic: @room.topic %>
           </div>
 
-          <%# 編集エリア（初期は非表示） %>
           <div id="topic-edit-area" class="hidden w-full basis-full mt-3">
             <%= f.text_field :topic,
                   value: @room.topic,
@@ -66,7 +64,6 @@
       </p>
     </section>
 
-    <%# ✅ room ストリーム（部屋詳細用） %>
     <%= turbo_stream_from @room %>
 
     <%# --- ユーザーアイコンエリア（最大4人） --- %>
@@ -75,7 +72,6 @@
         参加中のメンバー
       </h2>
 
-      <%# ✅ wrapper(id付き)は partial 側が必ず返す。ここでdivを作らない %>
       <%= render "rooms/participants", room: @room %>
     </section>
 
