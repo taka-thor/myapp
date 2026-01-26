@@ -9,8 +9,13 @@ end
 
   # GET /rooms/1 or /rooms/1.json
   def show
-    @room = Room.find(params[:id])
-  end
+  @room = Room.find(params[:id])
+
+  rp = @room.room_participants.find_or_initialize_by(user: current_user)
+  rp.is_active = true
+  rp.last_seen_at = Time.current
+  rp.save!
+end
 
   def edit; end
 
