@@ -7,14 +7,18 @@ def index
   # response.set_header("Turbo-Cache-Control", "no-cache")
 end
 
-  def show
+def show
   @room = Room.find(params[:id])
 
-  user_status = @room.room_participants.find_or_initialize_by(user: current_user)
-  user_status.is_active = true
-  user_status.last_seen_at = Time.current
-  user_status.save!
+  @room_participant = @room.room_participants.find_or_create_by!(user: current_user)
+  @room_participant.update!(
+    is_active: true,
+    last_seen_at: Time.current,
+    session_id: SecureRandom.uuid
+  )
 end
+
+
 
   def edit; end
 

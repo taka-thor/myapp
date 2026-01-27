@@ -2,11 +2,12 @@
   * { outline: 1px solid red; }
 </style> %>
 
-<%= turbo_stream_from "for_room_index" %>
 
 <div
   id="presence-hook"
   data-room-id="<%= @room.id %>"
+  data-user-id="<%= @current_user.id %>"
+  data-session-id="<%= @room_participant.session_id %>"
   data-presence-ping-url="<%= ping_room_presence_path(@room) %>"
   data-presence-leave-url="<%= leave_room_presence_path(@room) %>"
 ></div>
@@ -73,6 +74,40 @@
       </h2>
 
       <%= render "rooms/participants", room: @room %>
+    </section>
+
+    <%# --- RTC（デバッグ用UI） --- %>
+    <section class="space-y-3">
+      <h2 class="text-base sm:text-lg font-semibold text-slate-900">
+        通話（テスト）
+      </h2>
+
+      <div id="rtc-ui" class="rounded-2xl bg-slate-50 p-4 space-y-3">
+        <div class="flex gap-4 items-center">
+          <div class="space-y-1">
+            <div class="font-semibold">Local (自分)</div>
+            <audio id="localAudio" autoplay muted playsinline></audio>
+          </div>
+
+          <div class="space-y-1">
+            <div class="font-semibold">Remote（相手）</div>
+            <%# ※リモートは rtc.js が動的に audio を増やすので、固定1個は無くてもOK %>
+          </div>
+        </div>
+
+        <div class="flex gap-3 items-center">
+          <%# 自動開始がブロックされるブラウザがあるので「開始ボタン」は残す %>
+          <button id="startBtn" class="rounded-xl bg-emerald-500 text-white px-4 py-2 font-semibold hover:opacity-90 active:scale-95 transition">
+            入室する（マイクON）
+          </button>
+
+          <button id="hangupBtn" disabled class="rounded-xl bg-slate-200 text-slate-800 px-4 py-2 font-semibold hover:opacity-90 active:scale-95 transition">
+            退出する
+          </button>
+        </div>
+
+        <pre id="status" class="bg-slate-900 text-slate-100 p-3 rounded-xl h-[180px] overflow-auto text-xs"></pre>
+      </div>
     </section>
 
     <section class="mt-4">

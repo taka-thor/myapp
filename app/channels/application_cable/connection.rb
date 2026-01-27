@@ -1,9 +1,9 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    identified_by :uuid
+    identified_by :current_user
 
     def connect
-      self.uuid = SecureRandom.uuid
+      self.current_user = User.find_by(id: request.session[:user_info]) || reject_unauthorized_connection
     end
   end
 end

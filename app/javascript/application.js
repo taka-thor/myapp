@@ -6,3 +6,4 @@ import "./presence";
 import "./channels"; // ← 一覧で購読してDOM更新するため必須
 import "./reload_room_index_for_bfcache";
 import "./topic_editor";
+import "./rtc";
