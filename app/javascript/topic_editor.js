@@ -1,60 +1,59 @@
-console.log("[topic_editor] loaded");
+// app/javascript/topic_editor.js
 
-function initTopicEditor() {
+(() => {
+  console.debug("[topic_editor] loaded");
+
+  // Turbo遷移で二重評価されるケースがあるので「ページ単位」でガード
+  // （room/show とか index とか、同じDOMが再描画された時に二重bindを防ぐ）
+  if (window.__topic_editor_init__) return;
+  window.__topic_editor_init__ = true;
+
+  // Turboのキャッシュ復帰や before-cache に備えて cleanup を用意
+  let cleaned = false;
+
+  const cleanup = () => {
+    if (cleaned) return;
+    cleaned = true;
+
+    // 次のページで再初期化できるようにガード解除
+    window.__topic_editor_init__ = false;
+
+    // イベント解除（存在していた場合のみ）
+    if (openBtn) openBtn.removeEventListener("click", onOpen);
+    if (cancelBtn) cancelBtn.removeEventListener("click", onCancel);
+
+    console.debug("[topic_editor] cleanup");
+  };
+
+  // 要素取得（あなたのログに出てるIDをそのまま使う）
   const openBtn = document.getElementById("topic-edit-open");
   const area = document.getElementById("topic-edit-area");
   const cancelBtn = document.getElementById("topic-edit-cancel");
 
-  console.log("[topic_editor] elements", { openBtn, area, cancelBtn });
+  console.debug("[topic_editor] elements", { openBtn, area, cancelBtn });
 
-  if (!openBtn || !area || !cancelBtn) return;
+  // ページに対象が無ければ何もしない（ただしガードは解除しておく）
+  if (!openBtn || !area || !cancelBtn) {
+    window.__topic_editor_init__ = false;
+    return;
+  }
 
-  // ✅ Turboで再訪/置換があるので二重バインド防止
-  if (openBtn.dataset.topicEditorBound === "true") return;
-  openBtn.dataset.topicEditorBound = "true";
-
-  openBtn.addEventListener("click", () => {
-    console.log("[topic_editor] open clicked");
+  // ハンドラ
+  const onOpen = () => {
     area.classList.remove("hidden");
+  };
 
-    const input = area.querySelector('input[name="room[topic]"]');
-    input?.focus();
-    input?.select?.();
-  });
-
-  cancelBtn.addEventListener("click", () => {
-    console.log("[topic_editor] cancel clicked");
+  const onCancel = () => {
     area.classList.add("hidden");
-  });
+  };
 
-  // ✅ submit confirm（複数フォームがあっても「confirm_topic_update の submit だけ」拾う）
-  // capture: true にして、Turboがsubmitを拾う前に確実に止められるようにする
-  document.addEventListener(
-    "submit",
-    (e) => {
-      const form = e.target;
-      if (!(form instanceof HTMLFormElement)) return;
+  // イベント登録
+  openBtn.addEventListener("click", onOpen);
+  cancelBtn.addEventListener("click", onCancel);
 
-      const submitter = e.submitter;
-      if (submitter?.dataset?.confirmTopicUpdate !== "true") return;
+  // Turboのキャッシュに入る直前に必ず掃除（重要）
+  window.addEventListener("turbo:before-cache", cleanup, { once: true });
 
-      const input = form.querySelector('input[name="room[topic]"]');
-      const nextTopic = input?.value?.trim() || "";
-
-      if (!nextTopic) {
-        e.preventDefault();
-        alert("話題を入力してください");
-        return;
-      }
-
-      const ok = window.confirm(`「${nextTopic}」に変更します。\nよろしいですか？`);
-      if (!ok) e.preventDefault();
-    },
-    true
-  );
-}
-
-// Turbo対応（重要）
-document.addEventListener("turbo:load", initTopicEditor);
-// Turbo無しの保険
-document.addEventListener("DOMContentLoaded", initTopicEditor);
+  // ページを離れる系でも掃除（念のため）
+  window.addEventListener("pagehide", cleanup, { once: true });
+})();

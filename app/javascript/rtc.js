@@ -15,10 +15,6 @@ import consumer from "./channels/consumer";
   const root = document.getElementById("presence-hook");
   if (!root) return;
 
-  // 多重 init ガード（Turbo等で二重起動しがち）
-  if (window.__rtc_init__) return;
-  window.__rtc_init__ = true;
-
   const roomId = String(root.dataset.roomId || "");
   const myUserId = Number(root.dataset.userId);
   const mySessionId = String(root.dataset.sessionId || "");
@@ -27,6 +23,21 @@ import consumer from "./channels/consumer";
     console.warn("[rtc] missing dataset", { roomId, myUserId, mySessionId });
     return;
   }
+
+  // 多重 init ガード（roomIdごと / Turbo等で二重起動しがち）
+  const initKey = `__rtc_init_room_${roomId}`;
+  if (window[initKey]) return;
+  window[initKey] = true;
+
+  // デバッグ（必要なら残してOK）
+  console.debug("[rtc] boot", {
+    roomId,
+    myUserId,
+    mySessionId,
+    initKey,
+    already: !!window[initKey],
+    hasRoot: !!root,
+  });
 
   const MAX_PEERS = 4; // self + 3
   const ICE_SERVERS = [
@@ -42,6 +53,10 @@ import consumer from "./channels/consumer";
 
   // knownPeerSessions: peerUserId -> session_id
   const knownPeerSessions = new Map();
+
+  // ICEが先に来た時に貯めておく
+  // pendingIce: peerUserId -> [candidateInit,...]
+  const pendingIce = new Map();
 
   const atCapacity = () => peers.size >= (MAX_PEERS - 1);
 
@@ -81,7 +96,29 @@ import consumer from "./channels/consumer";
     try { entry.pc.close(); } catch {}
     peers.delete(peerUserId);
     knownPeerSessions.delete(peerUserId);
+    pendingIce.delete(peerUserId);
     console.debug("[rtc] peer closed", peerUserId);
+  };
+
+  const flushPendingIce = async (peerUserId) => {
+    const entry = peers.get(peerUserId);
+    if (!entry) return;
+
+    const pc = entry.pc;
+    if (!pc.remoteDescription) return;
+
+    const list = pendingIce.get(peerUserId);
+    if (!list || list.length === 0) return;
+
+    pendingIce.delete(peerUserId);
+
+    for (const c of list) {
+      try {
+        await pc.addIceCandidate(new RTCIceCandidate(c));
+      } catch (e) {
+        console.warn("[rtc] addIceCandidate(flush) err:", e, c);
+      }
+    }
   };
 
   const newPeerConnection = (peerUserId, peerSessionIdForTo) => {
@@ -138,6 +175,8 @@ import consumer from "./channels/consumer";
 
     try {
       await pc.setRemoteDescription(remoteDesc);
+      await flushPendingIce(peerUserId);
+
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
 
@@ -232,6 +271,7 @@ import consumer from "./channels/consumer";
 
               entry.pc
                 .setRemoteDescription(new RTCSessionDescription(data.sdp))
+                .then(() => flushPendingIce(fromUserId))
                 .catch((e) => console.warn("[rtc] setRemoteDescription(answer) err:", e));
               break;
             }
@@ -250,11 +290,19 @@ import consumer from "./channels/consumer";
               }
 
               const entry = peers.get(fromUserId);
-              if (!entry || !data.candidate) return;
+              const c = data.candidate;
+              if (!entry || !c || !c.candidate) return;
+
+              if (!entry.pc.remoteDescription) {
+                const arr = pendingIce.get(fromUserId) || [];
+                arr.push(c);
+                pendingIce.set(fromUserId, arr);
+                return;
+              }
 
               entry.pc
-                .addIceCandidate(new RTCIceCandidate(data.candidate))
-                .catch((e) => console.warn("[rtc] addIceCandidate err:", e));
+                .addIceCandidate(new RTCIceCandidate(c))
+                .catch((e) => console.warn("[rtc] addIceCandidate err:", e, c));
               break;
             }
 
@@ -278,6 +326,9 @@ import consumer from "./channels/consumer";
     for (const peerUserId of [...peers.keys()]) closePeer(peerUserId);
     try { sub?.unsubscribe(); } catch {}
     sub = null;
+
+    // roomId単位の init ガードを解除（戻ってきた時に再初期化できる）
+    try { window[initKey] = false; } catch {}
   };
 
   // Turbo/BFCache 対策：pagehide で確実に退出
