@@ -12,10 +12,10 @@
   },
   "scripts": {
     "build:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
-    "build:rtc": "esbuild app/javascript/rtc-test.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
+    "build:rtc": "esbuild app/javascript/rtc.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
     "build": "npm run build:app && npm run build:rtc",
     "watch:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm --watch=forever",
-    "watch:rtc": "esbuild app/javascript/rtc-test.js --bundle --sourcemap --outdir=app/assets/builds --format=esm --watch=forever",
+    "watch:rtc": "esbuild app/javascript/rtc.js --bundle --sourcemap --outdir=app/assets/builds --format=esm --watch=forever",
     "watch": "npm run watch:app & npm run watch:rtc"
   }
 }
