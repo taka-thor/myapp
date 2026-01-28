@@ -1,7 +1,6 @@
 // app/javascript/rtc.js
 // WebRTC P2P signaling (audio) up to 4 peers
 // 方式1: join → server returns "present" → newcomer sends offers
-// UIなし：部屋詳細に入った瞬間に購読して offer まで送る（listen-only）
 //
 // 前提（rooms/show.html.erb）:
 // <div id="presence-hook"
@@ -29,7 +28,6 @@ import consumer from "./channels/consumer";
   if (window[initKey]) return;
   window[initKey] = true;
 
-  // デバッグ（必要なら残してOK）
   console.debug("[rtc] boot", {
     roomId,
     myUserId,
@@ -48,7 +46,7 @@ import consumer from "./channels/consumer";
 
   let sub = null;
 
-  // peers: peerUserId -> { pc }
+  // peers: peerUserId -> { pc, audioEl }
   const peers = new Map();
 
   // knownPeerSessions: peerUserId -> session_id
@@ -87,13 +85,89 @@ import consumer from "./channels/consumer";
     });
   };
 
+  // ====== local audio ======
+  let localStream = null;
+
+  const prepareLocalAudio = async () => {
+    if (localStream) return localStream;
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    console.debug("[rtc] got local audio tracks:", localStream.getAudioTracks().length);
+    return localStream;
+  };
+
+  // ====== remote audio playback ======
+  const ensureAudioEl = (peerUserId) => {
+    const audioId = `rtc-audio-${roomId}-${peerUserId}`;
+    let el = document.getElementById(audioId);
+    if (!el) {
+      el = document.createElement("audio");
+      el.id = audioId;
+      el.autoplay = true;
+      el.playsInline = true;
+      // ミュートしない（相手音を鳴らす）
+      el.muted = false;
+      document.body.appendChild(el);
+    }
+    return el;
+  };
+
+  const showTapToPlay = (peerUserId, audioEl) => {
+    const btnId = `rtc-tap-${roomId}-${peerUserId}`;
+    if (document.getElementById(btnId)) return;
+
+    const btn = document.createElement("button");
+    btn.id = btnId;
+    btn.type = "button";
+    btn.textContent = "🔊 タップして音声を再生";
+    btn.style.position = "fixed";
+    btn.style.left = "16px";
+    btn.style.bottom = "16px";
+    btn.style.zIndex = "99999";
+    btn.style.padding = "10px 12px";
+    btn.style.borderRadius = "12px";
+    btn.style.border = "1px solid rgba(0,0,0,0.15)";
+    btn.style.background = "white";
+    btn.style.cursor = "pointer";
+
+    btn.addEventListener(
+      "click",
+      () => {
+        audioEl
+          .play()
+          .then(() => {
+            btn.remove();
+            console.debug("[rtc] audio play ok (user gesture)", { peerUserId });
+          })
+          .catch((e) => console.warn("[rtc] audio play still blocked", e));
+      },
+      { once: false }
+    );
+
+    document.body.appendChild(btn);
+  };
+
   const closePeer = (peerUserId) => {
     const entry = peers.get(peerUserId);
     if (!entry) return;
-    try { entry.pc.onicecandidate = null; } catch {}
-    try { entry.pc.onconnectionstatechange = null; } catch {}
-    try { entry.pc.ontrack = null; } catch {}
-    try { entry.pc.close(); } catch {}
+
+    try {
+      entry.pc.onicecandidate = null;
+    } catch {}
+    try {
+      entry.pc.onconnectionstatechange = null;
+    } catch {}
+    try {
+      entry.pc.ontrack = null;
+    } catch {}
+    try {
+      entry.pc.close();
+    } catch {}
+
+    try {
+      // audio要素は残しても良いが、消したいなら消す
+      // entry.audioEl?.remove?.();
+    } catch {}
+
     peers.delete(peerUserId);
     knownPeerSessions.delete(peerUserId);
     pendingIce.delete(peerUserId);
@@ -124,6 +198,16 @@ import consumer from "./channels/consumer";
   const newPeerConnection = (peerUserId, peerSessionIdForTo) => {
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
 
+    // 送信（自分のマイク）
+    if (localStream) {
+      for (const track of localStream.getAudioTracks()) {
+        pc.addTrack(track, localStream);
+      }
+    } else {
+      // マイクが取れてない時でも受信m-lineを作るため
+      pc.addTransceiver("audio", { direction: "recvonly" });
+    }
+
     pc.onicecandidate = (e) => {
       if (!e.candidate) return;
       send("ice", {
@@ -134,15 +218,33 @@ import consumer from "./channels/consumer";
     };
 
     pc.onconnectionstatechange = () => {
+      console.debug("[rtc] connectionState", peerUserId, pc.connectionState);
       if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
         closePeer(peerUserId);
       }
     };
 
-    // UIなし：音を鳴らしたいならここで audio 要素を生成して stream を刺す処理を足す
-    // pc.ontrack = (e) => { ... }
+    // 受信（相手の音声を鳴らす）
+    const audioEl = ensureAudioEl(peerUserId);
+    pc.ontrack = (e) => {
+      const [stream] = e.streams;
+      if (!stream) return;
 
-    peers.set(peerUserId, { pc });
+      audioEl.srcObject = stream;
+      audioEl
+        .play()
+        .then(() => {
+          console.debug("[rtc] audio play ok", { peerUserId });
+        })
+        .catch((err) => {
+          console.warn("[rtc] audio.play blocked", err);
+          showTapToPlay(peerUserId, audioEl);
+        });
+
+      console.debug("[rtc] ontrack", { peerUserId, kinds: e.track?.kind });
+    };
+
+    peers.set(peerUserId, { pc, audioEl });
     return pc;
   };
 
@@ -153,7 +255,7 @@ import consumer from "./channels/consumer";
     const pc = entry?.pc || newPeerConnection(peerUserId, peerSessionId);
 
     try {
-      // listen-only でも offer は作れる（ローカルトラック無し）
+      // マイク無しでも受信だけの offer は作れる
       const offer = await pc.createOffer({ offerToReceiveAudio: true });
       await pc.setLocalDescription(offer);
 
@@ -198,8 +300,16 @@ import consumer from "./channels/consumer";
     sub = consumer.subscriptions.create(
       { channel: "RtcChannel", room: roomId },
       {
-        connected() {
+        async connected() {
           console.debug("[rtc] AC connected", { roomId, myUserId, mySessionId });
+
+          // マイク取得（失敗しても recvonly で進む）
+          try {
+            await prepareLocalAudio();
+          } catch (e) {
+            console.warn("[rtc] getUserMedia failed:", e);
+          }
+
           send("join", {}); // 方式1: server → present
         },
         disconnected() {
@@ -229,7 +339,7 @@ import consumer from "./channels/consumer";
                 if (knownPeerSessions.has(peerUserId)) continue;
 
                 knownPeerSessions.set(peerUserId, peerSessionId);
-                makeOfferTo(peerUserId, peerSessionId); // ★ newcomer sends offers
+                makeOfferTo(peerUserId, peerSessionId); // newcomer sends offers
               }
               break;
             }
@@ -322,13 +432,19 @@ import consumer from "./channels/consumer";
   };
 
   const cleanup = () => {
-    try { send("leave", {}); } catch {}
+    try {
+      send("leave", {});
+    } catch {}
     for (const peerUserId of [...peers.keys()]) closePeer(peerUserId);
-    try { sub?.unsubscribe(); } catch {}
+    try {
+      sub?.unsubscribe();
+    } catch {}
     sub = null;
 
     // roomId単位の init ガードを解除（戻ってきた時に再初期化できる）
-    try { window[initKey] = false; } catch {}
+    try {
+      window[initKey] = false;
+    } catch {}
   };
 
   // Turbo/BFCache 対策：pagehide で確実に退出
