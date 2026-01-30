@@ -74,8 +74,13 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 ## 機能候補
 
+### MVP リリース
+
 - グループ通話機能
 - セキュリティ関連（HTTPS 通信）
+
+### 本リリース
+
 - 広告の導入
 - リワード動画視聴でのポイントを利用できるアプリ内ショップの導入
 - 音声ストリームをテキスト化し、詐欺等に関連する危険なワードを検知し、ポップアッ
