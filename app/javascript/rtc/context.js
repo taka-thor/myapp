@@ -24,12 +24,11 @@ export const createRtcContext = () => {
     initKey,
 
     MAX_PEERS: 4,
-      const ICE_SERVERS = [
+    ICE_SERVERS: [
       { urls: "stun:stun.l.google.com:19302" },
       { urls: "stun:stun1.l.google.com:19302" },
-
       { urls: "stun:turn.turn-kt.com:3478" },
-    ];
+    ],
 
 
     // cable subscription
