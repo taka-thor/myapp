@@ -1,5 +1,3 @@
-// app/javascript/topic_editor.js
-
 (() => {
   console.debug("[topic_editor] loaded");
 
