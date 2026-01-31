@@ -1,4 +1,4 @@
-FROM ruby:3.2.3-slim
+FROM ruby:3.3.10
 
 RUN apt-get update -qq \
 && apt-get install --no-install-recommends -y \
