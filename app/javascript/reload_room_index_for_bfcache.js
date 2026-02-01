@@ -1,4 +1,3 @@
-
 function isRoomsIndexPage() {
   return !!document.querySelector('[data-page="rooms-index"]');
 }
