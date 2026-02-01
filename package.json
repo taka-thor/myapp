@@ -5,7 +5,8 @@
   "dependencies": {
     "@hotwired/stimulus": "latest",
     "@hotwired/turbo-rails": "latest",
-    "@rails/actioncable": "latest"
+    "@rails/actioncable": "latest",
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "esbuild": "^0.23.0"

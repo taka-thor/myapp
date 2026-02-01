@@ -12,8 +12,10 @@ gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 gem "rails-i18n"
+# Gemfile
 gem "mini_magick"
 
+# gem "importmap-rails"
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 gem "jsbundling-rails", "~> 1.3"
@@ -25,7 +27,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
-gem "tailwindcss-rails", "~> 3.3.2"
+gem "tailwindcss-rails"
 
 
 gem "turbo-rails"
