@@ -1,15 +1,17 @@
 import { ensureAudioEl, showTapToPlay } from "./audio_remote";
 import { send } from "./send";
+import { startSpeakingFromStream, stopSpeaking } from "./speaking_ring";
 
 export const closePeer = (ctx, peerUserId) => {
   const entry = ctx.peers.get(peerUserId);
   if (!entry) return;
 
+  stopSpeaking(ctx, peerUserId);
+
   try { entry.pc.onicecandidate = null; } catch {}
   try { entry.pc.onconnectionstatechange = null; } catch {}
   try { entry.pc.ontrack = null; } catch {}
   try { entry.pc.close(); } catch {}
-
 
   ctx.peers.delete(peerUserId);
   ctx.knownPeerSessions.delete(peerUserId);
@@ -72,6 +74,9 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     if (!stream) return;
 
     audioEl.srcObject = stream;
+
+    startSpeakingFromStream(ctx, peerUserId, stream, { threshold: 0.02, holdMs: 450 });
+
     audioEl
       .play()
       .then(() => console.debug("[rtc] audio play ok", { peerUserId }))

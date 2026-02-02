@@ -42,6 +42,8 @@ Rails.application.configure do
   # ngrok (free) のホストを許可
   config.hosts << "aaf567df721c.ngrok-free.app"
 
+  config.assets.digest = false
+
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
