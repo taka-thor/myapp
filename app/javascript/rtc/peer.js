@@ -10,8 +10,6 @@ export const closePeer = (ctx, peerUserId) => {
   try { entry.pc.ontrack = null; } catch {}
   try { entry.pc.close(); } catch {}
 
-  // audio要素は残しても良い（必要なら消す）
-  // try { entry.audioEl?.remove?.(); } catch {}
 
   ctx.peers.delete(peerUserId);
   ctx.knownPeerSessions.delete(peerUserId);
@@ -44,7 +42,6 @@ export const flushPendingIce = async (ctx, peerUserId) => {
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
-  // 送信（自分のマイク）
   if (ctx.localStream) {
     for (const track of ctx.localStream.getAudioTracks()) {
       pc.addTrack(track, ctx.localStream);

@@ -51,7 +51,6 @@ export const handleReceived = (ctx, data) => {
   const type = data?.type;
   if (!type) return;
 
-  // 自分が送ったブロードキャストのエコーを無視
   if (data.from_user_id != null && Number(data.from_user_id) === ctx.myUserId) return;
 
   switch (type) {

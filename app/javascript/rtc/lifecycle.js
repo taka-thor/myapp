@@ -13,7 +13,6 @@ export const cleanup = (ctx) => {
   } catch {}
   ctx.sub = null;
 
-  // roomId単位の init ガードを解除（戻ってきた時に再初期化できる）
   try {
     window[ctx.initKey] = false;
   } catch {}

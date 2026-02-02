@@ -17,14 +17,13 @@ export const connectCable = (ctx) => {
           mySessionId: ctx.mySessionId,
         });
 
-        // マイク取得（失敗しても recvonly で進む）
         try {
           await prepareLocalAudio(ctx);
         } catch (e) {
           console.warn("[rtc] getUserMedia failed:", e);
         }
 
-        send(ctx, "join", {}); // server → present
+        send(ctx, "join", {});
       },
 
       disconnected() {
@@ -35,7 +34,6 @@ export const connectCable = (ctx) => {
         const type = data?.type;
         if (!type) return;
 
-        // 自分のエコー無視
         if (data.from_user_id != null && Number(data.from_user_id) === ctx.myUserId) return;
 
         if (type === "leave") {
