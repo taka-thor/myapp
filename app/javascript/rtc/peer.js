@@ -69,13 +69,19 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   };
 
   const audioEl = ensureAudioEl(ctx, peerUserId);
+
   pc.ontrack = (e) => {
     const [stream] = e.streams;
     if (!stream) return;
 
     audioEl.srcObject = stream;
 
-    startSpeakingFromStream(ctx, peerUserId, stream, { threshold: 0.02, holdMs: 450 });
+    startSpeakingFromStream(ctx, peerUserId, stream, {
+      threshold: 0.02,
+      noiseFloor: 0.0,
+      holdMs: 450,
+      debug: true,
+    });
 
     audioEl
       .play()

@@ -4,15 +4,20 @@ const setSpeaking = (userId, speaking) => {
   el.classList.toggle("rtc-speaking", speaking);
 };
 
-export const startSpeakingFromStream = (ctx, peerUserId, stream, opts = {}) => {
+export const startSpeakingFromStream = (ctx, userId, stream, opts = {}) => {
   ctx._speakingAudio ||= new Map();
-  if (ctx._speakingAudio.has(peerUserId)) return;
+  if (ctx._speakingAudio.has(userId)) return;
 
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   if (!AudioCtx) return;
 
+  const tracks = stream?.getAudioTracks?.() ?? [];
+  if (tracks.length === 0) return;
+
   const threshold = opts.threshold ?? 0.02;
   const holdMs = opts.holdMs ?? 450;
+  const debug = opts.debug ?? false;
+  const debugEveryMs = opts.debugEveryMs ?? 250;
 
   const audioCtx = new AudioCtx();
   if (audioCtx.state === "suspended") {
@@ -27,24 +32,27 @@ export const startSpeakingFromStream = (ctx, peerUserId, stream, opts = {}) => {
   const data = new Uint8Array(analyser.fftSize);
 
   let rafId = null;
-  let offTimer = null;
   let stopped = false;
+
+  let isSpeaking = false;
+  let lastAboveAt = 0;
+
+  let lastDebugAt = 0;
 
   const stop = () => {
     stopped = true;
     if (rafId) cancelAnimationFrame(rafId);
-    if (offTimer) clearTimeout(offTimer);
 
-    setSpeaking(peerUserId, false);
+    setSpeaking(userId, false);
 
     try { source.disconnect(); } catch {}
     try { analyser.disconnect(); } catch {}
     try { audioCtx.close(); } catch {}
 
-    ctx._speakingAudio.delete(peerUserId);
+    ctx._speakingAudio.delete(userId);
   };
 
-  ctx._speakingAudio.set(peerUserId, { stop });
+  ctx._speakingAudio.set(userId, { stop });
 
   const tick = () => {
     if (stopped) return;
@@ -58,10 +66,27 @@ export const startSpeakingFromStream = (ctx, peerUserId, stream, opts = {}) => {
     }
     const rms = Math.sqrt(sum / data.length);
 
+    if (debug) {
+      const now = performance.now();
+      if (now - lastDebugAt > debugEveryMs) {
+        console.log("[speaking] rms", { userId, rms, threshold, audioState: audioCtx.state });
+        lastDebugAt = now;
+      }
+    }
+
+    const now = performance.now();
+
     if (rms > threshold) {
-      setSpeaking(peerUserId, true);
-      if (offTimer) clearTimeout(offTimer);
-      offTimer = setTimeout(() => setSpeaking(peerUserId, false), holdMs);
+      lastAboveAt = now;
+      if (!isSpeaking) {
+        isSpeaking = true;
+        setSpeaking(userId, true);
+      }
+    } else {
+      if (isSpeaking && now - lastAboveAt > holdMs) {
+        isSpeaking = false;
+        setSpeaking(userId, false);
+      }
     }
 
     rafId = requestAnimationFrame(tick);
@@ -70,6 +95,6 @@ export const startSpeakingFromStream = (ctx, peerUserId, stream, opts = {}) => {
   tick();
 };
 
-export const stopSpeaking = (ctx, peerUserId) => {
-  try { ctx._speakingAudio?.get(peerUserId)?.stop?.(); } catch {}
+export const stopSpeaking = (ctx, userId) => {
+  try { ctx._speakingAudio?.get(userId)?.stop?.(); } catch {}
 };
