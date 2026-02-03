@@ -2,12 +2,10 @@
   <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
     <% room.active_users.limit(4).each do |user| %>
       <div class="flex flex-col items-center gap-2">
-        <%# アバター枠（ここが光る） %>
         <div
           class="rtc-avatar-ring rounded-full p-1 transition"
           data-rtc-user-id="<%= user.id %>"
         >
-          <%# アバター本体（中身はoverflow-hiddenでOK） %>
           <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-100 shadow-sm">
             <% if user.respond_to?(:icon_url) && user.icon_url.present? %>
               <%= image_tag user.icon_url, alt: user.name, class: "w-full h-full object-cover" %>
@@ -19,7 +17,6 @@
           </div>
         </div>
 
-        <%# ユーザー名 %>
         <p class="text-sm sm:text-base font-medium text-slate-900 truncate max-w-[8rem] text-center">
           <%= user.name %>
         </p>

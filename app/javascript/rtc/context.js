@@ -11,13 +11,11 @@ export const createRtcContext = () => {
     return null;
   }
 
-  // 多重 init ガード（roomIdごと / Turbo等で二重起動しがち）
   const initKey = `__rtc_init_room_${roomId}`;
   if (window[initKey]) return null;
   window[initKey] = true;
 
   const ctx = {
-    // dataset
     roomId,
     myUserId,
     mySessionId,
@@ -30,16 +28,12 @@ export const createRtcContext = () => {
       { urls: "stun:turn.turn-kt.com:3478" },
     ],
 
-
-    // cable subscription
     sub: null,
 
-    // state
-    peers: new Map(),             // peerUserId -> { pc, audioEl }
-    knownPeerSessions: new Map(), // peerUserId -> session_id
-    pendingIce: new Map(),        // peerUserId -> [candidateInit,...]
+    peers: new Map(),
+    knownPeerSessions: new Map(),
+    pendingIce: new Map(),
 
-    // local audio
     localStream: null,
   };
 

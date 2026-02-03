@@ -1,17 +1,17 @@
 import { ensureAudioEl, showTapToPlay } from "./audio_remote";
 import { send } from "./send";
+import { startSpeakingFromStream, stopSpeaking } from "./speaking_ring";
 
 export const closePeer = (ctx, peerUserId) => {
   const entry = ctx.peers.get(peerUserId);
   if (!entry) return;
 
+  stopSpeaking(ctx, peerUserId);
+
   try { entry.pc.onicecandidate = null; } catch {}
   try { entry.pc.onconnectionstatechange = null; } catch {}
   try { entry.pc.ontrack = null; } catch {}
   try { entry.pc.close(); } catch {}
-
-  // audio要素は残しても良い（必要なら消す）
-  // try { entry.audioEl?.remove?.(); } catch {}
 
   ctx.peers.delete(peerUserId);
   ctx.knownPeerSessions.delete(peerUserId);
@@ -44,7 +44,6 @@ export const flushPendingIce = async (ctx, peerUserId) => {
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
-  // 送信（自分のマイク）
   if (ctx.localStream) {
     for (const track of ctx.localStream.getAudioTracks()) {
       pc.addTrack(track, ctx.localStream);
@@ -70,11 +69,20 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   };
 
   const audioEl = ensureAudioEl(ctx, peerUserId);
+
   pc.ontrack = (e) => {
     const [stream] = e.streams;
     if (!stream) return;
 
     audioEl.srcObject = stream;
+
+    startSpeakingFromStream(ctx, peerUserId, stream, {
+      threshold: 0.02,
+      noiseFloor: 0.0,
+      holdMs: 450,
+      debug: true,
+    });
+
     audioEl
       .play()
       .then(() => console.debug("[rtc] audio play ok", { peerUserId }))

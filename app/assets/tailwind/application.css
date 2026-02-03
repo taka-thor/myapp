@@ -1,3 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+.rtc-avatar-ring {
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.6);
+}
+
+.rtc-avatar-ring.rtc-speaking {
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+}
