@@ -60,8 +60,7 @@
         </div>
       <% end %>
 
-      <%# 2. 友達に紹介する %>
-      <%= link_to "#", class: "block" do %>
+        <%=link_to qrcodes_index_path, class: "block" do %>
         <div
           class="w-full rounded-2xl bg-white/80 shadow-md
                   px-5 py-5 sm:px-6 sm:py-6
@@ -78,7 +77,7 @@
                 友達に紹介する
               </p>
               <p class="text-xs sm:text-sm text-slate-600">
-                声友の招待リンクを友達にシェアします
+                QRコードを使って友達にシェアします
               </p>
             </div>
           </div>
@@ -86,7 +85,6 @@
         </div>
       <% end %>
 
-      <%# ⭐ 3. 追加：ショップに行く ⭐ %>
       <%= link_to "#", class: "block" do %>
         <div
           class="w-full rounded-2xl bg-white/80 shadow-md
@@ -96,7 +94,6 @@
         >
           <div class="flex items-center gap-3">
 
-            <%# ショップアイコン（袋 or 買い物） %>
             <div class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100">
               <span class="text-2xl sm:text-3xl" role="img">🛍️</span>
             </div>
