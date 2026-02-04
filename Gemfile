@@ -29,7 +29,6 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 gem "tailwindcss-rails"
 gem "rqrcode"
-gem "chunky_png"
 
 gem "turbo-rails"
 group :development, :test do

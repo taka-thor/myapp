@@ -44,6 +44,7 @@ Rails.application.configure do
 
   config.assets.digest = false
 
+  config.action_view.preload_links_header = false
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
