@@ -14,17 +14,17 @@
     const area = document.getElementById("topic-edit-area");
     if (!area) return;
 
+    const field = area.querySelector("input, textarea, [contenteditable='true']");
+
     if (openBtn) {
       area.classList.remove("hidden");
-      requestAnimationFrame(() => {
-        const field = area.querySelector("input, textarea, [contenteditable='true']");
-        field?.focus();
-      });
+      field?.classList.add("is-editing");
       return;
     }
 
     if (cancelBtn) {
       area.classList.add("hidden");
+      field?.classList.remove("is-editing");
     }
   };
 
