@@ -29,33 +29,6 @@ function post(url) {
   });
 }
 
-function postOnLeave(url) {
-  if (!url) {
-    dwarn("[presence] leave url empty");
-    return;
-  }
-
-  dlog("[presence] leave sending...", url);
-
-  try {
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": csrfToken(),
-        Accept: "application/json",
-      },
-      credentials: "same-origin",
-      keepalive: true,
-    })
-      .then((res) => dlog("[presence] leave ok:", res.status))
-      .catch((e) => {
-        derr("[presence] leave failed (ignored):", e);
-      });
-  } catch (e) {
-    derr("[presence] leave exception (ignored):", e);
-  }
-}
-
 let timerId = null;
 let firstPingTimeoutId = null;
 let started = false;
@@ -87,7 +60,7 @@ function startHeartbeat({ pingUrl, intervalMs }) {
   const ms = Number(intervalMs || 5000);
   const firstDelayMs = 300;
 
-  //初回 ping（enter）だけ遅らせる(showアクションtrueと併用)
+  // 初回 ping（enter）だけ遅らせる(showアクションtrueと併用)
   firstPingTimeoutId = setTimeout(() => {
     firstPingTimeoutId = null;
 
@@ -125,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const pingUrl = root.dataset.presencePingUrl;
-  const leaveUrl = root.dataset.presenceLeaveUrl;
+  // const leaveUrl = root.dataset.presenceLeaveUrl; // ←不要なので削除
   const intervalMs = Number("5000");
 
   startHeartbeat({ pingUrl, intervalMs });
@@ -140,10 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (leaving) return;
     leaving = true;
 
-    dlog("[presence] pagehide -> leave fired (persisted:", !!e.persisted, ")");
+    dlog("[presence] pagehide -> stop heartbeat only (persisted:", !!e.persisted, ")");
     stopHeartbeat();
 
-    postOnLeave(leaveUrl);
+    // postOnLeave(leaveUrl); // ←ここがleave fetchなので削除
   });
 
   document.addEventListener("visibilitychange", () => {
