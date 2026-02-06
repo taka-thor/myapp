@@ -15,7 +15,23 @@
 <div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
   <%= render "shared/header" %>
 
-  <main class="flex-1 px-6 pb-10 pt-12 space-y-8">
+  <main class="flex-1 px-6 pb-10 pt-6 space-y-8">
+    <div class="flex justify-start">
+      <%= link_to rooms_path,
+            data: { turbo_prefetch: false },
+            class: "inline-flex items-center justify-center gap-2
+                    w-[260px]
+                    rounded-2xl border border-red-200
+                    bg-red-50 text-red-700
+                    px-4 py-2
+                    font-bold
+                    shadow-sm hover:shadow-md transition" do %>
+        <span aria-hidden="true">⬅︎</span>
+        <span>退出</span>
+      <% end %>
+    </div>
+
+
     <%# --- トピックバー --- %>
     <section>
       <div class="w-full rounded-2xl bg-sky-300/90 px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-between gap-3">
