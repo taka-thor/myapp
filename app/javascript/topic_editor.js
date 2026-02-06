@@ -19,6 +19,16 @@
     if (openBtn) {
       area.classList.remove("hidden");
       field?.classList.add("is-editing");
+
+      requestAnimationFrame(() => {
+        field?.focus();
+
+        if (field && typeof field.setSelectionRange === "function") {
+          const len = field.value?.length ?? 0;
+          field.setSelectionRange(len, len);
+        }
+      });
+
       return;
     }
 
