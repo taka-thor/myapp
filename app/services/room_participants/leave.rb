@@ -1,6 +1,6 @@
 class RoomParticipants::Leave
   def self.call(room:, user:)
-    rp = RoomParticipant.find_by(room_id: room.id, user_id: user.id)
+    rp = RoomParticipant.find_by(room_id: room, user_id: user)
 
     unless rp # もし〜でなければ
       Rails.logger.info("[RoomParticipants::Leave] not found room_id=#{room.id} user_id=#{user.id}")

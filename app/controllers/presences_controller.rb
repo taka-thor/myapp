@@ -13,6 +13,6 @@ class PresencesController < ApplicationController
 
   private
   def set_room
-    @room = Room.find(params[:room_id]) # pingやleaveでfetchするときにdocumentから取得するURLからのparameter =>rooms/id/presence/ping
+    @room = Room.find(params[:room_id]) # config/routes.rbでresouceを定義して、pingやleaveでfetchするときに取得するURLからのparameter =>rooms/id/presence/pingで取得
   end
 end
