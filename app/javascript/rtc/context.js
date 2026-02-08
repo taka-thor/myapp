@@ -35,6 +35,11 @@ export const createRtcContext = () => {
     pendingIce: new Map(),
 
     localStream: null,
+    isMuted: false,
+
+    _onMuteClick: null,
+    _onTurboRender: null,
+    _onBeforeStreamRender: null,
   };
 
   console.debug("[rtc] boot", {

@@ -1,4 +1,4 @@
-const setSpeaking = (userId, speaking) => {
+export const setSpeakingIndicator = (userId, speaking) => {
   const el = document.querySelector(`[data-rtc-user-id="${userId}"]`);
   if (!el) return;
   el.classList.toggle("rtc-speaking", speaking);
@@ -18,6 +18,7 @@ export const startSpeakingFromStream = (ctx, userId, stream, opts = {}) => {
   const holdMs = opts.holdMs ?? 450;
   const debug = opts.debug ?? false;
   const debugEveryMs = opts.debugEveryMs ?? 250;
+  const isSuppressed = opts.isSuppressed;
 
   const audioCtx = new AudioCtx();
   if (audioCtx.state === "suspended") {
@@ -43,7 +44,7 @@ export const startSpeakingFromStream = (ctx, userId, stream, opts = {}) => {
     stopped = true;
     if (rafId) cancelAnimationFrame(rafId);
 
-    setSpeaking(userId, false);
+    setSpeakingIndicator(userId, false);
 
     try { source.disconnect(); } catch {}
     try { analyser.disconnect(); } catch {}
@@ -76,16 +77,26 @@ export const startSpeakingFromStream = (ctx, userId, stream, opts = {}) => {
 
     const now = performance.now();
 
+    if (typeof isSuppressed === "function" && isSuppressed()) {
+      if (isSpeaking) {
+        isSpeaking = false;
+        setSpeakingIndicator(userId, false);
+      }
+
+      rafId = requestAnimationFrame(tick);
+      return;
+    }
+
     if (rms > threshold) {
       lastAboveAt = now;
       if (!isSpeaking) {
         isSpeaking = true;
-        setSpeaking(userId, true);
+        setSpeakingIndicator(userId, true);
       }
     } else {
       if (isSpeaking && now - lastAboveAt > holdMs) {
         isSpeaking = false;
-        setSpeaking(userId, false);
+        setSpeakingIndicator(userId, false);
       }
     }
 
