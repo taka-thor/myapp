@@ -1,4 +1,5 @@
 import { startSpeakingFromStream } from "./speaking_ring";
+import { applyLocalMuteState } from "./mute_control";
 
 const startMeSpeakingSafely = (ctx) => {
   const tryStart = (retry = 0) => {
@@ -13,6 +14,7 @@ const startMeSpeakingSafely = (ctx) => {
       holdMs: 600,
       debug: true,
       debugEveryMs: 250,
+      isSuppressed: () => Boolean(ctx.isMuted),
     });
   };
 
@@ -30,6 +32,7 @@ export const prepareLocalAudio = async (ctx) => {
   ctx.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
   console.log("[rtc] got local audio tracks:", ctx.localStream.getAudioTracks().length);
 
+  applyLocalMuteState(ctx);
   startMeSpeakingSafely(ctx);
 
   return ctx.localStream;

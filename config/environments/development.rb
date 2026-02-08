@@ -39,9 +39,7 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
-  # ngrok (free) のホストを許可
-  config.hosts << "aaf567df721c.ngrok-free.app"
-
+  config.hosts << "192.168.1.23"
   config.assets.digest = false
 
   config.action_view.preload_links_header = false
