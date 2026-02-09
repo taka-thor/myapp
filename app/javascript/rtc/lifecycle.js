@@ -1,5 +1,6 @@
 import { send } from "./send";
 import { closePeer } from "./peer";
+import { unbindMuteControls } from "./mute_control";
 
 export const cleanup = (ctx) => {
   try {
@@ -12,6 +13,10 @@ export const cleanup = (ctx) => {
     ctx.sub?.unsubscribe();
   } catch {}
   ctx.sub = null;
+
+  try {
+    unbindMuteControls(ctx);
+  } catch {}
 
   try {
     window[ctx.initKey] = false;
