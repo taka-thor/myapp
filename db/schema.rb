@@ -10,43 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_24_030318) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_24_030318) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "ng_words", force: :cascade do |t|
+    t.string "word", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "word", null: false
     t.index ["word"], name: "index_ng_words_on_word", unique: true
   end
 
   create_table "room_participants", force: :cascade do |t|
-    t.datetime "created_at", null: false
+    t.bigint "user_id", null: false
+    t.bigint "room_id", null: false
     t.boolean "is_active"
     t.datetime "joined_at"
-    t.datetime "last_seen_at"
     t.datetime "left_at"
-    t.integer "room_id", null: false
-    t.string "session_id"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
+    t.datetime "last_seen_at"
+    t.string "session_id"
     t.index ["room_id"], name: "index_room_participants_on_room_id"
     t.index ["session_id"], name: "index_room_participants_on_session_id"
     t.index ["user_id"], name: "index_room_participants_on_user_id"
-    t.index ["user_id"], name: "index_room_participants_unique_active_user", unique: true, where: "is_active = 1"
+    t.index ["user_id"], name: "index_room_participants_unique_active_user", unique: true, where: "(is_active = true)"
   end
 
   create_table "rooms", force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.string "topic"
     t.datetime "topic_updated"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.text "icon_url"
     t.string "name"
-    t.datetime "updated_at", null: false
+    t.text "icon_url"
     t.string "user_uuid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "room_participants", "rooms"

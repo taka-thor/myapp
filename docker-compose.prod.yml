@@ -5,12 +5,10 @@ services:
     command: >
       bash -lc '
         set -e
-        # /assets だけをミラーリング（不要分は --delete で掃除）
         if ! mountpoint -q /host-assets; then
           echo "ERROR: /host-assets not mounted"; exit 1
         fi
         rsync -a --delete /app/public/assets/ /host-assets/
-        # manifest をassets直下でも使うなら一緒に同期（任意）
         rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
         chown -R 33:33 /host-assets
       '
@@ -31,8 +29,6 @@ services:
       RAILS_LOG_TO_STDOUT: "true"
     ports:
       - "127.0.0.1:3000:3000"
-    volumes:
-      - /var/www/myapp/shared/db:/app/db
     depends_on:
       assets-export:
         condition: service_completed_successfully

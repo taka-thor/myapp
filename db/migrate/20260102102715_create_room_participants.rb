@@ -1,4 +1,4 @@
-class CreateRoomParticipants < ActiveRecord::Migration[8.1]
+class CreateRoomParticipants < ActiveRecord::Migration[7.2]
   def change
     create_table :room_participants do |t|
       t.belongs_to :user, null: false, foreign_key: true
