@@ -9,7 +9,7 @@ gem "sprockets-rails", "~> 3.5"
 # Use Postgres (Neon) in production
 gem "pg", "~> 1.6"
 
-gem "psych", "< 5.3"
+gem "psych", "< 5.4"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.4"
