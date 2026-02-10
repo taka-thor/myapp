@@ -1,5 +1,9 @@
 FROM ruby:3.3.10
 
+ARG APP_ENV=development
+ARG SECRET_KEY_BASE=dummy
+ENV RAILS_ENV=${APP_ENV}
+
 RUN apt-get update -qq \
 && apt-get install --no-install-recommends -y \
     build-essential libsqlite3-dev sqlite3 \
@@ -29,7 +33,11 @@ RUN bundle exec bootsnap precompile app/ lib/ || true
 RUN bash -lc 'rm -rf app/assets/builds/*'
 RUN npm run build
 
-RUN bash -lc 'rm -rf tmp/cache/assets/* && RAILS_ENV=production SECRET_KEY_BASE=dummy bundle exec rails assets:clobber && bundle exec rails assets:precompile'
+RUN bash -lc 'if [ "$APP_ENV" = "production" ]; then \
+  rm -rf tmp/cache/assets/* && \
+  SECRET_KEY_BASE="$SECRET_KEY_BASE" bundle exec rails assets:clobber && \
+  SECRET_KEY_BASE="$SECRET_KEY_BASE" bundle exec rails assets:precompile; \
+fi'
 
 EXPOSE 3000
 

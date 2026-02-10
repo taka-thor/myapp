@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.rtc-avatar-ring {
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.6);
+}
+
+.rtc-avatar-ring.rtc-speaking {
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+}
+
+@layer components {
+  #topic-edit-area input.is-editing,
+  #topic-edit-area textarea.is-editing,
+  #topic-edit-area [contenteditable="true"].is-editing {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
