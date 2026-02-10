@@ -9,5 +9,12 @@ class Rooms::BroadcastTopic
       partial: "rooms/topic_index_and_show",
       locals: { room: room, topic: topic }
     )
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      room,
+      target: "room_#{room.id}_topic",
+      partial: "rooms/topic_index_and_show",
+      locals: { room: room, topic: topic }
+    )
   end
 end
