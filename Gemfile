@@ -6,9 +6,6 @@ gem "rails", "~> 7.2.2"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails", "~> 3.5"
 
-# DB adapters
-# Use sqlite3 as the database for Active Record (dev/test)
-gem "sqlite3", "~> 1.7"
 # Use Postgres (Neon) in production
 gem "pg", "~> 1.6"
 

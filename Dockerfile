@@ -10,7 +10,6 @@ RUN apt-get update -qq \
   && apt-get install --no-install-recommends -y \
     build-essential \
     libpq-dev \
-    libsqlite3-dev sqlite3 \
     nodejs npm \
     tzdata git curl rsync \
     vim nano less \
