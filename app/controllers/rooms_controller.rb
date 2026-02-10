@@ -3,7 +3,7 @@ class RoomsController < ApplicationController
   before_action :leave_room_for_index, only: %i[ index ]
 
   def index
-    @rooms = Room.all
+    @rooms = Room.order(:id)
     @active_user_counts = RoomParticipant.active.group(:room_id).count
     # response.set_header("Turbo-Cache-Control", "no-cache")
   end
