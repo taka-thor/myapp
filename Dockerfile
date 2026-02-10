@@ -1,16 +1,20 @@
 FROM ruby:3.3.10
 
 ARG APP_ENV=development
+ARG PRECOMPILE_ASSETS=0
 ARG SECRET_KEY_BASE=dummy
+
 ENV RAILS_ENV=${APP_ENV}
 
 RUN apt-get update -qq \
-&& apt-get install --no-install-recommends -y \
-    build-essential libsqlite3-dev sqlite3 \
-    nodejs npm tzdata git curl rsync \
+  && apt-get install --no-install-recommends -y \
+    build-essential \
+    libpq-dev \
+    libsqlite3-dev sqlite3 \
+    nodejs npm \
+    tzdata git curl rsync \
     vim nano less \
-&& rm -rf /var/lib/apt/lists/*
-
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -30,14 +34,20 @@ COPY . .
 
 RUN bundle exec bootsnap precompile app/ lib/ || true
 
-RUN bash -lc 'rm -rf app/assets/builds/*'
-RUN npm run build
+RUN rm -rf app/assets/builds/* \
+  && npm run build
 
-RUN bash -lc 'if [ "$APP_ENV" = "production" ]; then \
-  rm -rf tmp/cache/assets/* && \
-  SECRET_KEY_BASE="$SECRET_KEY_BASE" bundle exec rails assets:clobber && \
-  SECRET_KEY_BASE="$SECRET_KEY_BASE" bundle exec rails assets:precompile; \
-fi'
+RUN if [ "$PRECOMPILE_ASSETS" = "1" ]; then \
+      rm -rf tmp/cache/assets/* && \
+      RAILS_ENV=production \
+      SECRET_KEY_BASE="$SECRET_KEY_BASE" \
+      DATABASE_URL=postgresql://dummy:dummy@127.0.0.1:5432/dummy \
+      bundle exec rails assets:clobber && \
+      RAILS_ENV=production \
+      SECRET_KEY_BASE="$SECRET_KEY_BASE" \
+      DATABASE_URL=postgresql://dummy:dummy@127.0.0.1:5432/dummy \
+      bundle exec rails assets:precompile ; \
+    fi
 
 EXPOSE 3000
 

@@ -1,6 +1,7 @@
 import { createRtcContext } from "./context";
 import { bindLifecycle } from "./lifecycle";
 import { connectCable } from "./cable";
+import { bindMuteControls } from "./mute_control";
 
 const LISTENER_KEY = "__rtc_entry_listener_installed__";
 
@@ -9,6 +10,7 @@ export const bootRtc = () => {
   if (!ctx) return;
 
   bindLifecycle(ctx);
+  bindMuteControls(ctx);
   connectCable(ctx);
 };
 
