@@ -12,9 +12,11 @@
     "esbuild": "^0.23.0"
   },
   "scripts": {
-    "build:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
-    "build": "npm run build:app",
-    "watch:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm --watch=forever",
-    "watch": "npm run watch:app"
-  }
+  "build:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm",
+  "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
+  "build": "npm run build:css && npm run build:app",
+  "watch:app": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --format=esm --watch=forever",
+  "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
+  "watch": "npm run watch:css & npm run watch:app"
+}
 }
