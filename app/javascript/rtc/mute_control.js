@@ -1,7 +1,7 @@
 import { setSpeakingIndicator } from "./speaking_ring";
 
-const speakerStatusSelector = (userId) => `[data-rtc-speaker-status][data-rtc-user-id="${userId}"]`;
-const muteToggleSelector = (userId) => `[data-rtc-mute-toggle][data-rtc-user-id="${userId}"]`;
+const speakerStatusSelector = (userId) => `[data-rtc-speaker-status][data-rtc-user-id=\"${userId}\"]`;
+const muteToggleSelector = (userId) => `[data-rtc-mute-toggle][data-rtc-user-id=\"${userId}\"]`;
 
 const renderSpeakerStatus = (statusEl, muted) => {
   statusEl.classList.toggle("text-slate-400", muted);
