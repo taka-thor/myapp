@@ -1,34 +1,53 @@
 services:
-  web: # docker compose build をすると、compose が docker-compose.yml を読み込み → build: に書かれた場所を探しに行く
-    build: . #「このディレクトリ（.）にある Dockerfile を使ってイメージを作る」→ ルート直下の Dockerfile が読み込まれる
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: development
+        PRECOMPILE_ASSETS: "1"
+    platform: linux/amd64
+
     env_file:
       - .env
-    platform: linux/amd64
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
+
+    command: bash -lc "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
+
     volumes:
-      - .:/app #compose.ymlを置いている場所.とコンテナ内ディレクトリ/appをbindmount
-      - ./db:/app/db
-      - node_modules:/app/node_modules # ★追加：Macのnode_modules混入を防ぐ（esbuild Exec format error対策）
+      - .:/app
+      - node_modules:/app/node_modules
+
     ports:
       - "3000:3000"
 
-  js: # ★追加：JSをwatchして app/assets/builds を更新し続ける人（esbuild --watch）
-    build: . # web と同じDockerfileを使う（このDockerfileで nodejs / npm を入れているのでOK）
+    tty: true
+    stdin_open: true
+
+  js:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: development
+        PRECOMPILE_ASSETS: "1"
+    platform: linux/amd64
+
     env_file:
       - .env
-    platform: linux/amd64
-    # ★package.json に "watch" を追加した前提（npm run watch = watch:app & watch:rtc）
-    command: bash -lc "npm run watch"
+
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
+
+    command: bash -lc "npm run watch"
+
     volumes:
-      - .:/app # web と同じ /app を共有しないと、jsが生成した builds を web が配信できない
-      - ./db:/app/db
-      - node_modules:/app/node_modules # ★追加：web と同じnode_modules(volume)を使う
+      - .:/app
+      - node_modules:/app/node_modules
 
 volumes:
-  node_modules: # ★追加：コンテナ専用node_modules置き場（named volume）
+  node_modules:
