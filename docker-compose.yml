@@ -5,25 +5,19 @@ services:
       dockerfile: Dockerfile
       args:
         APP_ENV: development
-        PRECOMPILE_ASSETS: "1"
+        PRECOMPILE_ASSETS: "0"
     platform: linux/amd64
-
     env_file:
       - .env
-
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
-
     command: bash -lc "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
-
     volumes:
       - .:/app
       - node_modules:/app/node_modules
-
     ports:
       - "3000:3000"
-
     tty: true
     stdin_open: true
 
@@ -33,21 +27,39 @@ services:
       dockerfile: Dockerfile
       args:
         APP_ENV: development
-        PRECOMPILE_ASSETS: "1"
+        PRECOMPILE_ASSETS: "0"
     platform: linux/amd64
-
     env_file:
       - .env
-
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
-
     command: bash -lc "npm run watch"
-
     volumes:
       - .:/app
       - node_modules:/app/node_modules
+    tty: true
+    stdin_open: true
+
+  css:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: development
+        PRECOMPILE_ASSETS: "0"
+    platform: linux/amd64
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Tokyo
+      RAILS_ENV: development
+    command: bash -lc "bin/rails tailwindcss:watch[always,poll]"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    tty: true
+    stdin_open: true
 
 volumes:
   node_modules:

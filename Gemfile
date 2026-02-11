@@ -24,7 +24,7 @@ gem "mini_magick", "~> 4.13"
 
 # Frontend
 gem "jsbundling-rails", "~> 1.3"
-gem "tailwindcss-rails", "~> 2.6"
+gem "tailwindcss-rails", "~> 4.4"
 
 gem "rqrcode", "~> 2.2"
 
@@ -40,7 +40,7 @@ group :development, :test do
   gem "pry-rails"
   gem "pry-byebug"
   gem "byebug"
-
+  gem "dotenv-rails"
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 

@@ -1,25 +1,4 @@
 services:
-  assets-precompile:
-    image: ghcr.io/taka-thor/myapp:latest
-    pull_policy: always
-    env_file:
-      - /var/www/myapp/shared/.env.production
-    environment:
-      RAILS_ENV: production
-      TZ: Asia/Tokyo
-      RAILS_LOG_TO_STDOUT: "true"
-      RAILS_SERVE_STATIC_FILES: "true"
-    command: >
-      bash -lc '
-        set -e
-        mkdir -p /app/public/assets
-        bin/rails assets:precompile
-      '
-    volumes:
-      - assets:/app/public/assets
-      - manifests:/app/public
-    restart: "no"
-
   assets-export:
     image: ghcr.io/taka-thor/myapp:latest
     pull_policy: always
@@ -31,15 +10,10 @@ services:
         fi
         rsync -a --delete /app/public/assets/ /host-assets/
         rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
-        chown -R 33:33 /host-assets || true
+        chown -R 33:33 /host-assets
       '
     volumes:
       - /var/www/myapp/current/public/assets:/host-assets
-      - assets:/app/public/assets
-      - manifests:/app/public
-    depends_on:
-      assets-precompile:
-        condition: service_completed_successfully
     restart: "no"
 
   web:
@@ -58,11 +32,4 @@ services:
     depends_on:
       assets-export:
         condition: service_completed_successfully
-    volumes:
-      - assets:/app/public/assets
-      - manifests:/app/public
     restart: unless-stopped
-
-volumes:
-  assets:
-  manifests:

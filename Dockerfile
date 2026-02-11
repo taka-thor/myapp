@@ -1,7 +1,7 @@
 FROM ruby:3.3.10
 
 ARG APP_ENV=development
-ARG PRECOMPILE_ASSETS=1
+ARG PRECOMPILE_ASSETS=0
 ARG SECRET_KEY_BASE=dummy
 
 ENV RAILS_ENV=${APP_ENV}
@@ -41,13 +41,8 @@ RUN if [ "$PRECOMPILE_ASSETS" = "1" ]; then \
       RAILS_ENV=production \
       SECRET_KEY_BASE="$SECRET_KEY_BASE" \
       DATABASE_URL=postgresql://dummy:dummy@127.0.0.1:5432/dummy \
-      bundle exec rails assets:clobber && \
-      RAILS_ENV=production \
-      SECRET_KEY_BASE="$SECRET_KEY_BASE" \
-      DATABASE_URL=postgresql://dummy:dummy@127.0.0.1:5432/dummy \
       bundle exec rails assets:precompile ; \
     fi
 
 EXPOSE 3000
-
 CMD ["bash", "-lc", "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"]
