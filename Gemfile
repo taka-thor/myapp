@@ -26,7 +26,7 @@ gem "mini_magick", "~> 4.13"
 gem "jsbundling-rails", "~> 1.3"
 gem "tailwindcss-rails", "~> 4.4"
 
-gem "rqrcode", "~> 2.2"
+gem "rqrcode", "~> 3.2"
 
 gem "turbo-rails", "~> 2.0"
 
