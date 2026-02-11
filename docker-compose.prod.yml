@@ -1,4 +1,25 @@
 services:
+  assets-precompile:
+    image: ghcr.io/taka-thor/myapp:latest
+    pull_policy: always
+    env_file:
+      - /var/www/myapp/shared/.env.production
+    environment:
+      RAILS_ENV: production
+      TZ: Asia/Tokyo
+      RAILS_LOG_TO_STDOUT: "true"
+      RAILS_SERVE_STATIC_FILES: "true"
+    command: >
+      bash -lc '
+        set -e
+        mkdir -p /app/public/assets
+        bin/rails assets:precompile
+      '
+    volumes:
+      - assets:/app/public/assets
+      - manifests:/app/public
+    restart: "no"
+
   assets-export:
     image: ghcr.io/taka-thor/myapp:latest
     pull_policy: always
@@ -8,11 +29,17 @@ services:
         if ! mountpoint -q /host-assets; then
           echo "ERROR: /host-assets not mounted"; exit 1
         fi
-        rsync -a /app/public/assets/ /host-assets/
-        rsync -a /app/public/manifest*.json /host-assets/ 2>/dev/null || true
+        rsync -a --delete /app/public/assets/ /host-assets/
+        rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
+        chown -R 33:33 /host-assets || true
       '
     volumes:
-      - ./public/assets:/host-assets
+      - /var/www/myapp/current/public/assets:/host-assets
+      - assets:/app/public/assets
+      - manifests:/app/public
+    depends_on:
+      assets-precompile:
+        condition: service_completed_successfully
     restart: "no"
 
   web:
@@ -20,7 +47,7 @@ services:
     pull_policy: always
     command: bash -lc "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
     env_file:
-      - ./.env.production
+      - /var/www/myapp/shared/.env.production
     environment:
       RAILS_ENV: production
       TZ: Asia/Tokyo
@@ -31,4 +58,11 @@ services:
     depends_on:
       assets-export:
         condition: service_completed_successfully
+    volumes:
+      - assets:/app/public/assets
+      - manifests:/app/public
     restart: unless-stopped
+
+volumes:
+  assets:
+  manifests:
