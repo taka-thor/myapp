@@ -176,7 +176,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
   - `Nginx(EC2常駐)`
 
 - **DB**
-  - ` SQlite`
+  - ` Neon`
 
 ## 画面遷移図
 
