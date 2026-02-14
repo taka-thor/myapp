@@ -1,9 +1,58 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+
+AutoTopic.delete_all  # いったん全部消して入れ直す（不要なら消してOK）
+
+topics = [
+  "おはよう",
+  "今日の予定",
+  "今の気分",
+  "最近の推し",
+  "好きな食べ物",
+  "苦手なもの",
+  "最近見た映画",
+  "最近読んだ本",
+  "好きな音楽",
+  "週末の予定",
+  "今日の一言",
+  "今ほしい物",
+  "最近の発見",
+  "今の悩み",
+  "最近の成功",
+  "最近の失敗",
+  "行きたい場所",
+  "住みたい町",
+  "旅行の思い出",
+  "好きな季節",
+  "朝型?夜型?",
+  "最近の運動",
+  "健康のコツ",
+  "得意なこと",
+  "苦手なこと",
+  "最近の料理",
+  "好きな飲み物",
+  "癒しの時間",
+  "ストレス解消",
+  "今ハマってる",
+  "休日の過ごし方",
+  "小さな幸せ",
+  "最近の買い物",
+  "今年の目標",
+  "来月やりたい",
+  "明日の予定",
+  "最近のニュース",
+  "今日の天気",
+  "最近の学び",
+  "最近の挑戦",
+  "子どもの頃",
+  "学生時代の話",
+  "初めての仕事",
+  "好きなゲーム",
+  "おすすめアプリ",
+  "好きな漫画",
+  "好きなアニメ",
+  "好きな動画",
+  "最近の散歩",
+  "最近の発想"
+]
+
+AutoTopic.insert_all!(topics.map { |t| { topic: t } })
+puts "inserted: #{AutoTopic.count}"
