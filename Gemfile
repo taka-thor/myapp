@@ -29,7 +29,7 @@ gem "tailwindcss-rails", "~> 4.4"
 gem "rqrcode", "~> 2.2"
 
 gem "turbo-rails", "~> 2.0"
-
+gem "redis", "~> 5.4.1"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[windows jruby]
 
