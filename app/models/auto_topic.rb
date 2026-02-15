@@ -1,0 +1,2 @@
+class AutoTopic < ApplicationRecord
+end

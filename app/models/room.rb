@@ -1,4 +1,6 @@
 class Room < ApplicationRecord
+  after_commit -> { AutoTopics::BroadcastTopic.call(room_id: id) }, if: :saved_change_to_topic?
+
   has_many :room_participants
   has_many :users, through: :room_participants
 
