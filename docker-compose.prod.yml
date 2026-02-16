@@ -1,14 +1,27 @@
 services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    restart: unless-stopped
+
   assets-precompile:
-    image: ghcr.io/taka-thor/myapp:latest
-    pull_policy: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: production
+        PRECOMPILE_ASSETS: "0"
+        # SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+        # REDIS_URL: "redis://127.0.0.1:6379/1"
+    platform: linux/amd64
     env_file:
-      - /var/www/myapp/shared/.env.production
+      - .env.production
     environment:
       RAILS_ENV: production
       TZ: Asia/Tokyo
       RAILS_LOG_TO_STDOUT: "true"
       RAILS_SERVE_STATIC_FILES: "true"
+      REDIS_URL: redis://redis:6379/1
     command: >
       bash -lc '
         set -e
@@ -18,23 +31,33 @@ services:
     volumes:
       - assets:/app/public/assets
       - manifests:/app/public
+    depends_on:
+      - redis
     restart: "no"
 
   assets-export:
-    image: ghcr.io/taka-thor/myapp:latest
-    pull_policy: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: production
+        PRECOMPILE_ASSETS: "0"
+    platform: linux/amd64
+    env_file:
+      - .env.production
+    environment:
+      RAILS_ENV: production
+      TZ: Asia/Tokyo
+      REDIS_URL: redis://redis:6379/1
     command: >
       bash -lc '
         set -e
-        if ! mountpoint -q /host-assets; then
-          echo "ERROR: /host-assets not mounted"; exit 1
-        fi
+        mkdir -p /host-assets
         rsync -a --delete /app/public/assets/ /host-assets/
         rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
-        chown -R 33:33 /host-assets || true
       '
     volumes:
-      - /var/www/myapp/current/public/assets:/host-assets
+      - ./tmp/local_public_assets:/host-assets
       - assets:/app/public/assets
       - manifests:/app/public
     depends_on:
@@ -43,19 +66,29 @@ services:
     restart: "no"
 
   web:
-    image: ghcr.io/taka-thor/myapp:latest
-    pull_policy: always
-    command: bash -lc "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: production
+        PRECOMPILE_ASSETS: "0"
+        SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+        REDIS_URL: "redis://127.0.0.1:6379/1"
+    platform: linux/amd64
     env_file:
-      - /var/www/myapp/shared/.env.production
+      - .env.production
     environment:
       RAILS_ENV: production
       TZ: Asia/Tokyo
       RAILS_SERVE_STATIC_FILES: "true"
       RAILS_LOG_TO_STDOUT: "true"
+      REDIS_URL: redis://redis:6379/1
+    command: bash -lc "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
     ports:
-      - "127.0.0.1:3000:3000"
+      - "3000:3000"
     depends_on:
+      redis:
+        condition: service_started
       assets-export:
         condition: service_completed_successfully
     volumes:
