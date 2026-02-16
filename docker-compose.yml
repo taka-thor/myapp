@@ -1,4 +1,7 @@
 services:
+  redis:
+    image: redis:7-alpine
+
   web:
     build:
       context: .
@@ -12,6 +15,7 @@ services:
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/1
     command: bash -lc "rm -f tmp/pids/server.pid && bin/rails s -b 0.0.0.0 -p 3000"
     volumes:
       - .:/app
@@ -20,6 +24,8 @@ services:
       - "3000:3000"
     tty: true
     stdin_open: true
+    depends_on:
+      - redis
 
   js:
     build:

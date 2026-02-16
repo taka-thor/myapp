@@ -111,10 +111,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 - **部屋トピック自動更新機能**（複数ある部屋ごとに表示されたトピックが一定時間ごとに変化する機能）
   - `Redis`
-  - `sidekiq`
-  - `sidekiq-scheduler`
-  - `whenever`
-  - `psych`
+  - `rails runner(systemd管理)`
 
 <br>
 
@@ -176,7 +173,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
   - `Nginx(EC2常駐)`
 
 - **DB**
-  - ` SQlite`
+  - ` Neon`
 
 ## 画面遷移図
 

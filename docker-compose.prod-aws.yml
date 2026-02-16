@@ -1,4 +1,9 @@
 services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    restart: unless-stopped
+
   assets-export:
     image: ghcr.io/taka-thor/myapp:latest
     pull_policy: always
@@ -27,9 +32,12 @@ services:
       TZ: Asia/Tokyo
       RAILS_SERVE_STATIC_FILES: "true"
       RAILS_LOG_TO_STDOUT: "true"
+      REDIS_URL: redis://redis:6379/1
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:
+      redis:
+        condition: service_started
       assets-export:
         condition: service_completed_successfully
     restart: unless-stopped
