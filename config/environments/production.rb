@@ -4,7 +4,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   # Code is not reloaded between requests.
   config.enable_reloading = false
-  # config.hosts << "app.rails-kt.com"
+  config.hosts << "app.rails-kt.com"
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -14,10 +14,6 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
-  config.hosts << "127.0.0.1"
-  config.hosts << "192.168.1.5"
-  config.hosts << "localhost:3000"
-  config.hosts << "127.0.0.1:3000"
 
   # Ensures that a master key has been made available in ENV["RAILS_MASTER_KEY"], config/master.key, or an environment
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
@@ -92,11 +88,7 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # config.action_cable.allowed_request_origins = [ "https://app.rails-kt.com" ]
-  config.action_cable.allowed_request_origins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000"
-  ]
+  config.action_cable.allowed_request_origins = [ "https://app.rails-kt.com" ]
   # mount は routes.rb の /cable を使用（config.action_cable.url は未指定でOK）
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
