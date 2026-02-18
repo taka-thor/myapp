@@ -30,58 +30,11 @@
         <span>退出</span>
       <% end %>
     </div>
-
+    
       <%= render "shared/flash_messages" %>
 
     <%# --- トピックバー --- %>
-    <section>
-      <div class="w-full rounded-2xl bg-sky-300/90 px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-between gap-3">
-        <%= form_with model: @room, url: room_topic_path(@room), method: :patch,
-              data: { turbo: true }, class: "flex items-center gap-3 w-full flex-wrap" do |f| %>
-
-          <%# 変更ボタン（入力を開く） %>
-          <button
-            type="button"
-            id="topic-edit-open"
-            class="shrink-0 rounded-xl bg-orange-400 text-white px-2 py-1 sm:px-3 sm:py-1.5
-                    text-base sm:text-lg font-semibold hover:opacity-90 active:scale-95 transition"
-          >
-            変更
-          </button>
-
-          <div class="flex-1 min-w-0 text-[20px]">
-            <%= render "rooms/topic_index_and_show", room: @room, topic: @room.topic %>
-          </div>
-
-          <div id="topic-edit-area" class="hidden w-full basis-full mt-3">
-            <%= f.text_field :topic,
-                  value: @room.topic,
-                  class: "w-full rounded-xl px-3 py-2 text-base",
-                  placeholder: "新しい話題" %>
-
-            <div class="mt-2 flex justify-end gap-2">
-              <%= f.submit "更新",
-                    class: "rounded-xl bg-emerald-500 text-white px-4 py-2 font-semibold hover:opacity-90 active:scale-95 transition",
-                    data: { confirm_topic_update: true } %>
-
-              <button
-                type="button"
-                id="topic-edit-cancel"
-                class="rounded-xl bg-slate-200 text-slate-800 px-4 py-2 font-semibold hover:opacity-90 active:scale-95 transition"
-              >
-                やめる
-              </button>
-            </div>
-          </div>
-
-        <% end %>
-      </div>
-
-      <p class="mt-4 text-center text-sm sm:text-base text-slate-700 leading-relaxed">
-        「変更」を押すと、話題を変更できます
-      </p>
-    </section>
-
+    <%= render "rooms/topic_editor", room: @room%>
     <%= turbo_stream_from @room %>
 
     <%# --- ユーザーアイコンエリア（最大4人） --- %>
