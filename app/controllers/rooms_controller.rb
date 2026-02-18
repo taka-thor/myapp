@@ -21,23 +21,12 @@ class RoomsController < ApplicationController
 
   def edit; end
 
-  def update
-    @room = Room.find(params[:id])
-    @room.update!(room_params)
-
-    Rooms::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
-
-    redirect_to @room
-  end
+  def update; end
 
   private
 
   def set_room
     @room = Room.find(params[:id])
-  end
-
-  def room_params
-    params.require(:room).permit(:topic, :topic_updated, :user_id)
   end
 
   def leave_room_for_index
