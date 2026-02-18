@@ -2,12 +2,13 @@ class TopicsController < ApplicationController
   before_action :set_room
 
   def update
-    Rails.logger.warn "TOPIC_UPDATE_DEBUG reached update"
-    Rails.logger.info "FORMAT=#{request.format} ACCEPT=#{request.headers['Accept']}"
-
     @room.update!(topic_params)
     Rooms::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
-    # redirect_to @room, notice: "話題を更新しました"
+    render turbo_stream: turbo_stream.replace(
+      "topic_editor",
+      partial: "rooms/topic_editor",
+      locals: { room: @room }),
+      notice: "話題を更新しました"
   end
   #     respond_to do |format|
   #       format.turbo_stream do
