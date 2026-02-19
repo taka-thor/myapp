@@ -4,11 +4,14 @@ class TopicsController < ApplicationController
   def update
     @room.update!(topic_params)
     Rooms::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
-    render turbo_stream: turbo_stream.replace(
-      "topic_editor",
-      partial: "rooms/topic_editor",
-      locals: { room: @room }),
-      notice: "話題を更新しました"
+
+    flash.now[:notice] = "話題を更新しました"
+    Rooms::BroadcastTopicEditorAndFlash.call(room: @room, flash: flash)
+
+    respond_to do |format|
+      format.turbo_stream { head :ok }
+      format.html { redirect_to room_path(@room), notice: "話題を更新しました" }
+    end
   end
   #     respond_to do |format|
   #       format.turbo_stream do
