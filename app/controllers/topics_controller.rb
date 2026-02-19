@@ -2,42 +2,22 @@ class TopicsController < ApplicationController
   before_action :set_room
 
   def update
-    @room.update!(topic_params)
-    Rooms::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
+    if @room.update(topic_params)
+        Rooms::BroadcastTopic.call(room_id: @room.id) if @room.saved_change_to_topic?
 
-    flash.now[:notice] = "話題を更新しました"
-    Rooms::BroadcastTopicEditorAndFlash.call(room: @room, flash: flash)
+        flash.now[:notice] = "話題を更新しました"
+        Rooms::BroadcastTopicEditorAndFlash.call(room: @room, flash: flash)
+    else
+      @room.restore_attributes([ :topic ])
+      render turbo_stream: turbo_stream.replace(
+        "topic_editor",
+        partial: "rooms/topic_editor",
+        locals: { room: @room }
+      ),
+      status: :unprocessable_entity
 
-    respond_to do |format|
-      format.turbo_stream { head :ok }
-      format.html { redirect_to room_path(@room), notice: "話題を更新しました" }
     end
   end
-  #     respond_to do |format|
-  #       format.turbo_stream do
-  #         render turbo_stream: turbo_stream.replace(
-  #           "room_topic_editor",
-  #           partial: "topics/display",
-  #           locals: { room: @room }
-  #         )
-  #       end
-  #       format.html { redirect_to @room, notice: "話題を更新しました" }
-  #     end
-
-  #   else
-
-  #     respond_to do |format|
-  #       format.turbo_stream do
-  #         render turbo_stream: turbo_stream.replace(
-  #           "room_topic_editor",
-  #           partial: "topics/form",
-  #           locals: { room: @room }
-  #         ), status: :unprocessable_entity
-  #       end
-  #       format.html { render "rooms/show", status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
 
   private
 

@@ -1,6 +1,10 @@
 <% if object.errors.any? %>
-  <div id="error_explanation"
-        class="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-red-700 text-sm">
+  <div
+    id="error_explanation"
+    data-controller="flash"
+    data-flash-timeout-value="5000"
+    class="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-red-700 text-sm"
+  >
     <ul class="mb-0 list-disc list-inside">
       <% object.errors.each do |error| %>
         <li><%= error.full_message %></li>
