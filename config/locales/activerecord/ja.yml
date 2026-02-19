@@ -6,7 +6,8 @@ ja:
     attributes:
       user:
         name: ニックネーム
-
+      room:
+        topic: 話題
     errors:
       models:
         user:
@@ -17,3 +18,7 @@ ja:
               too_long: "%{attribute}は%{count}文字以内で入力してください"
               invalid: "ひらがな以外の記号や空白はご使用できません"
               ng_word: "%{attribute}に不適切な表現が含まれています"
+        room:
+          attributes:
+            topic:
+              too_long: "%{attribute}は%{count}文字以内で入力してください"
