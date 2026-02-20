@@ -4,8 +4,13 @@ Rails.application.routes.draw do
   root "static_pages#top"
   get "static_pages/home", to: "static_pages#home"
   get "qrcodes/index", to: "qrcodes#index"
+  get "user_info", to: "users#edit", as: :user_info
+  get "terms", to: "static_pages#terms"
+  get "privacy_policy", to: "static_pages#privacy_policy"
+  get "contact", to: "static_pages#contact"
 
   resources :users, only: %i[new create]
+  resource :user, only: %i[edit update]
   resources :user_sessions, only: %i[create]
   resource :user_nicknames, only: %i[new create]
   resource :user_icons, only: %i[new create]
@@ -18,8 +23,5 @@ Rails.application.routes.draw do
     resource :topic, only: %i[ update ]
   end
 
-
-
-  # ヘルスチェック
   get "/healthcheck", to: proc { [ 200, { "Content-Type"=>"text/plain" }, [ "ok" ] ] }
 end
