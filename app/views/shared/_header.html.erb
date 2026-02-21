@@ -23,24 +23,26 @@
     <% end %>
   </div>
 
-  <details class="relative" data-header-menu>
-    <summary
-      class="list-none cursor-pointer w-11 h-11 rounded-xl border border-slate-300 bg-white/80 flex items-center justify-center shadow-sm hover:bg-white"
-      aria-label="メニュー"
-    >
-      <span class="flex flex-col gap-1.5">
-        <span class="block w-5 h-0.5 bg-slate-700"></span>
-        <span class="block w-5 h-0.5 bg-slate-700"></span>
-        <span class="block w-5 h-0.5 bg-slate-700"></span>
-      </span>
-    </summary>
+  <% if local_assigns.fetch(:show_menu, true) %>
+    <details class="relative" data-header-menu>
+      <summary
+        class="list-none cursor-pointer w-11 h-11 rounded-xl border border-slate-300 bg-white/80 flex items-center justify-center shadow-sm hover:bg-white"
+        aria-label="メニュー"
+      >
+        <span class="flex flex-col gap-1.5">
+          <span class="block w-5 h-0.5 bg-slate-700"></span>
+          <span class="block w-5 h-0.5 bg-slate-700"></span>
+          <span class="block w-5 h-0.5 bg-slate-700"></span>
+        </span>
+      </summary>
 
-    <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg z-50 overflow-hidden">
-      <%= link_to "ホーム", static_pages_home_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
-      <%= link_to "ユーザー情報", edit_user_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
-      <%= link_to "利用規約", terms_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
-      <%= link_to "プライバシーポリシー", privacy_policy_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
-      <%= link_to "お問い合わせ", contact_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
-    </div>
-  </details>
+      <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg z-50 overflow-hidden">
+        <%= link_to "ホーム", static_pages_home_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
+        <%= link_to "ユーザー情報", edit_user_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
+        <%= link_to "利用規約", terms_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
+        <%= link_to "プライバシーポリシー", privacy_policy_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
+        <%= link_to "お問い合わせ", contact_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
+      </div>
+    </details>
+  <% end %>
 </div>
