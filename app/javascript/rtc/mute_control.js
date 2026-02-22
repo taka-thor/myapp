@@ -35,6 +35,14 @@ export const applyLocalMuteState = (ctx) => {
   }
 };
 
+const syncLocalOnlyMuteButtons = (ctx) => {
+  for (const buttonEl of document.querySelectorAll("[data-rtc-mute-toggle][data-rtc-user-id]")) {
+    const userId = Number(buttonEl.dataset.rtcUserId);
+    const isMine = userId === ctx.myUserId;
+    buttonEl.classList.toggle("hidden", !isMine);
+  }
+};
+
 export const syncMuteUi = (ctx) => {
   const muted = Boolean(ctx.isMuted);
 
@@ -54,6 +62,7 @@ export const setLocalMuted = (ctx, muted) => {
 };
 
 export const bindMuteControls = (ctx) => {
+  syncLocalOnlyMuteButtons(ctx);
   syncMuteUi(ctx);
 
   ctx._onMuteClick = (event) => {
@@ -64,7 +73,10 @@ export const bindMuteControls = (ctx) => {
     setLocalMuted(ctx, !ctx.isMuted);
   };
 
-  ctx._onTurboRender = () => syncMuteUi(ctx);
+  ctx._onTurboRender = () => {
+    syncLocalOnlyMuteButtons(ctx);
+    syncMuteUi(ctx);
+  };
 
   ctx._onBeforeStreamRender = (event) => {
     const originalRender = event.detail?.render;
@@ -72,6 +84,7 @@ export const bindMuteControls = (ctx) => {
 
     event.detail.render = (streamElement) => {
       originalRender(streamElement);
+      syncLocalOnlyMuteButtons(ctx);
       syncMuteUi(ctx);
     };
   };
