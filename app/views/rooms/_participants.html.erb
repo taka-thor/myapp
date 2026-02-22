@@ -1,15 +1,14 @@
 <div id="room_<%= room.id %>_participants">
   <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
     <% room.active_users.limit(4).each do |user| %>
-      <% is_current_user = (@current_user&.id == user.id) %>
       <div class="flex flex-col items-center gap-2">
         <div
           class="rtc-avatar-ring rounded-full p-1 transition"
           data-rtc-user-id="<%= user.id %>"
         >
-          <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-100 shadow-sm">
+          <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-100 shadow-sm flex items-center justify-center">
             <% if user.respond_to?(:icon_url) && user.icon_url.present? %>
-              <%= image_tag user.icon_url, alt: user.name, class: "w-full h-full object-cover" %>
+              <%= image_tag user.icon_url, alt: user.name, class: "w-[85%] h-[85%] object-contain" %>
             <% else %>
               <div class="w-full h-full flex items-center justify-center text-3xl sm:text-4xl">
                 🐾
@@ -61,17 +60,15 @@
             </span>
           </p>
 
-          <% if is_current_user %>
-            <button
-              type="button"
-              data-rtc-mute-toggle
-              data-rtc-user-id="<%= user.id %>"
-              aria-pressed="false"
-              class="mt-2 w-full rounded-full px-3 py-1.5 text-xs sm:text-sm font-semibold transition bg-emerald-500 text-white hover:opacity-90 active:scale-95"
-            >
-              自分の音声 ON
-            </button>
-          <% end %>
+          <button
+            type="button"
+            data-rtc-mute-toggle
+            data-rtc-user-id="<%= user.id %>"
+            aria-pressed="false"
+            class="hidden mt-2 w-full rounded-full px-3 py-1.5 text-xs sm:text-sm font-semibold transition bg-emerald-500 text-white hover:opacity-90 active:scale-95"
+          >
+            自分の音声 ON
+          </button>
         </div>
       </div>
     <% end %>

@@ -1,0 +1,15 @@
+<div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
+  <%= render "shared/header" %>
+
+  <main class="flex-1 px-6 pb-10 pt-8 space-y-6">
+    <h1 class="text-xl sm:text-2xl font-semibold text-slate-900">ユーザー情報</h1>
+
+    <section class="rounded-2xl bg-white/80 shadow-md p-5 space-y-3">
+      <p class="text-sm text-slate-500">ニックネーム</p>
+      <p class="text-lg text-slate-900 font-semibold"><%= @current_user&.name.presence || "未設定" %></p>
+
+      <p class="text-sm text-slate-500 pt-2">ユーザーID</p>
+      <p class="text-base text-slate-900"><%= @current_user&.id || "-" %></p>
+    </section>
+  </main>
+</div>
