@@ -24,9 +24,7 @@ export default class extends Controller {
   closeAndReset() {
     this.areaTarget.classList.add("hidden")
 
-    // 「次に変更押したらプレイスホルダーが見える」状態にしたいなら value を空にする
     this.inputTarget.value = ""
 
-    // もし「前回の入力が残っててほしい」なら ↑ を消してOK
   }
 }

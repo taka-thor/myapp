@@ -1,14 +1,17 @@
-    <section id="topic_editor">
+    <section
+      id="topic_editor"
+      data-controller="topic-editor"
+ç    >
       <div class="w-full rounded-2xl bg-sky-300/90 px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-between gap-3">
         <%= form_with model: room, url: room_topic_path(room), method: :patch,
             data: { turbo: true }, class: "flex items-center gap-3 w-full flex-wrap" do |f| %>
 
           <%= render 'shared/error_messages', object: room %>
 
-          <%# 変更ボタン（入力を開く） %>
           <button
             type="button"
             id="topic-edit-open"
+            data-action="topic-editor#open"
             class="shrink-0 rounded-xl bg-orange-400 text-white px-2 py-1 sm:px-3 sm:py-1.5
                     text-base sm:text-lg font-semibold hover:opacity-90 active:scale-95 transition"
           >
@@ -19,10 +22,11 @@
             <%= render "rooms/topic_index_and_show", room: room, topic: room.topic %>
           </div>
 
-          <div id="topic-edit-area" class="hidden w-full basis-full mt-3">
+          <div id="topic-edit-area" data-topic-editor-target="area" class="hidden w-full basis-full mt-3">
             <%= f.text_field :topic,
+                  data: { topic_editor_target: "input" },
                   value: room.topic,
-                  class: "w-full rounded-xl px-3 py-2 text-base",
+                  class: "w-full rounded-xl px-3 py-2 text-base border-2 border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-300",
                   placeholder: "新しい話題" %>
 
             <div class="mt-2 flex justify-end gap-2">
@@ -33,6 +37,7 @@
               <button
                 type="button"
                 id="topic-edit-cancel"
+                data-action="topic-editor#cancel"
                 class="rounded-xl bg-slate-200 text-slate-800 px-4 py-2 font-semibold hover:opacity-90 active:scale-95 transition"
               >
                 やめる
