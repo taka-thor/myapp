@@ -36,6 +36,7 @@
 # SQLite（ローカルDB）
 /db/*.sqlite3
 /db/*.sqlite3-*
+/db/seeds.rb
 
 # 資格情報（鍵ファイルのみ除外。*.yml.enc はコミットOK）
 /config/master.key
