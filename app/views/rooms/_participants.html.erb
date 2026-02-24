@@ -69,10 +69,12 @@
           >
             自分の音声 ON
           </button>
-
-          <div class="flex justify-center">
+          <p
+            data-rtc-reconnect
+            data-rtc-user-id="<%= user.id %>"
+            class="hidden flex justify-center">
             <%= link_to room_path(room),
-                  data: { turbo_prefetch: false },
+                  data: { turbo_prefetch: false, turbo: false, rtc_reconnect_link: true },
                   class: "mt-1 rounded-full
                   px-1 py-1 text-l
                   sm:text-sm
@@ -82,7 +84,7 @@
                   flex items-center justify-center gap-1" do %>
               <span>再接続</span>
             <% end %>
-          </div>
+          </p>
         </div>
       </div>
     <% end %>

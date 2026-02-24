@@ -2,6 +2,8 @@ import { ensureAudioEl, showTapToPlay } from "./audio_remote";
 import { send } from "./send";
 import { startSpeakingFromStream, stopSpeaking } from "./speaking_ring";
 
+const FORCE_TAP_TO_PLAY_KEY = "rtc_force_tap_to_play";
+
 export const closePeer = (ctx, peerUserId) => {
   const entry = ctx.peers.get(peerUserId);
   if (!entry) return;
@@ -82,6 +84,14 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
       holdMs: 450,
       debug: true,
     });
+
+    const forceTapToPlay = sessionStorage.getItem(FORCE_TAP_TO_PLAY_KEY) === "1";
+    if (forceTapToPlay) {
+      showTapToPlay(ctx, peerUserId, audioEl);
+      sessionStorage.removeItem(FORCE_TAP_TO_PLAY_KEY);
+      console.debug("[rtc] force tap-to-play after reconnect", { peerUserId });
+      return;
+    }
 
     audioEl
       .play()
