@@ -16,7 +16,7 @@ ja:
               blank: "%{attribute}を入力してください"
               taken: "「%{value}」は既に使われています"
               too_long: "%{attribute}は%{count}文字以内で入力してください"
-              invalid: "ひらがな以外の記号や空白はご使用できません"
+              invalid: "ひらがな・カタカナ・記号（ー、〜、!、?）が使用できます"
               ng_word: "%{attribute}に不適切な表現が含まれています"
         room:
           attributes:
