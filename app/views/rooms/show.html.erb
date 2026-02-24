@@ -32,8 +32,6 @@
     </div>
 
     <%= render "shared/flash_messages" %>
-
-    <%# --- トピックバー --- %>
     <%= render "rooms/topic_editor", room: @room%>
     <%= turbo_stream_from @room %>
 
@@ -42,7 +40,6 @@
       <h2 class="text-base sm:text-lg font-semibold text-slate-900">
         参加中のメンバー
       </h2>
-
       <%= render "rooms/participants", room: @room %>
     </section>
 
@@ -60,7 +57,7 @@
           <p class="leading-relaxed">
             運営側が個人情報をお聞きすることは
           </p>
-          <p class="leading-relaxed font-semibold">
+          <p class="leading-relaxed">
             絶対にありません
           </p>
         </div>
