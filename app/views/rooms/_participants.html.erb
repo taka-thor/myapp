@@ -65,10 +65,26 @@
             data-rtc-mute-toggle
             data-rtc-user-id="<%= user.id %>"
             aria-pressed="false"
-            class="hidden mt-2 w-full rounded-full px-3 py-1.5 text-xs sm:text-sm font-semibold transition bg-emerald-500 text-white hover:opacity-90 active:scale-95"
+            class="hidden mt-1 w-full rounded-full px-3 py-1.5 text-xs sm:text-sm font-semibold transition bg-emerald-500 text-white hover:opacity-90 active:scale-95"
           >
             自分の音声 ON
           </button>
+          <p
+            data-rtc-reconnect
+            data-rtc-user-id="<%= user.id %>"
+            class="hidden flex justify-center">
+            <%= link_to room_path(room),
+                  data: { turbo_prefetch: false, turbo: false, rtc_reconnect_link: true },
+                  class: "mt-1 rounded-full
+                  px-1 py-1 text-l
+                  sm:text-sm
+                  transition bg-slate-300
+                  text-blue-800
+                  hover:opacity-90 active:scale-95
+                  flex items-center justify-center gap-1" do %>
+              <span>再接続</span>
+            <% end %>
+          </p>
         </div>
       </div>
     <% end %>

@@ -2,6 +2,8 @@ import { setSpeakingIndicator } from "./speaking_ring";
 
 const speakerStatusSelector = (userId) => `[data-rtc-speaker-status][data-rtc-user-id=\"${userId}\"]`;
 const muteToggleSelector = (userId) => `[data-rtc-mute-toggle][data-rtc-user-id=\"${userId}\"]`;
+const reconnectSelector = "[data-rtc-reconnect][data-rtc-user-id]";
+const FORCE_TAP_TO_PLAY_KEY = "rtc_force_tap_to_play";
 
 const renderSpeakerStatus = (statusEl, muted) => {
   statusEl.classList.toggle("text-slate-400", muted);
@@ -43,6 +45,13 @@ const syncLocalOnlyMuteButtons = (ctx) => {
   }
 };
 
+const syncLocalOnlyReconnect = (ctx) => {
+  for (const el of document.querySelectorAll(reconnectSelector)) {
+    const userId = Number(el.dataset.rtcUserId);
+    el.classList.toggle("hidden", userId !== ctx.myUserId);
+  }
+};
+
 export const syncMuteUi = (ctx) => {
   const muted = Boolean(ctx.isMuted);
 
@@ -63,9 +72,16 @@ export const setLocalMuted = (ctx, muted) => {
 
 export const bindMuteControls = (ctx) => {
   syncLocalOnlyMuteButtons(ctx);
+  syncLocalOnlyReconnect(ctx);
   syncMuteUi(ctx);
 
   ctx._onMuteClick = (event) => {
+    const reconnectLink = event.target.closest("[data-rtc-reconnect-link]");
+    if (reconnectLink) {
+      sessionStorage.setItem(FORCE_TAP_TO_PLAY_KEY, "1");
+      return;
+    }
+
     const button = event.target.closest(muteToggleSelector(ctx.myUserId));
     if (!button) return;
 
@@ -75,6 +91,7 @@ export const bindMuteControls = (ctx) => {
 
   ctx._onTurboRender = () => {
     syncLocalOnlyMuteButtons(ctx);
+    syncLocalOnlyReconnect(ctx);
     syncMuteUi(ctx);
   };
 
@@ -85,6 +102,7 @@ export const bindMuteControls = (ctx) => {
     event.detail.render = (streamElement) => {
       originalRender(streamElement);
       syncLocalOnlyMuteButtons(ctx);
+      syncLocalOnlyReconnect(ctx);
       syncMuteUi(ctx);
     };
   };

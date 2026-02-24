@@ -5,7 +5,7 @@ class User < ApplicationRecord
             presence:   true,
             uniqueness: true,
             length:     { maximum: 10 },
-            format:     { with: /\A\p{Hiragana}+\z/ },
+            format:     { with: /\A[\p{Hiragana}\p{Katakana}ー〜!！?？]+\z/ },
             ng_word:    true,
             on:         :nickname_step
 end
