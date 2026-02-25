@@ -1,5 +1,8 @@
 class NgWord < ApplicationRecord
+  before_validation :normalize_word
+
   validates :word, presence: true, uniqueness: true
+  validates :word, format: { with: /\A[a-zぁ-ん]+\z/ }
   # このネスト内のメソッド全てをクラスメソッドとして扱うよってこと。self.⚪︎⚪︎って書かなくてOK
   class << self
     def word_filter(text)
@@ -23,8 +26,6 @@ class NgWord < ApplicationRecord
 
       # 5) 英字の同じ文字連続を1文字に潰す
       s = s.gsub(/([a-z])\1+/, '\1')
-
-      s
     end
     # ?で終わるメソッドは、「真偽値」を確認。ng?メソッドをRoomモデルのカスタムバリデーションに入れて、エラーメッセージを出す設計
     def ng?(text)
@@ -33,8 +34,15 @@ class NgWord < ApplicationRecord
 
       NgWord.pluck(:word).any? do |db_word|
         filtered_db_word = word_filter(db_word)
+        next false if filtered_db_word.blank?
         filtered_word.include?(filtered_db_word)
       end
     end
+  end
+
+  private
+  # create用
+  def normalize_word
+    self.word = Ngword.word_filter(word)
   end
 end
