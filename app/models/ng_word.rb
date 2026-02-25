@@ -26,7 +26,6 @@ class NgWord < ApplicationRecord
 
       # 5) 英字の同じ文字連続を1文字に潰す
       s = s.gsub(/([a-z])\1+/, '\1')
-
     end
     # ?で終わるメソッドは、「真偽値」を確認。ng?メソッドをRoomモデルのカスタムバリデーションに入れて、エラーメッセージを出す設計
     def ng?(text)
