@@ -2,7 +2,7 @@ require "mini_magick"
 
 namespace :icons do
   desc "app/icons_src の画像をリサイズ＆圧縮して tmp/icons_build に出力"
-  task build: :environment do
+  task build: [] do
     src_dir  = Rails.root.join("app/icons_src")
     dest_dir = Rails.root.join("tmp/icons_build")
 
