@@ -1,1 +1,35 @@
 ja:
+  qrcodes:
+    index:
+      title: QRコード
+  rooms:
+    edit:
+      title: ルーム編集
+    index:
+      title: ルーム一覧
+    new:
+      title: ルーム作成
+    show:
+      title: ルーム詳細
+  static_pages:
+    contact:
+      title: お問い合わせ
+    home:
+      title: ホーム
+    privacy_policy:
+      title: プライバシーポリシー
+    terms:
+      title: 利用規約
+    top:
+      title: 声友 - ホーム
+    user_info:
+      title: ユーザー情報
+  user_icons:
+    new:
+      title: アイコン選択
+  user_nicknames:
+    new:
+      title: ニックネーム設定
+  users:
+    edit:
+      title: ユーザー情報
