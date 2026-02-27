@@ -1,5 +1,6 @@
 class UserSessionsController < ApplicationController
   skip_before_action :current_user, only: %i[create]
+  skip_before_action :require_login, only: %i[create]
 
   def create
       user = User.find_by(id: session[:user_info])
