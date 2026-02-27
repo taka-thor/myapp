@@ -15,6 +15,7 @@ class UserIconsController < ApplicationController
     @user = User.new(name: name, icon_url: icon_url)
 
     if @user.save
+      reset_session
       session[:user_info] = @user.id
 
       redirect_to static_pages_home_path
