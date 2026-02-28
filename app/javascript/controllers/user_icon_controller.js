@@ -1,31 +1,35 @@
 import { Controller } from "@hotwired/stimulus";
 
-<script>
-  document.addEventListener("turbo:load", () => {
-    const options = document.querySelectorAll(".icon-option");
-    const hiddenInput = document.getElementById("selected-icon-id");
-    const submitBtn = document.getElementById("icon-submit");
-    const form = document.getElementById("icon-form");
+export default class extends Controller {
+  static targets = ["option", "input", "submit", "form"];
 
-    options.forEach((option) => {
-      option.addEventListener("click", () => {
-        // 他の選択状態をリセット
-        options.forEach((o) => o.classList.remove("ring-4", "ring-sky-400"));
-
-        // クリックしたものだけ外枠をつける（水色・青強め）
-        option.classList.add("ring-4", "ring-sky-400");
-
-        // hidden に選択中の icon_url をセット
-        hiddenInput.value = option.dataset.iconId;
-
-        // 決定ボタンを表示 & 有効化
-        submitBtn.classList.remove(
-          "opacity-0",
-          "translate-y-4",
-          "pointer-events-none"
-        );
-        form.classList.remove("pointer-events-none");
-      });
+  connect() {
+    this.boundOptionClick = this.onOptionClick.bind(this);
+    this.optionTargets.forEach((option) => {
+      option.addEventListener("click", this.boundOptionClick);
     });
-  });
-</script>
+  }
+
+  disconnect() {
+    this.optionTargets.forEach((option) => {
+      option.removeEventListener("click", this.boundOptionClick);
+    });
+  }
+
+  onOptionClick(event) {
+    const selected = event.currentTarget;
+    this.optionTargets.forEach((option) => {
+      option.classList.remove("ring-4", "ring-sky-400");
+    });
+
+    selected.classList.add("ring-4", "ring-sky-400");
+    this.inputTarget.value = selected.dataset.iconId || "";
+
+    this.submitTarget.classList.remove(
+      "opacity-0",
+      "translate-y-4",
+      "pointer-events-none"
+    );
+    this.formTarget.classList.remove("pointer-events-none");
+  }
+}
