@@ -36,9 +36,8 @@ Rails.application.configure do
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
   config.action_mailer.perform_caching = false
-
+  beee-2400-4152-1c62-a100-310d-634-2852-b09a.ngrok-free.app
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
-
   config.hosts << "192.168.1.5"
   config.assets.digest = false
 

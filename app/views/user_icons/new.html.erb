@@ -2,7 +2,7 @@
 <%# <style>
   * { outline: 1px solid red; }
 </style> %>
-<div class="min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col" data-controller="user-icon">
   <!-- タイトル -->
   <header class="px-6 pt-6 pb-4">
     <h1 class="text-[26px] font-semibold text-center text-[#4B4642]">アイコンを選んでください</h1>
@@ -16,6 +16,7 @@
           type="button"
           class="icon-option relative rounded-full p-[3px] transition ring-0 focus:outline-none"
           data-icon-id="<%= icon %>"
+          data-user-icon-target="option"
         >
           <div
             class="w-[74px] h-[74px] rounded-full overflow-hidden bg-slate-100 flex items-center justify-center"
@@ -32,45 +33,21 @@
   </main>
 
   <!-- 決定ボタン（最初は非表示） -->
-  <%= form_with model: @user, url: user_icons_path, data: { turbo_method: :post }, id: "icon-form",
-        class: "fixed bottom-0 left-0 right-0 pb-6 pointer-events-none flex justify-center" do %>
-    <input type="hidden" name="user[icon_url]" id="selected-icon-id" />
+  <%= form_with(
+        model: @user,
+        url: user_icons_path,
+        data: { turbo_method: :post, user_icon_target: "form" },
+        id: "icon-form",
+        class: "fixed bottom-0 left-0 right-0 pb-6 pointer-events-none flex justify-center"
+      ) do %>
+    <input type="hidden" name="user[icon_url]" id="selected-icon-id" data-user-icon-target="input" />
     <button
       type="submit"
       id="icon-submit"
+      data-user-icon-target="submit"
       class="w-[40vw] max-w-[425px] mx-auto py-3 rounded-xl bg-sky-500 text-white font-semibold shadow-lg opacity-0 translate-y-4 transition pointer-events-none"
     >
       決定
     </button>
   <% end %>
 </div>
-
-<script>
-  document.addEventListener("turbo:load", () => {
-    const options = document.querySelectorAll(".icon-option");
-    const hiddenInput = document.getElementById("selected-icon-id");
-    const submitBtn = document.getElementById("icon-submit");
-    const form = document.getElementById("icon-form");
-
-    options.forEach((option) => {
-      option.addEventListener("click", () => {
-        // 他の選択状態をリセット
-        options.forEach((o) => o.classList.remove("ring-4", "ring-sky-400"));
-
-        // クリックしたものだけ外枠をつける（水色・青強め）
-        option.classList.add("ring-4", "ring-sky-400");
-
-        // hidden に選択中の icon_url をセット
-        hiddenInput.value = option.dataset.iconId;
-
-        // 決定ボタンを表示 & 有効化
-        submitBtn.classList.remove(
-          "opacity-0",
-          "translate-y-4",
-          "pointer-events-none"
-        );
-        form.classList.remove("pointer-events-none");
-      });
-    });
-  });
-</script>
