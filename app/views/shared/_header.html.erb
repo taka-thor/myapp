@@ -44,22 +44,22 @@
         <%= link_to "お問い合わせ", contact_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <div class="border-t border-slate-100">
           <button type="button"
-                  data-action="click->menu#toggleHowTo"
+                  data-howto-toggle
                   class="w-full flex items-center justify-between px-4 py-3 text-sm text-slate-800 hover:bg-slate-50">
-            <span>使い方</span>
-            <span aria-hidden="true">▸</span>
+            <span>ご利用方法</span>
+            <span data-howto-arrow class="inline-block transition-transform" aria-hidden="true">▸</span>
           </button>
 
-          <div data-menu-target="howto"
+          <div data-howto-panel
               class="hidden bg-slate-50">
-            <%= link_to "初めての方へ", howto_start_path,
+            <%# <%= link_to "初めての方へ", howto_start_path,
+                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %> %>
+
+            <%= link_to "ルームの使い方", how_to_talk_path,
                 class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
 
-            <%= link_to "ルームの使い方", howto_rooms_path,
-                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
-
-            <%= link_to "よくある質問", howto_faq_path,
-                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
+            <%# <%= link_to "よくある質問", howto_faq_path,
+                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %> %>
           </div>
         </div>
       </div>

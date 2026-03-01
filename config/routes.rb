@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "privacy_policy", to: "static_pages#privacy_policy"
   get "contact", to: "static_pages#contact"
   # get "test", to: "tests#test"
+  get "how_to_talk", to: "static_pages#how_to_talk", as: :how_to_talk
 
   resources :users, only: %i[new create]
   resource :user, only: %i[edit update]
