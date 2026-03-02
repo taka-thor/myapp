@@ -14,8 +14,12 @@ ja:
   static_pages:
     contact:
       title: お問い合わせ
+    each_room_display:
+      title: 各部屋の表示について
     home:
       title: ホーム
+    how_to_talk:
+      title: 声友のご利用方法
     privacy_policy:
       title: プライバシーポリシー
     terms:

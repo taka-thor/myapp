@@ -1,0 +1,146 @@
+<%# <style>
+  * { outline: 1px solid red; }
+</style> %>
+
+
+<section class="px-6 pb-12">
+  <div class="mx-auto max-w-4xl rounded-[28px] bg-white/60 p-6 shadow-[0_12px_30px_rgba(122,90,58,0.2)]">
+    <div class="text-center mt-2 mb-6">
+      <h2 class="inline-block px-4 py-2 rounded-full bg-[#C88951] text-white text-2xl font-bold">
+        声友のご利用方法
+      </h2>
+    </div>
+
+    <ol class="space-y-8 mt-8">
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold mx-auto">
+            1
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-semibold text-xl text-slate-900 text-center">
+              ニックネームを入力する
+            </h3>
+
+            <p class="text-lg text-slate-700 leading-relaxed">
+              はじめに、お相手に表示される名前を入力します。
+              本名である必要はありません。
+            </p>
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "ニックネーム選択画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold mx-auto">
+            2
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-semibold text-xl text-slate-900 text-center">
+              アイコンを選択する
+            </h3>
+
+            <p class="text-lg text-slate-700 leading-relaxed">
+              用意されたアイコンの中から、好きなものを1つタップして選びます。
+            </p>
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "アイコン選択画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold mx-auto">
+            3
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-semibold text-xl text-slate-900 text-center">
+              通話部屋を選ぶ
+            </h3>
+
+            <h2 class="text-lg text-slate-700 leading-relaxed">
+              <p>登録が終わると、ホーム画面が表示され、通話をする場合は「通話部屋を探す」を選択すると下図のように通話部屋の一覧が表示されます。各部屋には話題が表示されており、お好きなお部屋に入室出来ます。</p>
+              <p>入室後、話題はどなたでも変更できます。
+            </h2>
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "部屋一覧画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold mx-auto">
+            4
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-semibold text-xl text-slate-900 text-center">
+              通話を楽しむ
+            </h3>
+
+            <p class="text-lg text-slate-700 leading-relaxed">
+              入室後は、画面内の下に表示される
+              <span class="inline-flex items-center rounded-xl border border-black/15 bg-white px-3 py-1 text-sm font-medium text-slate-700">
+                🔊 タップして音声を再生
+              </span>
+              を押すことで、通話を開始します。(スマートフォンでのご利用時のみ)
+              通話中に「ご自身の音声だけ」をOFFにすることも可能です。
+            </p>
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "通話画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <div class="h-8 w-8 rounded-full bg-[#C88951] text-white flex items-center justify-center font-semibold mx-auto">
+            5
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-semibold text-xl text-slate-900 text-center">
+              次回からお手軽スタート
+            </h3>
+
+            <h2 class="text-lg text-slate-700 leading-relaxed">
+              <p>一度登録したニックネームとアイコンはそのまま使えます。</p>
+              <p>ニックネームやアイコンはいつでも変更できます。</p>
+            </h2>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
