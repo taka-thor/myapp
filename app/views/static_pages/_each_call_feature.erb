@@ -1,0 +1,104 @@
+<%# <style>
+  * { outline: 1px solid red; }
+</style> %>
+
+
+<section class="px-6 pb-12">
+  <div class="mx-auto max-w-4xl rounded-[28px] bg-white/60 p-6 shadow-[0_12px_30px_rgba(122,90,58,0.2)]">
+    <div class="text-center mt-2 mb-6">
+      <h2 class="inline-block px-4 py-2 rounded-full bg-[#C88951] text-white text-2xl font-bold">
+        通話時の各機能
+      </h2>
+    </div>
+
+    <ol class="space-y-8 mt-8">
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <p class="text-center text-xl font-semibold text-[#C88951]">
+            話題の変更方法
+          </p>
+
+          <div class="space-y-3">
+            <p class="text-lg text-slate-700 leading-relaxed">
+              話題を変更したい場合は
+              <span class="inline-flex items-center rounded-xl bg-orange-400 px-3 py-1 text-sm font-semibold text-white shadow-sm">
+                変更
+              </span>
+              を押して文字を入力後
+              <span class="inline-flex items-center rounded-xl bg-emerald-500 px-3 py-1 text-sm font-semibold text-white shadow-sm">
+                更新
+              </span>
+              を押します。話題が更新されると、
+            </p>
+            <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+              話題が更新されました
+            </div>
+            と参加メンバーに通知されます。
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "話題変更画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <p class="text-center text-xl font-semibold text-[#C88951]">
+            ミュート(消音)設定
+          </p>
+
+          <div class="space-y-3">
+            <p class="text-lg text-slate-700 leading-relaxed">
+              ミュート(消音)ボタンは、下図の
+              <span class="inline-flex items-center rounded-full bg-emerald-500 px-3 py-1 text-sm font-semibold text-white shadow-sm">
+                自分の音声 ON
+              </span>
+              を押すとOFFになり、
+              ご自身の音声はお相手に聞こえなくなり、お相手の音声のみが聞こえる状態になります。
+            </p>
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "ミュート・再接続画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm bg-white/70">
+        <div class="space-y-3">
+          <p class="text-center text-xl font-semibold text-[#C88951]">
+            お相手の声が聞こえない等の接続不良の時
+          </p>
+
+          <div class="space-y-3">
+            <p class="text-lg text-slate-700 leading-relaxed">
+              入室後、音声が正常に聞こえない場合があります。
+              その時は下図の
+              <span class="inline-flex items-center rounded-full bg-slate-300 px-3 py-1 text-sm font-semibold text-blue-800">
+                再接続
+              </span>
+              ボタンを押すと改善することがあります。
+            </p>
+
+            <div class="mt-2">
+              <div class="relative w-full rounded-xl
+                          aspect-[16/9] flex items-center justify-center text-xs
+                          text-slate-400 bg-white/40">
+                <%= image_tag "ミュート・再接続画面.png", class: "rounded-xl" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>

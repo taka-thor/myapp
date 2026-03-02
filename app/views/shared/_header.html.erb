@@ -37,6 +37,7 @@
       </summary>
 
       <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg z-50 overflow-hidden">
+        <%= link_to "トップ", root_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "ホーム", static_pages_home_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "ユーザー情報", edit_user_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "利用規約", terms_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
@@ -52,14 +53,8 @@
 
           <div data-howto-panel
               class="hidden bg-slate-50">
-            <%# <%= link_to "初めての方へ", howto_start_path,
-                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %> %>
-
-            <%= link_to "ルームの使い方", how_to_talk_path,
+            <%= link_to "通話部屋について", how_to_talk_path,
                 class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
-
-            <%# <%= link_to "よくある質問", howto_faq_path,
-                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %> %>
           </div>
         </div>
       </div>
