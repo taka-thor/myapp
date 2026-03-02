@@ -47,12 +47,14 @@
           <button type="button"
                   data-howto-toggle
                   class="w-full flex items-center justify-between px-4 py-3 text-sm text-slate-800 hover:bg-slate-50">
-            <span>ご利用方法</span>
+            <span>ご利用方法等</span>
             <span data-howto-arrow class="inline-block transition-transform" aria-hidden="true">▸</span>
           </button>
 
           <div data-howto-panel
               class="hidden bg-slate-50">
+            <%= link_to "各部屋の表示について", each_room_display_path,
+                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
             <%= link_to "通話部屋について", how_to_talk_path,
                 class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
           </div>
