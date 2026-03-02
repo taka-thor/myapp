@@ -26,7 +26,7 @@
   <% if local_assigns.fetch(:show_menu, true) %>
     <details class="relative" data-header-menu>
       <summary
-        class="list-none cursor-pointer w-11 h-11 rounded-xl border border-slate-300 bg-white/80 flex items-center justify-center shadow-sm hover:bg-white"
+        class="list-none [&::-webkit-details-marker]:hidden cursor-pointer w-11 h-11 rounded-xl border border-slate-300 bg-white/80 flex items-center justify-center shadow-sm hover:bg-white"
         aria-label="メニュー"
       >
         <span class="flex flex-col gap-1.5">
@@ -37,11 +37,26 @@
       </summary>
 
       <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg z-50 overflow-hidden">
+        <%= link_to "トップ", root_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "ホーム", static_pages_home_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "ユーザー情報", edit_user_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "利用規約", terms_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "プライバシーポリシー", privacy_policy_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
         <%= link_to "お問い合わせ", contact_path, class: "block px-4 py-3 text-sm text-slate-800 hover:bg-slate-50" %>
+        <div class="border-t border-slate-100">
+          <button type="button"
+                  data-howto-toggle
+                  class="w-full flex items-center justify-between px-4 py-3 text-sm text-slate-800 hover:bg-slate-50">
+            <span>ご利用方法</span>
+            <span data-howto-arrow class="inline-block transition-transform" aria-hidden="true">▸</span>
+          </button>
+
+          <div data-howto-panel
+              class="hidden bg-slate-50">
+            <%= link_to "通話部屋について", how_to_talk_path,
+                class: "block pl-8 pr-4 py-2 text-sm text-slate-700 hover:bg-slate-100" %>
+          </div>
+        </div>
       </div>
     </details>
   <% end %>
