@@ -26,7 +26,7 @@
   <% if local_assigns.fetch(:show_menu, true) %>
     <details class="relative" data-header-menu>
       <summary
-        class="list-none cursor-pointer w-11 h-11 rounded-xl border border-slate-300 bg-white/80 flex items-center justify-center shadow-sm hover:bg-white"
+        class="list-none [&::-webkit-details-marker]:hidden cursor-pointer w-11 h-11 rounded-xl border border-slate-300 bg-white/80 flex items-center justify-center shadow-sm hover:bg-white"
         aria-label="メニュー"
       >
         <span class="flex flex-col gap-1.5">
@@ -48,6 +48,7 @@
                   data-howto-toggle
                   class="w-full flex items-center justify-between px-4 py-3 text-sm text-slate-800 hover:bg-slate-50">
             <span>ご利用方法</span>
+            <span data-howto-arrow class="inline-block transition-transform" aria-hidden="true">▸</span>
           </button>
 
           <div data-howto-panel

@@ -4,7 +4,9 @@ function closeMenusOutsideClick(event) {
   menus.forEach((menu) => {
     if (!menu.contains(event.target)) {
       const panel = menu.querySelector("[data-howto-panel]");
+      const arrow = menu.querySelector("[data-howto-arrow]");
       panel?.classList.add("hidden");
+      arrow?.classList.remove("rotate-90");
       menu.removeAttribute("open");
     }
   });
@@ -20,10 +22,12 @@ function toggleHowToMenu(event) {
   if (!menu) return;
 
   const panel = menu.querySelector("[data-howto-panel]");
-  if (!panel) return;
+  const arrow = menu.querySelector("[data-howto-arrow]");
+  if (!panel || !arrow) return;
 
   const willOpen = panel.classList.contains("hidden");
   panel.classList.toggle("hidden", !willOpen);
+  arrow.classList.toggle("rotate-90", willOpen);
 }
 
 if (!window.__headerMenuBound) {
