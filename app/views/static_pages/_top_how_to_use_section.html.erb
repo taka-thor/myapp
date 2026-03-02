@@ -104,7 +104,11 @@
             </h3>
 
             <p class="text-lg text-slate-700 leading-relaxed">
-              入室後は、画面内の下に表示される「タップして音声を再生」を押すことで、通話を開始します。
+              入室後は、画面内の下に表示される
+              <span class="inline-flex items-center rounded-xl border border-black/15 bg-white px-3 py-1 text-sm font-medium text-slate-700">
+                🔊 タップして音声を再生
+              </span>
+              を押すことで、通話を開始します。(スマートフォンでのご利用時のみ)
               通話中に「ご自身の音声だけ」をOFFにすることも可能です。
             </p>
 
@@ -112,7 +116,7 @@
               <div class="relative w-full rounded-xl
                           aspect-[16/9] flex items-center justify-center text-xs
                           text-slate-400 bg-white/40">
-                通話中画面のスクリーンショットをここに表示
+                <%= image_tag "通話画面.png", class: "rounded-xl" %>
               </div>
             </div>
           </div>
