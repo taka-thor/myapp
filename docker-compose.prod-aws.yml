@@ -10,15 +10,21 @@ services:
     command: >
       bash -lc '
         set -e
-        if ! mountpoint -q /host-assets; then
-          echo "ERROR: /host-assets not mounted"; exit 1
+        if ! mountpoint -q /host-public; then
+          echo "ERROR: /host-public not mounted"; exit 1
         fi
-        rsync -a --delete /app/public/assets/ /host-assets/
-        rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
-        chown -R 33:33 /host-assets
+        mkdir -p /host-public/assets
+        rsync -a --delete /app/public/assets/ /host-public/assets/
+        rsync -a /app/public/manifest.json /host-public/manifest.json 2>/dev/null || true
+        rsync -a /app/public/service-worker.js /host-public/service-worker.js 2>/dev/null || true
+        rsync -a /app/public/pwa-icon.png /host-public/pwa-icon.png 2>/dev/null || true
+        rsync -a /app/public/icon.png /host-public/icon.png 2>/dev/null || true
+        rsync -a /app/public/icon.svg /host-public/icon.svg 2>/dev/null || true
+        chown -R 33:33 /host-public/assets
+        chown 33:33 /host-public/manifest.json /host-public/service-worker.js /host-public/pwa-icon.png /host-public/icon.png /host-public/icon.svg 2>/dev/null || true
       '
     volumes:
-      - /var/www/myapp/current/public/assets:/host-assets
+      - /var/www/myapp/current/public:/host-public
     restart: "no"
 
   web:
