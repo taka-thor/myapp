@@ -1,5 +1,5 @@
-const CACHE_NAME = "koetomo-static-v2";
-const OFFLINE_URLS = ["/", "/manifest.json", "/icon.png", "/icon.svg"];
+const CACHE_NAME = "koetomo-static-v4";
+const OFFLINE_URLS = ["/", "/manifest.json", "/pwa-icon.png", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
