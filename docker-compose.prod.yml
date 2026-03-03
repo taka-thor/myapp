@@ -52,12 +52,16 @@ services:
     command: >
       bash -lc '
         set -e
-        mkdir -p /host-assets
-        rsync -a --delete /app/public/assets/ /host-assets/
-        rsync -a --delete /app/public/manifest*.json /host-assets/ 2>/dev/null || true
+        mkdir -p /host-public/assets
+        rsync -a --delete /app/public/assets/ /host-public/assets/
+        rsync -a /app/public/manifest.json /host-public/manifest.json 2>/dev/null || true
+        rsync -a /app/public/service-worker.js /host-public/service-worker.js 2>/dev/null || true
+        rsync -a /app/public/pwa-icon.png /host-public/pwa-icon.png 2>/dev/null || true
+        rsync -a /app/public/icon.png /host-public/icon.png 2>/dev/null || true
+        rsync -a /app/public/icon.svg /host-public/icon.svg 2>/dev/null || true
       '
     volumes:
-      - ./tmp/local_public_assets:/host-assets
+      - ./tmp/local_public:/host-public
       - assets:/app/public/assets
       - manifests:/app/public
     depends_on:
