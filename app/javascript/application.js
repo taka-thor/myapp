@@ -8,4 +8,5 @@ import "./reload_room_index_for_bfcache";
 import "./header_menu";
 import { bootRtcOnTurboLoad } from "./rtcs/entry";
 import "./pwa_register";
+import "./google_analytics";
 bootRtcOnTurboLoad();
