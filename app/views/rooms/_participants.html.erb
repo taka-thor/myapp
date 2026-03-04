@@ -1,4 +1,4 @@
-<div id="room_<%= room.id %>_participants">
+<div id="room_<%= room.id %>_participants" data-controller="mute">
   <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
     <% room.active_users.limit(4).each do |user| %>
       <div class="flex flex-col items-center gap-2">
@@ -64,6 +64,7 @@
             type="button"
             data-rtc-mute-toggle
             data-rtc-user-id="<%= user.id %>"
+            data-action="click->mute#toggle"
             aria-pressed="false"
             class="hidden mt-1 w-full rounded-full px-3 py-1.5 text-xs sm:text-sm font-semibold transition bg-emerald-500 text-white hover:opacity-90 active:scale-95"
           >
@@ -74,7 +75,12 @@
             data-rtc-user-id="<%= user.id %>"
             class="hidden flex justify-center">
             <%= link_to room_path(room),
-                  data: { turbo_prefetch: false, turbo: false, rtc_reconnect_link: true },
+                  data: {
+                    turbo_prefetch: false,
+                    turbo: false,
+                    rtc_reconnect_link: true,
+                    action: "click->mute#markReconnect"
+                  },
                   class: "mt-1 rounded-full
                   px-1 py-1 text-l
                   sm:text-sm

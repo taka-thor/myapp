@@ -4,6 +4,7 @@ const speakerStatusSelector = (userId) => `[data-rtc-speaker-status][data-rtc-us
 const muteToggleSelector = (userId) => `[data-rtc-mute-toggle][data-rtc-user-id=\"${userId}\"]`;
 const reconnectSelector = "[data-rtc-reconnect][data-rtc-user-id]";
 const FORCE_TAP_TO_PLAY_KEY = "rtc_force_tap_to_play";
+let activeMuteCtx = null;
 
 const renderSpeakerStatus = (statusEl, muted) => {
   statusEl.classList.toggle("text-slate-400", muted);
@@ -52,6 +53,11 @@ const syncLocalOnlyReconnect = (ctx) => {
   }
 };
 
+export const syncMuteVisibilityForLocalUser = (ctx) => {
+  syncLocalOnlyMuteButtons(ctx);
+  syncLocalOnlyReconnect(ctx);
+};
+
 export const syncMuteUi = (ctx) => {
   const muted = Boolean(ctx.isMuted);
 
@@ -70,56 +76,20 @@ export const setLocalMuted = (ctx, muted) => {
   syncMuteUi(ctx);
 };
 
+export const markForceTapToPlayOnReconnect = () => {
+  sessionStorage.setItem(FORCE_TAP_TO_PLAY_KEY, "1");
+};
+
+export const getActiveMuteCtx = () => activeMuteCtx;
+
 export const bindMuteControls = (ctx) => {
-  syncLocalOnlyMuteButtons(ctx);
-  syncLocalOnlyReconnect(ctx);
+  activeMuteCtx = ctx;
+  syncMuteVisibilityForLocalUser(ctx);
   syncMuteUi(ctx);
-
-  ctx._onMuteClick = (event) => {
-    const reconnectLink = event.target.closest("[data-rtc-reconnect-link]");
-    if (reconnectLink) {
-      sessionStorage.setItem(FORCE_TAP_TO_PLAY_KEY, "1");
-      return;
-    }
-
-    const button = event.target.closest(muteToggleSelector(ctx.myUserId));
-    if (!button) return;
-
-    event.preventDefault();
-    setLocalMuted(ctx, !ctx.isMuted);
-  };
-
-  ctx._onTurboRender = () => {
-    syncLocalOnlyMuteButtons(ctx);
-    syncLocalOnlyReconnect(ctx);
-    syncMuteUi(ctx);
-  };
-
-  ctx._onBeforeStreamRender = (event) => {
-    const originalRender = event.detail?.render;
-    if (typeof originalRender !== "function") return;
-
-    event.detail.render = (streamElement) => {
-      originalRender(streamElement);
-      syncLocalOnlyMuteButtons(ctx);
-      syncLocalOnlyReconnect(ctx);
-      syncMuteUi(ctx);
-    };
-  };
-
-  document.addEventListener("click", ctx._onMuteClick);
-  document.addEventListener("turbo:render", ctx._onTurboRender);
-  document.addEventListener("turbo:before-stream-render", ctx._onBeforeStreamRender);
 };
 
 export const unbindMuteControls = (ctx) => {
-  if (ctx._onMuteClick) document.removeEventListener("click", ctx._onMuteClick);
-  if (ctx._onTurboRender) document.removeEventListener("turbo:render", ctx._onTurboRender);
-  if (ctx._onBeforeStreamRender) {
-    document.removeEventListener("turbo:before-stream-render", ctx._onBeforeStreamRender);
+  if (activeMuteCtx === ctx) {
+    activeMuteCtx = null;
   }
-
-  ctx._onMuteClick = null;
-  ctx._onTurboRender = null;
-  ctx._onBeforeStreamRender = null;
 };
