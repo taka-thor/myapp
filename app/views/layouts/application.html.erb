@@ -9,6 +9,9 @@
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <% if ENV["GA_MEASUREMENT_ID"].present? %>
+      <meta name="ga-measurement-id" content="<%= ENV["GA_MEASUREMENT_ID"] %>">
+    <% end %>
 
     <%= yield :head %>
 
