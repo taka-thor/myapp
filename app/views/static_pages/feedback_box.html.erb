@@ -1,16 +1,16 @@
 <% content_for(:title, t('.title')) %>
 <% feedback_body = <<~BODY
   接続状態はどうでしたか？
-  1 お相手の音声が聞こえなかった
-  2 最初は聞こえなかったが、再接続ボタンを押して改善した
-  3 最初から正常に接続できていた
+  1  お相手の音声が聞こえなかった
+  2  最初は聞こえなかったが、再接続ボタンを押して改善した
+  3  最初から正常に接続できていた
 
   ◯番を選択(番号を記入)
 
   操作は分かりやすかったですか？
-  1 よくわからない
-  2 慣れると使えそう
-  3 最初から問題なく使えた
+  1  よくわからない
+  2  慣れると使えそう
+  3  最初から問題なく使えた
 
   ◯番を選択 (番号を記入)
 
@@ -24,16 +24,12 @@ BODY
     <h1 class="text-xl sm:text-2xl font-semibold text-slate-900">ご意見箱</h1>
 
     <section class="rounded-2xl bg-white/80 shadow-md p-5 space-y-4 text-sm leading-7 text-slate-800">
-      <p>ご意見・ご要望は、以下ボタンからそのまま送信できます。</p>
+      <p>ご意見・ご要望は、以下ボタンから送信をお願い致します。</p>
       <%= mail_to "papionnn21@gmail.com",
           "メールフォームを開く",
           subject: "声友 ご意見箱",
           body: feedback_body,
           class: "inline-flex items-center rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm" %>
-      <p>
-        メール:
-        <a href="mailto:papionnn21@gmail.com" class="text-sky-700 underline">papionnn21@gmail.com</a>
-      </p>
     </section>
   </main>
 </div>
