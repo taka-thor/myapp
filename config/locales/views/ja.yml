@@ -16,6 +16,8 @@ ja:
       title: お問い合わせ
     each_room_display:
       title: 各部屋の表示について
+    feedback_box:
+      title: ご意見箱
     home:
       title: ホーム
     how_to_talk:

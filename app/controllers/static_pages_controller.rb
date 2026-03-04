@@ -8,6 +8,7 @@ class StaticPagesController < ApplicationController
   def terms; end
   def privacy_policy; end
   def contact; end
+  def feedback_box; end
   def how_to_talk; end
   def each_room_display; end
 end
