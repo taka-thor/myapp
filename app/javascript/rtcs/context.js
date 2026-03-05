@@ -16,7 +16,7 @@ export const createRtcContext = () => {
   window[initKey] = true;
 
   const ctx = {
-    roomId,
+    roomId, //const roomIdなどをここで呼んでいる
     myUserId,
     mySessionId,
     initKey,
@@ -31,7 +31,7 @@ export const createRtcContext = () => {
     sub: null,
 
     peers: new Map(),
-    knownPeerSessions: new Map(),
+    knownPeerSessions: new Map(), // キーと値で表現するコレクションがMap
     pendingIce: new Map(),
 
     localStream: null,
