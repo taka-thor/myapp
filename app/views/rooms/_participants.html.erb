@@ -1,6 +1,8 @@
 <div id="room_<%= room.id %>_participants" data-controller="mute">
   <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
-    <% room.active_users.limit(4).each do |user| %>
+    <% room.active_room_participants.includes(:user).limit(4).each do |participant| %>
+      <% user = participant.user %>
+      <% muted = participant.muted? %>
       <div class="flex flex-col items-center gap-2">
         <div
           class="rtc-avatar-ring rounded-full p-1 transition"
@@ -22,10 +24,10 @@
             <span class="truncate max-w-[8rem] text-center"><%= user.name %></span>
 
             <span
-              class="inline-flex h-5 w-5 items-center justify-center text-sky-500 transition"
+              class="inline-flex h-5 w-5 items-center justify-center <%= muted ? "text-slate-400" : "text-sky-500" %> transition"
               data-rtc-speaker-status
               data-rtc-user-id="<%= user.id %>"
-              aria-label="自分の音声 ON"
+              aria-label="<%= muted ? "音声 OFF" : "音声 ON" %>"
               role="img"
             >
               <svg
@@ -35,7 +37,7 @@
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
-                class="h-5 w-5"
+                class="<%= muted ? "hidden h-5 w-5" : "h-5 w-5" %>"
                 aria-hidden="true"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 5.25L6 9.75H3.75v4.5H6l5.25 4.5V5.25z" />
@@ -50,7 +52,7 @@
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
-                class="hidden h-5 w-5"
+                class="<%= muted ? "h-5 w-5" : "hidden h-5 w-5" %>"
                 aria-hidden="true"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 5.25L6 9.75H3.75v4.5H6l5.25 4.5V5.25z" />

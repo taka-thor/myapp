@@ -22,6 +22,23 @@ class RtcChannel < ApplicationCable::Channel
         to_user_id: current_user.id,
         to_session_id: data["from_session_id"]
       })
+    when "mute_changed"
+      muted = ActiveModel::Type::Boolean.new.cast(data["muted"])
+      participant = RoomParticipant.find_by(
+        room_id: @room_id,
+        user_id: current_user.id,
+        is_active: true,
+        session_id: data["from_session_id"]
+      )
+      participant&.update!(muted: muted)
+      RoomParticipants::BroadcastPresenceChanges.call(Room.find(@room_id))
+      ActionCable.server.broadcast(signaling_info, {
+        type: "mute_changed",
+        room: @room_id,
+        from_user_id: current_user.id,
+        from_session_id: data["from_session_id"],
+        muted: muted
+      })
     else
       ActionCable.server.broadcast(signaling_info, data)
     end

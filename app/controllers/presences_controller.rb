@@ -2,7 +2,11 @@ class PresencesController < ApplicationController
   before_action :set_room, only: %i[ping leave]
 
   def ping
-    RoomParticipants::Ping.call(room: @room, user: current_user)
+    RoomParticipants::Ping.call(
+      room: @room,
+      user: current_user,
+      muted: params[:muted]
+    )
     head :no_content
   end
 

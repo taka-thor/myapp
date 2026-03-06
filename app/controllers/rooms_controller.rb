@@ -15,7 +15,8 @@ class RoomsController < ApplicationController
     @room_participant.update!(
       is_active: true,
       last_seen_at: Time.current,
-      session_id: SecureRandom.uuid
+      session_id: SecureRandom.uuid,
+      muted: false
     )
   end
 
