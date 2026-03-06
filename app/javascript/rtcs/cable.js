@@ -24,6 +24,10 @@ export const connectCable = (ctx) => {
         }
 
         send(ctx, "join", {});
+        if (ctx.pendingMuteBroadcast) {
+          send(ctx, "mute_changed", { muted: ctx.isMuted });
+          ctx.pendingMuteBroadcast = false;
+        }
       },
 
       disconnected() {
@@ -34,7 +38,13 @@ export const connectCable = (ctx) => {
         const type = data?.type;
         if (!type) return;
 
-        if (data.from_user_id != null && Number(data.from_user_id) === ctx.myUserId) return;
+        if (type === "mute_changed") return;
+
+        const fromMe =
+          data.from_user_id != null &&
+          Number(data.from_user_id) === ctx.myUserId &&
+          String(data.from_session_id || "") === ctx.mySessionId;
+        if (fromMe) return;
 
         if (type === "leave") {
           const fromUserId = Number(data.from_user_id);

@@ -22,11 +22,13 @@ export default class extends Controller {
     document.removeEventListener("turbo:before-stream-render", this.boundBeforeStreamRender);
   }
 
+  //ライフサイクルメソッドのほか、任意のメソッドを定義して、
+  //data-action="click->mute#toggle"のように呼べる。
+  //この場合のイベントオブジェクトは、クリック
   toggle(event) {
-    event.preventDefault();
+    event?.preventDefault?.();
     const ctx = getActiveMuteCtx();
     if (!ctx) return;
-
     setLocalMuted(ctx, !ctx.isMuted);
     this.sync();
   }
