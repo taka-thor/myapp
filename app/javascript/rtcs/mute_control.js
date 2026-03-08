@@ -1,10 +1,33 @@
 import { setSpeakingIndicator } from "./speaking_ring";
+import { send } from "./send";
 
 const speakerStatusSelector = (userId) => `[data-rtc-speaker-status][data-rtc-user-id=\"${userId}\"]`;
 const muteToggleSelector = (userId) => `[data-rtc-mute-toggle][data-rtc-user-id=\"${userId}\"]`;
 const reconnectSelector = "[data-rtc-reconnect][data-rtc-user-id]";
 const FORCE_TAP_TO_PLAY_KEY = "rtc_force_tap_to_play";
 let activeMuteCtx = null;
+
+const csrfToken = () => document.querySelector('meta[name="csrf-token"]')?.content;
+
+const postMutedPresence = async (ctx) => {
+  const token = csrfToken();
+  if (!token || !ctx.roomId) return;
+
+  try {
+    await fetch(`/rooms/${ctx.roomId}/presence/ping`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ muted: ctx.isMuted }),
+    });
+  } catch (e) {
+    console.warn("[rtc] muted ping failed:", e);
+  }
+};
 
 const renderSpeakerStatus = (statusEl, muted) => {
   statusEl.classList.toggle("text-slate-400", muted);
@@ -28,9 +51,9 @@ const renderMuteToggle = (buttonEl, muted) => {
 };
 
 export const applyLocalMuteState = (ctx) => {
-  const tracks = ctx.localStream?.getAudioTracks?.() ?? [];
+  const tracks = ctx.localStream?.getAudioTracks?.() ?? []; //applyLocalMuteState音声トラック一覧を取る。localStream があれば音声トラック配列を取得 なければ []（空配列）
   for (const track of tracks) {
-    track.enabled = !ctx.isMuted;
+    track.enabled = !ctx.isMuted;//MediaStreamTrackのプロパティであるenabledに値を入れるだけで、自動で適応される。(どこかのメソッドを呼んで適応させるなどの作業はいらない)
   }
 
   if (ctx.isMuted) {
@@ -72,8 +95,15 @@ export const syncMuteUi = (ctx) => {
 
 export const setLocalMuted = (ctx, muted) => {
   ctx.isMuted = Boolean(muted);
-  applyLocalMuteState(ctx);
+  applyLocalMuteState(ctx); // isMuted:trueのctxを保持
   syncMuteUi(ctx);
+  postMutedPresence(ctx);
+  if (ctx.sub) {
+    send(ctx, "mute_changed", { muted: ctx.isMuted });
+    ctx.pendingMuteBroadcast = false;
+  } else {
+    ctx.pendingMuteBroadcast = true;
+  }
 };
 
 export const markForceTapToPlayOnReconnect = () => {
@@ -82,6 +112,8 @@ export const markForceTapToPlayOnReconnect = () => {
 
 export const getActiveMuteCtx = () => activeMuteCtx;
 
+// entry.jsから渡されたctx
+// createRtcContextを実行するごとにsessionIDが変わるため、各場所経由で受け渡し
 export const bindMuteControls = (ctx) => {
   activeMuteCtx = ctx;
   syncMuteVisibilityForLocalUser(ctx);

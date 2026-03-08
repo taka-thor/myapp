@@ -36,6 +36,7 @@ export const createRtcContext = () => {
 
     localStream: null,
     isMuted: false,
+    pendingMuteBroadcast: false,
   };
 
   console.debug("[rtc] boot", {
