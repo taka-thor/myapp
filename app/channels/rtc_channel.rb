@@ -6,6 +6,8 @@ class RtcChannel < ApplicationCable::Channel
     stream_from signaling_info
   end
 
+  # data変数はsend.jsからperformメソッドで送られる。
+  # 
   def signal(data)
     case data["type"]
     when "join"
@@ -22,8 +24,8 @@ class RtcChannel < ApplicationCable::Channel
         to_user_id: current_user.id,
         to_session_id: data["from_session_id"]
       })
-    when "mute_changed"
-      muted = ActiveModel::Type::Boolean.new.cast(data["muted"])
+    when "mute_changed" # payloadのtypeがmute_changeの時だけ
+      muted = ActiveModel::Type::Boolean.new.cast(data["muted"]) # data["muted"]はクライアントから送られてきた値。これをRails仕様の真偽値に変換し、安全にDBに入れることを目的としている。
       participant = RoomParticipant.find_by(
         room_id: @room_id,
         user_id: current_user.id,
