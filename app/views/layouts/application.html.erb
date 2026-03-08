@@ -3,6 +3,20 @@
   <head>
     <meta charset="UTF-8">
     <title><%= content_for(:title) || "声友" %></title>
+    <% og_title = content_for(:title) || "声友" %>
+    <% og_description = "かんたん音声通話アプリ「声友」" %>
+    <% og_url = request.original_url %>
+    <% og_image = "#{request.base_url}#{image_path('top.png')}" %>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="声友">
+    <meta property="og:url" content="<%= og_url %>">
+    <meta property="og:title" content="<%= og_title %>">
+    <meta property="og:description" content="<%= og_description %>">
+    <meta property="og:image" content="<%= og_image %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= og_title %>">
+    <meta name="twitter:description" content="<%= og_description %>">
+    <meta name="twitter:image" content="<%= og_image %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
