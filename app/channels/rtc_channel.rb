@@ -7,7 +7,7 @@ class RtcChannel < ApplicationCable::Channel
   end
 
   # data変数はsend.jsからperformメソッドで送られる。
-  # 
+  #
   def signal(data)
     case data["type"]
     when "join"
