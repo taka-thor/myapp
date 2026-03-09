@@ -46,13 +46,13 @@ class RtcChannel < ApplicationCable::Channel
       normalized = NgWord.word_filter(transcript)
       Rails.logger.info("[rtc:ng] detected from_user_id=#{current_user.id} room_id=#{@room_id} normalized='#{normalized}'")
       if normalized.present?
-        validation_room = Room.new(topic: normalized)
+        validation_room = Room.new(speaking: normalized)
         validation_room.validate
 
-        if validation_room.errors.added?(:topic, :ng_word)
+        if validation_room.errors.added?(:speaking, :ng_word)
           ng_message = validation_room.errors.full_message(
-            :topic,
-            validation_room.errors.generate_message(:topic, :ng_word)
+            :speaking,
+            validation_room.errors.generate_message(:speaking, :ng_word)
           )
 
           Rooms::BroadcastFlash.call(

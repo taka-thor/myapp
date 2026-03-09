@@ -1,6 +1,9 @@
 class Room < ApplicationRecord
   after_commit -> { AutoTopics::BroadcastTopic.call(room_id: id) }, if: :saved_change_to_topic?
 
+  # RTC用
+  attr_accessor :speaking
+
   has_many :room_participants
   has_many :users, through: :room_participants
 
@@ -13,4 +16,5 @@ class Room < ApplicationRecord
           source: :user
 
   validates :topic, length: { maximum: 12 }, presence: true, ng_word: true
+  validates :speaking, ng_word: true
 end
