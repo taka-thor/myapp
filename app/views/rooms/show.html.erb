@@ -9,6 +9,7 @@
   data-room-id="<%= @room.id %>"
   data-user-id="<%= @current_user.id %>"
   data-session-id="<%= @room_participant.session_id %>"
+  data-ng-words="<%= json_escape(@ng_words.to_json) %>"
   data-presence-ping-url="<%= ping_room_presence_path(@room) %>"
   data-presence-leave-url="<%= leave_room_presence_path(@room) %>"
 ></div>
@@ -47,6 +48,11 @@
     </section>
 
     <section class="mt-4">
+      <div
+        id="stt-ng-warning"
+        class="hidden w-full max-w-sm mx-auto mb-3 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-center text-amber-800 text-sm sm:text-base"
+      ></div>
+
       <div
         class="w-full max-w-sm mx-auto rounded-2xl bg-red-50
                 px-4 py-4 sm:px-5 sm:py-5

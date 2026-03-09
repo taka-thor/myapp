@@ -26,7 +26,6 @@ export default class extends Controller {
   //data-action="click->mute#toggle"のように呼べる。
   //この場合のイベントオブジェクトは、クリック
   toggle(event) {
-    event?.preventDefault?.();
     const ctx = getActiveMuteCtx();
     if (!ctx) return;
     setLocalMuted(ctx, !ctx.isMuted);

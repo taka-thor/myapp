@@ -16,7 +16,6 @@ export const connectCable = (ctx) => {
           myUserId: ctx.myUserId,
           mySessionId: ctx.mySessionId,
         });
-
         try {
           await prepareLocalAudio(ctx);
         } catch (e) {

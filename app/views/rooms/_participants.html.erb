@@ -19,12 +19,13 @@
           </div>
         </div>
 
+        <!--ユーザーアイコンなどの表示部分-->
         <div class="max-w-[10rem]">
           <p class="flex items-center justify-center gap-1 text-sm sm:text-base font-medium text-slate-900">
             <span class="truncate max-w-[8rem] text-center"><%= user.name %></span>
 
             <span
-              class="inline-flex h-5 w-5 items-center justify-center <%= muted ? "text-slate-400" : "text-sky-500" %> transition"
+              class="inline-flex h-5 w-5 items-center justify-center <%= muted ? "text-slate-400" : "text-sky-500" %>"
               data-rtc-speaker-status
               data-rtc-user-id="<%= user.id %>"
               aria-label="<%= muted ? "音声 OFF" : "音声 ON" %>"

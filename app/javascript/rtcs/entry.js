@@ -2,6 +2,7 @@ import { createRtcContext } from "./context";
 import { bindLifecycle } from "./lifecycle";
 import { connectCable } from "./cable";
 import { bindMuteControls } from "./mute_control";
+import { startLocalNgDetector } from "./local_ng_detector";
 
 const LISTENER_KEY = "__rtc_entry_listener_installed__";
 
@@ -14,6 +15,7 @@ export const bootRtc = () => {
   bindLifecycle(ctx);
   bindMuteControls(ctx);
   connectCable(ctx);
+  startLocalNgDetector(ctx);
 };
 
 export const bootRtcOnTurboLoad = () => {
