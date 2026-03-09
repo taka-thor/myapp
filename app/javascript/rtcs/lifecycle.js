@@ -1,6 +1,7 @@
 import { send } from "./send";
 import { closePeer } from "./peer";
 import { unbindMuteControls } from "./mute_control";
+import { stopLocalNgDetector } from "./local_ng_detector";
 
 export const cleanup = (ctx) => {
   try {
@@ -16,6 +17,10 @@ export const cleanup = (ctx) => {
 
   try {
     unbindMuteControls(ctx);
+  } catch {}
+
+  try {
+    stopLocalNgDetector(ctx);
   } catch {}
 
   try {
