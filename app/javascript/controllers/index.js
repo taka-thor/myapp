@@ -5,6 +5,7 @@ import UserIconController from "./user_icon_controller";
 import TestController from "./test_controller";
 import MenuController from "./menu_controller";
 import MuteController from "./mute_controller";
+import HomeInstallController from "./home_install_controller";
 
 const application = Application.start();
 application.register("flash", FlashController);
@@ -13,5 +14,6 @@ application.register("user-icon", UserIconController);
 application.register("test", TestController);
 application.register("menu", MenuController);
 application.register("mute", MuteController);
+application.register("home-install", HomeInstallController);
 
 export { application };
