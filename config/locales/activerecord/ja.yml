@@ -8,6 +8,7 @@ ja:
         name: ニックネーム
       room:
         topic: 話題
+        speaking: 発言内容
     errors:
       models:
         user:
@@ -23,3 +24,5 @@ ja:
             topic:
               too_long: "%{attribute}は%{count}文字以内で入力してください"
               ng_word: "%{attribute}に不適切な言葉が含まれています"
+            speaking:
+              ng_word: "%{attribute}に不適切な表現が含まれています"
