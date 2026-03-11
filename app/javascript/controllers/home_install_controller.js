@@ -21,7 +21,7 @@ export default class extends Controller {
     if (!this.deferredPrompt) {
       if (this.hasStatusTarget) {
         this.statusTarget.textContent =
-          "この端末では追加ダイアログを直接表示できません。ブラウザメニューからホーム画面に追加してください。";
+          "Android以外では、ご案内を表示できません。ブラウザメニューからホーム画面に追加してください。";
       }
       return;
     }
