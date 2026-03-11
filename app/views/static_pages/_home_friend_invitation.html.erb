@@ -1,0 +1,31 @@
+<div
+  class="w-full rounded-2xl bg-white/80 shadow-md
+          px-5 py-5 sm:px-6 sm:py-6
+          space-y-4"
+>
+  <div class="flex items-center gap-3">
+    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-sky-100">
+      <span class="text-2xl sm:text-3xl" role="img">👥</span>
+    </div>
+
+    <div>
+      <p class="text-base sm:text-lg font-semibold text-slate-900">
+        友達に紹介する
+      </p>
+      <p class="text-xs sm:text-sm text-slate-600">
+        QRコードまたはメールでシェアできます
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <%= link_to "QRコードで紹介", qrcodes_index_path,
+          class: "inline-flex items-center justify-center rounded-xl bg-sky-500 px-3 py-2 text-sm font-semibold text-white" %>
+
+    <%= mail_to "",
+          "メールで紹介",
+          subject: "声友のご紹介",
+          body: "無料グループ通話アプリ「声友」は、個人情報は一切不要でご利用頂けます。\\nhttps://app.rails-kt.com",
+          class: "inline-flex items-center justify-center rounded-xl bg-emerald-500 px-3 py-2 text-sm font-semibold text-white" %>
+  </div>
+</div>
