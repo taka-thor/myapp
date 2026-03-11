@@ -1,13 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = [
-    "androidPanel",
-    "iosPanel",
-    "installedPanel",
-    "status",
-    "iosSteps",
-  ];
+  static targets = ["status", "iosSteps"];
 
   connect() {
     this.deferredPrompt = null;
@@ -16,7 +10,6 @@ export default class extends Controller {
 
     window.addEventListener("beforeinstallprompt", this.beforeInstallHandler);
     window.addEventListener("appinstalled", this.appInstalledHandler);
-    this.renderByPlatform();
   }
 
   disconnect() {
@@ -26,12 +19,9 @@ export default class extends Controller {
 
   async install() {
     if (!this.deferredPrompt) {
-      // 既に追加済み、またはブラウザ都合でプロンプト不可の場合のフォールバック。
-      // 要望に合わせ、押下後は追加済み表示へ切り替える。
-      this.showInstalledPanel();
       if (this.hasStatusTarget) {
         this.statusTarget.textContent =
-          "ホーム画面に追加済みの可能性があります。";
+          "この端末では追加ダイアログを直接表示できません。ブラウザメニューからホーム画面に追加してください。";
       }
       return;
     }
@@ -41,7 +31,6 @@ export default class extends Controller {
     this.deferredPrompt = null;
 
     if (choice?.outcome === "accepted") {
-      this.showInstalledPanel();
       if (this.hasStatusTarget) {
         this.statusTarget.textContent = "ホーム画面に追加しました。";
       }
@@ -61,58 +50,12 @@ export default class extends Controller {
   captureBeforeInstall(event) {
     event.preventDefault();
     this.deferredPrompt = event;
-    this.showAndroidPanel();
   }
 
   onAppInstalled() {
     this.deferredPrompt = null;
-    this.showInstalledPanel();
-  }
-
-  renderByPlatform() {
-    if (this.isStandalone()) {
-      this.showInstalledPanel();
-      return;
+    if (this.hasStatusTarget) {
+      this.statusTarget.textContent = "ホーム画面に追加しました。";
     }
-
-    if (this.isIos()) {
-      this.showIosPanel();
-      return;
-    }
-
-    this.showAndroidPanel();
-  }
-
-  showAndroidPanel() {
-    this.hideAll();
-    if (this.hasAndroidPanelTarget) this.androidPanelTarget.classList.remove("hidden");
-  }
-
-  showIosPanel() {
-    this.hideAll();
-    if (this.hasIosPanelTarget) this.iosPanelTarget.classList.remove("hidden");
-  }
-
-  showInstalledPanel() {
-    this.hideAll();
-    if (this.hasInstalledPanelTarget) this.installedPanelTarget.classList.remove("hidden");
-  }
-
-  hideAll() {
-    if (this.hasAndroidPanelTarget) this.androidPanelTarget.classList.add("hidden");
-    if (this.hasIosPanelTarget) this.iosPanelTarget.classList.add("hidden");
-    if (this.hasInstalledPanelTarget) this.installedPanelTarget.classList.add("hidden");
-  }
-
-  isStandalone() {
-    return (
-      window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true
-    );
-  }
-
-  isIos() {
-    const ua = window.navigator.userAgent || "";
-    return /iPhone|iPad|iPod/.test(ua);
   }
 }

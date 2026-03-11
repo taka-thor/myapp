@@ -109,32 +109,33 @@
             </div>
           </div>
 
-          <div data-home-install-target="androidPanel" class="space-y-3">
-            <p class="text-sm text-slate-700">
-              Android：ボタンを押すと追加確認モーダルが表示されます。
-            </p>
+          <div class="grid grid-cols-2 gap-3">
             <button
               type="button"
               data-action="home-install#install"
-              class="inline-flex items-center justify-center rounded-xl border border-indigo-300 bg-indigo-100 px-4 py-3 text-sm font-semibold text-indigo-900"
+              class="inline-flex items-center justify-center rounded-xl border border-indigo-300 bg-indigo-100 px-3 py-2 text-sm font-semibold text-indigo-900"
             >
-              ホーム画面に追加する
+              Android用
             </button>
-            <p data-home-install-target="status" class="text-xs text-slate-500"></p>
-          </div>
 
-          <div data-home-install-target="iosPanel" class="hidden space-y-3">
-            <p class="text-sm text-slate-700">
-              iPhone：Safari で次の手順を実行してください。
-            </p>
             <button
               type="button"
               data-action="home-install#toggleIosSteps"
-              class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-900"
+              class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-900"
             >
-              iPhoneの追加手順を見る
+              iPhone用
             </button>
+          </div>
 
+          <p class="text-sm text-slate-700">
+            Android：ボタンを押すと追加確認モーダルが表示されます。
+          </p>
+          <p data-home-install-target="status" class="text-xs text-slate-500"></p>
+
+          <div class="space-y-2">
+            <p class="text-sm text-slate-700">
+              iPhone：Safari で次の手順を実行してください。
+            </p>
             <ol data-home-install-target="iosSteps" class="hidden list-decimal pl-5 space-y-2 text-sm text-slate-700">
               <li>このページを Safari で開きます。</li>
               <li>画面下の共有ボタン（□↑）をタップします。</li>
@@ -142,12 +143,6 @@
               <li>名前を確認し、右上の「追加」をタップします。</li>
               <li>ホーム画面に「声友」アイコンが追加されたら完了です。</li>
             </ol>
-          </div>
-
-          <div data-home-install-target="installedPanel" class="hidden">
-            <p class="text-sm sm:text-base font-semibold text-emerald-700">
-              すでにホーム画面に追加されています。
-            </p>
           </div>
         </div>
       </section>
