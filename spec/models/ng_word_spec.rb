@@ -15,7 +15,7 @@ RSpec.describe NgWord, type: :model do
 
   describe ".ng?" do
     it "returns true when filtered text includes an ng word from DB" do
-      allow(described_class).to receive(:pluck).with(:word).and_return(["ちんこ"])
+      allow(described_class).to receive(:pluck).with(:word).and_return([ "ちんこ" ])
 
       expect(described_class.ng?("これは ちんこ です！")).to be(true)
     end
@@ -26,7 +26,7 @@ RSpec.describe NgWord, type: :model do
     end
 
     it "returns false when there is no ng word match" do
-      allow(described_class).to receive(:pluck).with(:word).and_return(["だめ"])
+      allow(described_class).to receive(:pluck).with(:word).and_return([ "だめ" ])
 
       expect(described_class.ng?("こんにちは")).to be(false)
     end
