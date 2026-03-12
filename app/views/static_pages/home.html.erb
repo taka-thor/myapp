@@ -2,15 +2,12 @@
 
 <div class="min-h-screen w-full max-w-[700px] mx-auto flex flex-col">
 
-  <%# --- ヘッダー（ユーザー情報表示） --- %>
   <%= render "shared/header" %>
 
   <main class="flex-1 px-6 pb-10 pt-12 space-y-10">
 
-    <%# --- こえきちアイコン + 吹き出し（左上） --- %>
     <section class="flex items-start gap-3">
 
-      <%# 小さめアイコン %>
       <div class="w-20 h-20 rounded-full overflow-hidden shadow-md shrink-0">
         <img
           src="<%= asset_path 'こえきち首輪ver.png' %>"
@@ -19,7 +16,6 @@
         />
       </div>
 
-      <%# 吹き出し（左向き） %>
       <div class="relative bg-white shadow-md rounded-2xl px-4 py-3 text-slate-800 text-sm sm:text-base leading-relaxed">
         お気軽にご利用ください
 
@@ -32,7 +28,6 @@
 
     </section>
 
-    <%# --- メニュー部分 --- %>
     <section class="space-y-6 pt-3" data-controller="home-install">
       <%= render "home_room_entry" %>
       <%= render "home_friend_invitation" %>
