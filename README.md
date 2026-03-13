@@ -138,12 +138,6 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 - **音声のテキスト化**（Web RTC で受け取った音声ストリームをテキスト化）
   - `Web Speech API`
-  - `Google Cloud Speech-to-Text (Streaming)`
-
-<br>
-
-- **ポップアップ機能**
-  - `Web Notifications API`
 
 <br>
 
