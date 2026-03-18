@@ -83,7 +83,6 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 <br>
 
 - **部屋トピック自動更新機能**（複数ある部屋ごとに表示されたトピックが一定時間ごとに変化する機能）
-  - `Redis`
   - `rails runner(systemd管理)`
 
 <br>
