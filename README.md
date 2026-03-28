@@ -45,22 +45,6 @@ SEO 対策を実施する。
 【既存アプリとの機能一覧表】
 https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content=DAGvTB2sPF4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
-## 機能候補
-
-- グループ通話機能
-- セキュリティ関連（HTTPS 通信）
-- 広告の導入
-- リワード動画視聴でのポイントを利用できるアプリ内ショップの導入
-- 音声ストリームをテキスト化し、詐欺等に関連する危険なワードを検知し、ポップアッ
-  プする機能
-- ミュート機能
-- フィードバック機能
-- 友たち紹介機能
-- ホーム画面アプリ追加の操作ガイド表示
-- アイコン選択機能
-- 部屋トピック自動更新機能
-- PWA
-
 <br>
 
 ## 機能の実装方針予定
