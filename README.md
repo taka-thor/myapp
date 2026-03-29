@@ -47,10 +47,6 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 <br>
 
-## 機能の実装方針予定
-
-<br>
-
 ### 使用予定 gem など
 
 ---
