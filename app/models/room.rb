@@ -14,7 +14,7 @@ class Room < ApplicationRecord
   has_many :active_users,
           through: :active_room_participants,
           source: :user
-
+  # ng_word: trueは、カスタムバリデータを呼ぶための記法
   validates :topic, length: { maximum: 12 }, presence: true, ng_word: true
   validates :speaking, ng_word: true
 end

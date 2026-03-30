@@ -43,6 +43,6 @@ class NgWord < ApplicationRecord
   private
   # create用
   def normalize_word
-    self.word = Ngword.word_filter(word)
+    self.word = NgWord.word_filter(word)
   end
 end
