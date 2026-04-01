@@ -102,6 +102,7 @@ https://www.canva.com/design/DAGvTB2sPF4/UnGcyDRXM3Lm8mUDnnGgDg/edit?utm_content
 
 - **STUN/TURN サーバー**
 
+  - `STUN google STUNサーバー`
   - `CoTURN (EC2常駐)(TURN fallback)`
 
 - **シグナリングサーバー**
