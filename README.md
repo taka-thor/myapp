@@ -2,14 +2,17 @@
 
 # 目次
 
+- [プロジェクト名：『声友』](#プロジェクト名声友)
+- [目次](#目次)
 - [サービス概要](#サービス概要)
 - [サービスURL](#サービスurl)
+    - [https://app.rails-kt.com](#httpsapprails-ktcom)
 - [サービス開発の背景](#サービス開発の背景)
 - [機能紹介](#機能紹介)
 - [技術構成について](#技術構成について)
-- [使用技術](#使用技術)
-- [ER図](#er図)
-- [画面遷移図](#画面遷移図)
+  - [使用技術](#使用技術)
+  - [ER図](#er図)
+  - [画面遷移図](#画面遷移図)
 
 # サービス概要
 
@@ -80,7 +83,7 @@ NG ワード検知・注意喚起
 
 会話中は Web Speech API を使った音声のテキスト化と NG ワード判定を組み合わせ、
 不適切な表現や個人情報に関わる会話への注意喚起を表示できるようにしています。
-安心して参加しやすい通話空間づくりを支える機能です。
+安心して参加しやすい通話空間づくりを支える機能です。(NGワードは順次追加)
 
 # 技術構成について
 
@@ -89,14 +92,14 @@ NG ワード検知・注意喚起
 | カテゴリ | 技術内容 |
 | --- | --- |
 | サーバーサイド | Ruby 3.3.10 / Ruby on Rails 7.2.2 |
-| フロントエンド | ERB / JavaScript / Hotwire Turbo / Stimulus |
+| フロントエンド | HTML / CSS / JavaScript / Hotwire |
 | CSS | Tailwind CSS 4 |
 | リアルタイム通信 | Action Cable |
 | 音声通話 | WebRTC |
+| STUN サーバー | Google STUN Server / `stun.turn-kt.com:3478` |
 | 音声認識 | Web Speech API |
 | QR コード | rqrcode |
 | データベース | PostgreSQL |
-| キャッシュ / PubSub | Redis |
 | インフラ | Docker / AWS EC2 / Nginx / Neon |
 | その他 | PWA / esbuild |
 
