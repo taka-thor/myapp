@@ -1,6 +1,8 @@
 export const createRtcContext = () => {
   const root = document.getElementById("presence-hook");
   if (!root) return null;
+  // rootでない場合、nullを返すように指定しない場合は、undefinedを返す仕様。
+  // nullでもundefinedでも結果だけど、意図的に何も返さないことを明示するためにnullを使う
 
   const roomId = String(root.dataset.roomId || "");
   const myUserId = Number(root.dataset.userId);

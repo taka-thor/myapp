@@ -19,7 +19,7 @@ export const bootRtc = () => {
 };
 
 export const bootRtcOnTurboLoad = () => {
-  if (window[LISTENER_KEY]) return;
+  if (window[LISTENER_KEY]) return; //変数を入れるために[]を使う(変数はLISTENER_KEY)
   window[LISTENER_KEY] = true;
   //turboloadイベントを認知したらbootRtc実行
   document.addEventListener("turbo:load", () => {
