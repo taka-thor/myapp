@@ -10,7 +10,7 @@ class RoomsController < ApplicationController
 
   def show
     @room = Room.find(params[:id])
-    @ng_words = NgWord.order(:id).pluck(:word)
+    @ng_words = NgWord.pluck(:word)
 
     @room_participant = @room.room_participants.find_or_create_by!(user: current_user)
     @room_participant.update!(
@@ -20,6 +20,7 @@ class RoomsController < ApplicationController
       muted: false
     )
   end
+# updateは既にあるレコードを更新するもの
 
   def edit; end
 
