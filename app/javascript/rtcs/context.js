@@ -1,12 +1,13 @@
 export const createRtcContext = () => {
   const root = document.getElementById("presence-hook");
-  if (!root) return null;
+  if (!root) return null;//presence-hookが見つからない時にnull(null=falsy扱い) → entry.jsのctxがfalsy判定。
   // rootでない場合、nullを返すように指定しない場合は、undefinedを返す仕様。
   // nullでもundefinedでも結果だけど、意図的に何も返さないことを明示するためにnullを使う
 
   const roomId = String(root.dataset.roomId || "");
   const myUserId = Number(root.dataset.userId);
   const mySessionId = String(root.dataset.sessionId || "");
+  // datasetから取得できる値は文字列なので、String型を指定。
 
   if (!roomId || !myUserId || !mySessionId) {
     console.warn("[rtc] missing dataset", { roomId, myUserId, mySessionId });
@@ -18,7 +19,7 @@ export const createRtcContext = () => {
   window[initKey] = true;
 
   const ctx = {
-    roomId, //const roomIdなどをここで呼んでいる
+    roomId, //const roomId関数などをここで呼んでいる
     myUserId,
     mySessionId,
     initKey,
