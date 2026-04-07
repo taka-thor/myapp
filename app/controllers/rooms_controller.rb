@@ -20,7 +20,7 @@ class RoomsController < ApplicationController
       muted: false
     )
   end
-# updateは既にあるレコードを更新するもの
+  # updateは既にあるレコードを更新するもの
 
   def edit; end
 
