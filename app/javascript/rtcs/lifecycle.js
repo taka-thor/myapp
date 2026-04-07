@@ -3,6 +3,8 @@ import { closePeer } from "./peer";
 import { unbindMuteControls } from "./mute_control";
 import { stopLocalNgDetector } from "./local_ng_detector";
 
+//開発者側でctxに正しくない値を入れた時などのブロック処理
+//仮に例外処理が発生してもcleanupメソッドは処理を継続できるため必要。
 export const cleanup = (ctx) => {
   try {
     send(ctx, "leave", {});
@@ -28,6 +30,8 @@ export const cleanup = (ctx) => {
   } catch {}
 };
 
+// bindLifecycleはbootRtcで渡されたctx(=presencehookの部分)
 export const bindLifecycle = (ctx) => {
   window.addEventListener("pagehide", () => cleanup(ctx), { once: true });
 };
+// once: trueにより、一度イベント実行したら自動で解除される。
