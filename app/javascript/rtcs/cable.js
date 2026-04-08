@@ -4,9 +4,11 @@ import { handleReceived } from "./protocol";
 import { closePeer } from "./peer";
 import { send } from "./send";
 
+// subscriptionオブジェクトを作成しctx.subに代入する部分
+// typeはjoin,mute_changed,leaveなど
 export const connectCable = (ctx) => {
   if (ctx.sub) return;
-
+//ctx.subでサブスクリプションオブジェクトとして、色々な標準メソッドが使える。
   ctx.sub = consumer.subscriptions.create(
     { channel: "RtcChannel", room: ctx.roomId },
     {
