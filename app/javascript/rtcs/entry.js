@@ -13,7 +13,7 @@ export const bootRtc = () => {
   const ctx = createRtcContext();
   if (!ctx) return;
 
-  bindLifecycle(ctx);
+  bindLifecycle(ctx);//bootRtc実行時にpagehideをトリガーとするイベントリスナーを設置する処理
   bindMuteControls(ctx);
   connectCable(ctx);
   startLocalNgDetector(ctx);

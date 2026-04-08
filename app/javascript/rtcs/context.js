@@ -32,9 +32,9 @@ export const createRtcContext = () => {
     ],
 
     sub: null,
-
+    // new Map();でMapオブジェクトを作成(Map = キーと値で表現するコレクション)
     peers: new Map(),
-    knownPeerSessions: new Map(), // キーと値で表現するコレクションがMap
+    knownPeerSessions: new Map(),
     pendingIce: new Map(),
 
     localStream: null,
