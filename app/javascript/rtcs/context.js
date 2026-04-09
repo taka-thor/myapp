@@ -4,6 +4,7 @@ export const createRtcContext = () => {
   // rootでない場合、nullを返すように指定しない場合は、undefinedを返す仕様。
   // nullでもundefinedでも結果だけど、意図的に何も返さないことを明示するためにnullを使う
 
+  // これらはinitKeyより上に書いてあるため、中身の値が変わってもctxに反映される
   const roomId = String(root.dataset.roomId || "");
   const myUserId = Number(root.dataset.userId);
   const mySessionId = String(root.dataset.sessionId || "");
@@ -13,7 +14,7 @@ export const createRtcContext = () => {
     console.warn("[rtc] missing dataset", { roomId, myUserId, mySessionId });
     return null;
   }
-
+  // ターボロードはwindowオブジェクトを初期化しないため必要な処理がinitKey
   const initKey = `__rtc_init_room_${roomId}`;
   if (window[initKey]) return null;
   window[initKey] = true;

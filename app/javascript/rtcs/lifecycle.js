@@ -21,23 +21,20 @@ export const cleanup = (ctx) => {
   ctx.sub = null;
 
   try {
-    unbindMuteControls(ctx);
+    unbindMuteControls(ctx);//ミュート状態を解除
   } catch {}
 
   try {
-    stopLocalNgDetector(ctx);
+    stopLocalNgDetector(ctx);//音声認識文字起こしを解除
   } catch {}
 
   try {
     window[ctx.initKey] = false;
   } catch {}
 };
-<<<<<<< Updated upstream
 
 // bindLifecycleはbootRtcで渡されたctx(=presencehookの部分)
-=======
 //イベントリスナーを設置したタイミングのctxつまり、初期のctxを使ってbindLifecycleを実行する
->>>>>>> Stashed changes
 export const bindLifecycle = (ctx) => {
   window.addEventListener("pagehide", () => cleanup(ctx), { once: true });
 };
