@@ -12,7 +12,7 @@ gem "pg", "~> 1.6"
 gem "psych", "< 5.3"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.4"
+gem "puma", "~> 8.0"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder", "~> 2.12"
