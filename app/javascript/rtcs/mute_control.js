@@ -30,7 +30,7 @@ const postMutedPresence = async (ctx) => {
 };
 
 const renderSpeakerStatus = (statusEl, muted) => {
-  statusEl.classList.toggle("text-slate-400", muted);
+  statusEl.classList.toggle("text-slate-400", muted);// statusElの中身はcssセレクター。このcssセレクターを含んたclassを探し、メソッドを実行。
   statusEl.classList.toggle("text-sky-500", !muted);
   statusEl.setAttribute("aria-label", muted ? "自分の音声 OFF" : "自分の音声 ON");
 

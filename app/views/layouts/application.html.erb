@@ -21,6 +21,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <!--HTMLにcsrfトークンを入れ込むmetaタグ。jsとfetchやPOSTを送るときに照合で使う-->
+    <!--<meta name="csrf-token" content="....">に変換される。よってcsrfトークンは、content属性となる-->
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <% if ENV["GA_MEASUREMENT_ID"].present? %>
