@@ -64,7 +64,7 @@ export const startLocalNgDetector = (ctx) => {
     if (!ctx.sub) return;
 
     const now = Date.now();
-    if (now - ctx.ngDetector.lastSentAt < 1200) return;
+    if (now - ctx.ngDetector.lastSentAt < 100) return;
     if (ctx.ngDetector.lastSentText === normText) return;
     ctx.ngDetector.lastSentAt = now;
     ctx.ngDetector.lastSentText = normText;
