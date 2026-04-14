@@ -1,7 +1,8 @@
 import { send } from "./send";
 
 const recognitionCtor = () => window.SpeechRecognition || window.webkitSpeechRecognition;
-
+// 一部のブラウザへの互換性を保つためにwindow.webkitSpeechRecognitionを記載
+// windowオブジェクトに音声認識があるかどうか確認するための準備
 const normalize = (text) =>
   String(text || "")
     .toLowerCase()
