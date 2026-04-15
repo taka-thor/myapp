@@ -11,8 +11,8 @@ const notifyRoomNgDetected = (ctx, transcript) => {
   send(ctx, "ng_word_detected", { transcript });
 };
 
-export const startLocalNgDetector = (ctx) => {
-  console.info("[rtc:ng] startLocalNgDetector called");
+export const startWordDetector = (ctx) => {
+  console.info("[rtc:ng] startWordDetector called");
   const SpeechRecognition = recognitionCtor();
   if (!SpeechRecognition) {
     console.warn("[rtc:ng] SpeechRecognition is not supported");
@@ -93,7 +93,7 @@ export const startLocalNgDetector = (ctx) => {
   startRecognition();
 };
 
-export const stopLocalNgDetector = (ctx) => {
+export const stopWordDetector = (ctx) => {
   const detector = ctx.ngDetector;
   if (!detector) return;
 
