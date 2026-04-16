@@ -1,4 +1,4 @@
-const CACHE_NAME = "koetomo-static-v5";
+const CACHE_NAME = "koetomo-static-v6";
 const OFFLINE_URLS = ["/", "/manifest.json", "/pwa-icon.png", "/icon.svg"];
 
 self.addEventListener("install", (event) => {

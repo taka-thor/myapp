@@ -9,7 +9,6 @@
   data-room-id="<%= @room.id %>"
   data-user-id="<%= @current_user.id %>"
   data-session-id="<%= @room_participant.session_id %>"
-  data-ng-words="<%= json_escape(@ng_words.to_json) %>"
   data-presence-ping-url="<%= ping_room_presence_path(@room) %>"
   data-presence-leave-url="<%= leave_room_presence_path(@room) %>"
 ></div>
