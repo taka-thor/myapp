@@ -2,6 +2,7 @@ console.log("[presence] presence.js loaded");
 
 const DEBUG = false;
 
+//コンソール表示のみで、処理は中断しない
 function dlog(...args) {
   if (DEBUG) console.log(...args);
 }
@@ -13,8 +14,8 @@ function derr(...args) {
 }
 
 function csrfToken() {
-  const meta = document.querySelector('meta[name="csrf-token"]');
-  if (!meta) throw new Error("[presence] csrf-token meta not found");
+  const meta = document.querySelector('meta[name="csrf-token"]');//application.htmlで埋めたcsrfトークンを取得
+  if (!meta) throw new Error("[presence] csrf-token meta not found");//エラーを投げて処理を中止する
   return meta.content;
 }
 
