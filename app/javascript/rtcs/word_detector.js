@@ -20,9 +20,9 @@ export const startWordDetector = (ctx) => {
     return;
   }
 
-  const recognition = new SpeechRecognition();
+  const recognition = new SpeechRecognition(); //音声認識のインスタンス作成
   recognition.lang = "ja-JP";
-  recognition.continuous = true;
+  // recognition.continuous = true;//音声認識の単発ではなく連続して行う設定
   recognition.interimResults = true;
 
   ctx.ngDetector = {
@@ -31,6 +31,7 @@ export const startWordDetector = (ctx) => {
     visibleHandler: null,
     lastSentAt: 0,
     lastSentText: "",
+    lastFinalTranscript: "",
     retryTimer: null,
   };
 
@@ -55,11 +56,21 @@ export const startWordDetector = (ctx) => {
     }
   };
 
+　//ブラウザの音声認識の結果が返ると、onresultが呼ばれる。そのときイベントオブジェクトが返される。
   recognition.onresult = (event) => {
-    let text = "";
-    for (let i = 0; i < event.results.length; i += 1) {
-      text += event.results[i][0]?.transcript || "";
+    const latestResult = event.results[event.results.length - 1];
+    if (!latestResult?.isFinal) return;
+
+    const fullText = latestResult?.[0]?.transcript || "";
+    if (!fullText) return;
+
+    const previous = ctx.ngDetector.lastFinalTranscript || "";
+    let text = fullText;
+    if (previous && fullText.startsWith(previous)) {
+      text = fullText.slice(previous.length).trim();
     }
+    ctx.ngDetector.lastFinalTranscript = fullText;
+
     const normText = normalize(text);
     if (!normText) return;
     if (!ctx.sub) return;
@@ -71,6 +82,7 @@ export const startWordDetector = (ctx) => {
     ctx.ngDetector.lastSentText = normText;
     console.info("[rtc:ng] sending ng_word_detected", { transcript: text, normalized: normText });
     notifyRoomNgDetected(ctx, text);
+    recognition.stop();
   };
 
   recognition.onerror = (event) => {
