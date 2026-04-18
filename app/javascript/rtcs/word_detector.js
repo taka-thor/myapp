@@ -56,9 +56,10 @@ export const startWordDetector = (ctx) => {
     }
   };
 
-　//ブラウザの音声認識の結果が返ると、onresultが呼ばれる。そのときイベントオブジェクトが返される。
+ //ブラウザの音声認識の結果が返ると、onresultが呼ばれる。そのときイベントオブジェクトが返される。
+ //
   recognition.onresult = (event) => {
-    const latestResult = event.results[event.results.length - 1];
+    const latestResult = event.results[event.results.length - 1];//一番最後の結果のみを取得
     if (!latestResult?.isFinal) return;
 
     const fullText = latestResult?.[0]?.transcript || "";
