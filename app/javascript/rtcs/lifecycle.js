@@ -7,7 +7,7 @@ import { stopWordDetector } from "./word_detector";
 //仮に例外処理が発生してもcleanupメソッドは処理を継続できるため必要。
 export const cleanup = (ctx) => {
   try {
-    send(ctx, "leave", {});
+    send(ctx, "leave", {}); //rtc_channelのelseに該当。
   } catch {}
 // const peerUserIdは、ローカル変数
 //ctx.peerはMapオブジェクト(context.jsで定義)で、keysメソッドでキーのみを１つずつ取り出して、const peerUserIdに入れている。

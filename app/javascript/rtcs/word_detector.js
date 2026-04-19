@@ -63,7 +63,7 @@ export const startWordDetector = (ctx) => {
     const latestResult = event.results[event.results.length - 1];//一番最後の結果のみを取得
     if (!latestResult?.isFinal) return;
 
-    const fullText = latestResult?.[0]?.transcript || "";
+    const fullText = latestResult?.[0]?.transcript || ""; //resultの最有力候補は、event.result[i][0]。
     if (!fullText) return;
 
     const previous = ctx.ngDetector.lastFinalTranscript || "";

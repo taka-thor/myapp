@@ -36,7 +36,7 @@ export const connectCable = (ctx) => {
       },
       // サーバー側からのデータを受け取るとき、つまりブロードキャストの時
       received(data) {
-        const type = data?.type; //data?は、もしdataに値がなくてもエラーにならない
+        const type = data?.type; //data?.は、もしdataやtypeに値がなくてもエラーにならない
         if (!type) return;
 
         if (type === "mute_changed") return;

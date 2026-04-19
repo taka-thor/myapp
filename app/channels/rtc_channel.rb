@@ -64,7 +64,7 @@ class RtcChannel < ApplicationCable::Channel
         end
       end
     else
-      ActionCable.server.broadcast(signaling_info, data) # data["type"]がjoinやmute_changedでなければ、ここでブロードキャスト。シグナリング情報が入る。
+      ActionCable.server.broadcast(signaling_info, data) # data["type"]が上記のwhenに該当しなければ、ここでブロードキャスト。シグナリング情報が入る。
     end
   end
 
