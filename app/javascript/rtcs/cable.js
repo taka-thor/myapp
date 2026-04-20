@@ -7,12 +7,12 @@ import { send } from "./send";
 // subscriptionオブジェクトを作成しctx.subに代入する部分
 // typeはjoin,mute_changed,leaveなど
 export const connectCable = (ctx) => {
-  if (ctx.sub) return;
+  if (ctx.sub) return;//一度購読していれば、ctx.subはtruthyとなりreturn.
 //ctx.subでサブスクリプションオブジェクトとして、色々な標準メソッドが使える。
   ctx.sub = consumer.subscriptions.create(
     { channel: "RtcChannel", room: ctx.roomId },
     {
-      async connected() { //接続が確立したら自動で呼ぶconnectedメソッド
+      async connected() { //connectedは接続が確立したら自動で呼ぶconnectedメソッド
         console.debug("[rtc] AC connected", {
           roomId: ctx.roomId,
           myUserId: ctx.myUserId,
