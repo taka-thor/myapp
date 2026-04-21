@@ -19,7 +19,7 @@ export const connectCable = (ctx) => {
           mySessionId: ctx.mySessionId,
         });
         try {
-          await prepareLocalAudio(ctx);
+          await prepareLocalAudio(ctx);//処理が完了するまで次の処理に進まない
         } catch (e) {
           console.warn("[rtc] getUserMedia failed:", e);
         }

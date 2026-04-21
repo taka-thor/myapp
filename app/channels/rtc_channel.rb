@@ -1,6 +1,6 @@
 class RtcChannel < ApplicationCable::Channel
   def subscribed
-    @room_id = params[:room].presence
+    @room_id = params[:room].presence # presenceをつけない場合、@room_idが空白でも""で返るため、rejectされない。
     reject unless @room_id
 
     stream_from signaling_info
@@ -12,7 +12,7 @@ class RtcChannel < ApplicationCable::Channel
     when "join"
 
       peers = RoomParticipant
-        .where(room_id: @room_id, is_active: true)
+        .where(room_id: @room_id, is_active: true) # subsctribedメソッドを読んだrtc_channelインスタンスと同じインスタンスがsignalメソッドを呼ぶことから、同一のインスタンのため@room_idが使えている。
         .where.not(user_id: current_user.id)
         .pluck(:user_id, :session_id)
         .map { |uid, sid| { user_id: uid, session_id: sid } }
