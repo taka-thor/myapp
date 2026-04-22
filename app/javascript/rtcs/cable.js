@@ -34,7 +34,7 @@ export const connectCable = (ctx) => {
       disconnected() {
         console.debug("[rtc] AC disconnected");
       },
-      // サーバー側からのデータを受け取るとき、つまりブロードキャストの時
+      // サーバー側からのデータを受け取るとき。つまりdef signalなどの時
       received(data) {
         const type = data?.type; //data?.は、もしdataやtypeに値がなくてもエラーにならない
         if (!type) return;
@@ -47,6 +47,7 @@ export const connectCable = (ctx) => {
           String(data.from_session_id || "") === ctx.mySessionId;
         if (fromMe) return;
 
+        //lifecycle.jsのsendメソッド
         if (type === "leave") {
           const fromUserId = Number(data.from_user_id);
           if (!fromUserId) return;
