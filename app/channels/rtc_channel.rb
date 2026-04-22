@@ -1,6 +1,7 @@
 class RtcChannel < ApplicationCable::Channel
+  # 書いてある全てのメソッドは、１つのChannelインスタンスに対して実行するもの。
   def subscribed
-    @room_id = params[:room].presence
+    @room_id = params[:room].presence # presenceをつけない場合、@room_idが空白でも""で返るため、rejectされない。
     reject unless @room_id
 
     stream_from signaling_info
@@ -12,12 +13,12 @@ class RtcChannel < ApplicationCable::Channel
     when "join"
 
       peers = RoomParticipant
-        .where(room_id: @room_id, is_active: true)
+        .where(room_id: @room_id, is_active: true) # subsctribedメソッドを読んだrtc_channelインスタンスと同じインスタンスがsignalメソッドを呼ぶことから、同一のインスタンのため@room_idが使えている。
         .where.not(user_id: current_user.id)
         .pluck(:user_id, :session_id)
         .map { |uid, sid| { user_id: uid, session_id: sid } }
 
-      transmit({
+      transmit({ # js側ではreceivedでデータを受け取る
         type: "present",
         peers: peers,
         to_user_id: current_user.id,
@@ -64,7 +65,7 @@ class RtcChannel < ApplicationCable::Channel
         end
       end
     else
-      ActionCable.server.broadcast(signaling_info, data) # data["type"]がjoinやmute_changedでなければ、ここでブロードキャスト。シグナリング情報が入る。
+      ActionCable.server.broadcast(signaling_info, data) # data["type"]が上記のwhenに該当しなければ、ここでブロードキャスト。主にシグナリング情報が入る。
     end
   end
 

@@ -1,13 +1,13 @@
 import { send } from "./send";
 import { closePeer } from "./peer";
 import { unbindMuteControls } from "./mute_control";
-import { stopLocalNgDetector } from "./word_detector";
+import { stopWordDetector } from "./word_detector";
 
 //開発者側でctxに正しくない値を入れた時などのブロック処理
 //仮に例外処理が発生してもcleanupメソッドは処理を継続できるため必要。
 export const cleanup = (ctx) => {
   try {
-    send(ctx, "leave", {});
+    send(ctx, "leave", {}); //rtc_channelのelseに該当。
   } catch {}
 // const peerUserIdは、ローカル変数
 //ctx.peerはMapオブジェクト(context.jsで定義)で、keysメソッドでキーのみを１つずつ取り出して、const peerUserIdに入れている。
@@ -25,7 +25,7 @@ export const cleanup = (ctx) => {
   } catch {}
 
   try {
-    stopLocalNgDetector(ctx);//音声認識文字起こしを解除
+    stopWordDetector(ctx);//音声認識文字起こしを解除
   } catch {}
 
   try {
