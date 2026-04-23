@@ -1,6 +1,7 @@
 import { startSpeakingFromStream } from "./speaking_ring";
 import { applyLocalMuteState } from "./mute_control";
 
+
 const startMeSpeakingSafely = (ctx) => {
   const tryStart = (retry = 0) => {
     const el = document.querySelector(`[data-rtc-user-id="${ctx.myUserId}"]`);
@@ -21,7 +22,7 @@ const startMeSpeakingSafely = (ctx) => {
   tryStart();
 };
 
-export const prepareLocalAudio = async (ctx) => {
+export const prepareLocalAudio = async (ctx) => { //ユーザーの音声ストリームを取得する処理
   console.log("[rtc] prepareLocalAudio called", {
     hasLocalStream: !!ctx.localStream,
     myUserId: ctx.myUserId,
@@ -29,10 +30,10 @@ export const prepareLocalAudio = async (ctx) => {
 
   if (ctx.localStream) return ctx.localStream;
 
-  ctx.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-  console.log("[rtc] got local audio tracks:", ctx.localStream.getAudioTracks().length);
+  ctx.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });//ユーザーのマイクから音声ストリームのみを取得
+  console.log("[rtc] got local audio tracks:", ctx.localStream.getAudioTracks().length);//ctx.localStreamはMediaStreamオブジェクト。
 
-  applyLocalMuteState(ctx);
+  applyLocalMuteState(ctx);//現在のミュート状態を検知
   startMeSpeakingSafely(ctx);
 
   return ctx.localStream;

@@ -54,7 +54,7 @@ export const applyLocalMuteState = (ctx) => {
   const tracks = ctx.localStream?.getAudioTracks?.() ?? []; //applyLocalMuteState音声トラック一覧を取る。localStream があれば音声トラック配列を取得 なければ []（空配列）
   for (const track of tracks) {
     track.enabled = !ctx.isMuted;//MediaStreamTrackのプロパティであるenabledに値を入れるだけで、自動で適応される。(どこかのメソッドを呼んで適応させるなどの作業はいらない)
-  }
+  }                              //track.enabledでマイク音声を有効にする
 
   if (ctx.isMuted) {
     setSpeakingIndicator(ctx.myUserId, false);
@@ -100,9 +100,6 @@ export const setLocalMuted = (ctx, muted) => {
   postMutedPresence(ctx);
   if (ctx.sub) {
     send(ctx, "mute_changed", { muted: ctx.isMuted });
-    ctx.pendingMuteBroadcast = false;
-  } else {
-    ctx.pendingMuteBroadcast = true;
   }
 };
 

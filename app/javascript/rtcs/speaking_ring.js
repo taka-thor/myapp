@@ -1,8 +1,8 @@
 export const setSpeakingIndicator = (userId, speaking) => {
   const el = document.querySelector(`[data-rtc-user-id="${userId}"]`);
   if (!el) return;
-  el.classList.toggle("rtc-speaking", speaking);
-};
+  el.classList.toggle("rtc-speaking", speaking); //classList.toggleのみ第二引数に真偽値を使える
+};                                               //trueはクラスを付ける。falseはその反対。
 
 export const startSpeakingFromStream = (ctx, userId, stream, opts = {}) => {
   ctx._speakingAudio ||= new Map();
