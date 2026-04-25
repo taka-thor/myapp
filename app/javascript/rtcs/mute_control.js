@@ -53,8 +53,8 @@ const renderMuteToggle = (buttonEl, muted) => {
 export const applyLocalMuteState = (ctx) => {
   const tracks = ctx.localStream?.getAudioTracks?.() ?? []; //applyLocalMuteState音声トラック一覧を取る。localStream があれば音声トラック配列を取得 なければ []（空配列）
   for (const track of tracks) {
-    track.enabled = !ctx.isMuted;//MediaStreamTrackのプロパティであるenabledに値を入れるだけで、自動で適応される。(どこかのメソッドを呼んで適応させるなどの作業はいらない)
-  }                              //track.enabledでマイク音声を有効にする
+    track.enabled = !ctx.isMuted;//enabledは、MediaStreamTrackのプロパティ
+  }                              //真偽値判定し、track.enabledでマイク音声を有効にする
 
   if (ctx.isMuted) {
     setSpeakingIndicator(ctx.myUserId, false);
@@ -62,10 +62,10 @@ export const applyLocalMuteState = (ctx) => {
 };
 
 const syncLocalOnlyMuteButtons = (ctx) => {
-  for (const buttonEl of document.querySelectorAll("[data-rtc-mute-toggle][data-rtc-user-id]")) {
+  for (const buttonEl of document.querySelectorAll("[data-rtc-mute-toggle][data-rtc-user-id]")) { //data-rtc-user-idのみだと、被り(意図しない値を取得する)もあるため2つ取得。
     const userId = Number(buttonEl.dataset.rtcUserId);
     const isMine = userId === ctx.myUserId;
-    buttonEl.classList.toggle("hidden", !isMine);
+    buttonEl.classList.toggle("hidden", !isMine);// ボタンを隠している状態がデフォ。自分の分だけ表示させる処理。
   }
 };
 

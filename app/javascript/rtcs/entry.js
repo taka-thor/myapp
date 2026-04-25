@@ -14,7 +14,7 @@ export const bootRtc = () => {
   if (!ctx) return;
 
   bindLifecycle(ctx);//bootRtc実行時にpagehideをトリガーとするイベントリスナーを設置する処理
-  bindMuteControls(ctx);
+  bindMuteControls(ctx);// ミュートボタンUIに関する処理
   connectCable(ctx);
   startWordDetector(ctx);
 };
