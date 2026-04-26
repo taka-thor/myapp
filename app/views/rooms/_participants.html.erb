@@ -80,8 +80,7 @@
             <%= link_to room_path(room),
                   data: {
                     turbo_prefetch: false,
-                    turbo: false,
-                    rtc_reconnect_link: true,
+                    turbo: false, # RTCなどを新しくするためフルリロード
                     action: "click->mute#markReconnect"
                   },
                   class: "mt-1 rounded-full

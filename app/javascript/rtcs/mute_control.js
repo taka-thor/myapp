@@ -61,14 +61,16 @@ export const applyLocalMuteState = (ctx) => {
   }
 };
 
+// ボタンを隠している状態がデフォ。自分の分だけミュートボタンを表示。
 const syncLocalOnlyMuteButtons = (ctx) => {
   for (const buttonEl of document.querySelectorAll("[data-rtc-mute-toggle][data-rtc-user-id]")) { //data-rtc-user-idのみだと、被り(意図しない値を取得する)もあるため2つ取得。
     const userId = Number(buttonEl.dataset.rtcUserId);
     const isMine = userId === ctx.myUserId;
-    buttonEl.classList.toggle("hidden", !isMine);// ボタンを隠している状態がデフォ。自分の分だけ表示させる処理。
+    buttonEl.classList.toggle("hidden", !isMine);
   }
 };
 
+// ボタンを隠している状態がデフォ。自分の分だけ再接続ボタンを表示。
 const syncLocalOnlyReconnect = (ctx) => {
   for (const el of document.querySelectorAll(reconnectSelector)) {
     const userId = Number(el.dataset.rtcUserId);
@@ -105,7 +107,7 @@ export const setLocalMuted = (ctx, muted) => {
 
 export const markForceTapToPlayOnReconnect = () => {
   sessionStorage.setItem(FORCE_TAP_TO_PLAY_KEY, "1");
-};
+};// ブラウザのセッションストレージに、キー、バリューを設置
 
 export const getActiveMuteCtx = () => activeMuteCtx;
 
