@@ -53,22 +53,24 @@ const renderMuteToggle = (buttonEl, muted) => {
 export const applyLocalMuteState = (ctx) => {
   const tracks = ctx.localStream?.getAudioTracks?.() ?? []; //applyLocalMuteState音声トラック一覧を取る。localStream があれば音声トラック配列を取得 なければ []（空配列）
   for (const track of tracks) {
-    track.enabled = !ctx.isMuted;//MediaStreamTrackのプロパティであるenabledに値を入れるだけで、自動で適応される。(どこかのメソッドを呼んで適応させるなどの作業はいらない)
-  }
+    track.enabled = !ctx.isMuted;//enabledは、MediaStreamTrackのプロパティ
+  }                              //真偽値判定し、track.enabledでマイク音声を有効にする
 
   if (ctx.isMuted) {
     setSpeakingIndicator(ctx.myUserId, false);
   }
 };
 
+// ボタンを隠している状態がデフォ。自分の分だけミュートボタンを表示。
 const syncLocalOnlyMuteButtons = (ctx) => {
-  for (const buttonEl of document.querySelectorAll("[data-rtc-mute-toggle][data-rtc-user-id]")) {
+  for (const buttonEl of document.querySelectorAll("[data-rtc-mute-toggle][data-rtc-user-id]")) { //data-rtc-user-idのみだと、被り(意図しない値を取得する)もあるため2つ取得。
     const userId = Number(buttonEl.dataset.rtcUserId);
     const isMine = userId === ctx.myUserId;
     buttonEl.classList.toggle("hidden", !isMine);
   }
 };
 
+// ボタンを隠している状態がデフォ。自分の分だけ再接続ボタンを表示。
 const syncLocalOnlyReconnect = (ctx) => {
   for (const el of document.querySelectorAll(reconnectSelector)) {
     const userId = Number(el.dataset.rtcUserId);
@@ -76,7 +78,7 @@ const syncLocalOnlyReconnect = (ctx) => {
   }
 };
 
-export const syncMuteVisibilityForLocalUser = (ctx) => {
+export const showOnlyMyMuteAndReconnectButtons = (ctx) => {
   syncLocalOnlyMuteButtons(ctx);
   syncLocalOnlyReconnect(ctx);
 };
@@ -100,15 +102,12 @@ export const setLocalMuted = (ctx, muted) => {
   postMutedPresence(ctx);
   if (ctx.sub) {
     send(ctx, "mute_changed", { muted: ctx.isMuted });
-    ctx.pendingMuteBroadcast = false;
-  } else {
-    ctx.pendingMuteBroadcast = true;
   }
 };
 
 export const markForceTapToPlayOnReconnect = () => {
   sessionStorage.setItem(FORCE_TAP_TO_PLAY_KEY, "1");
-};
+};// ブラウザのセッションストレージに、キー、バリューを設置
 
 export const getActiveMuteCtx = () => activeMuteCtx;
 
@@ -116,7 +115,7 @@ export const getActiveMuteCtx = () => activeMuteCtx;
 // createRtcContextを実行するごとにsessionIDが変わるため、各場所経由で受け渡し
 export const bindMuteControls = (ctx) => {
   activeMuteCtx = ctx;
-  syncMuteVisibilityForLocalUser(ctx);
+  showOnlyMyMuteAndReconnectButtons(ctx);
   syncMuteUi(ctx);
 };
 

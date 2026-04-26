@@ -19,16 +19,12 @@ export const connectCable = (ctx) => {
           mySessionId: ctx.mySessionId,
         });
         try {
-          await prepareLocalAudio(ctx);//処理が完了するまで次の処理に進まない
+          await prepareLocalAudio(ctx);//await:処理が完了するまで次の処理に進まない
         } catch (e) {
           console.warn("[rtc] getUserMedia failed:", e);
         }
 
         send(ctx, "join", {});
-        if (ctx.pendingMuteBroadcast) {
-          send(ctx, "mute_changed", { muted: ctx.isMuted });
-          ctx.pendingMuteBroadcast = false;
-        }
       },
 
       disconnected() {

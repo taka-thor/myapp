@@ -12,11 +12,12 @@ class RtcChannel < ApplicationCable::Channel
     case data["type"]
     when "join"
 
+      # 自分以外の参加者を自分のDOMに反映させるため
       peers = RoomParticipant
         .where(room_id: @room_id, is_active: true) # subsctribedメソッドを読んだrtc_channelインスタンスと同じインスタンスがsignalメソッドを呼ぶことから、同一のインスタンのため@room_idが使えている。
         .where.not(user_id: current_user.id)
-        .pluck(:user_id, :session_id)
-        .map { |uid, sid| { user_id: uid, session_id: sid } }
+        .pluck(:user_id, :session_id) # pluckは配列で返す
+        .map { |uid, sid| { user_id: uid, session_id: sid } } # [{uid,sid},{uid2,sid2}]
 
       transmit({ # js側ではreceivedでデータを受け取る
         type: "present",
