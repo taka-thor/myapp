@@ -4,7 +4,7 @@ import {
   markForceTapToPlayOnReconnect,
   setLocalMuted,
   syncMuteUi,
-  syncMuteVisibilityForLocalUser,
+  showOnlyMyMuteAndReconnectButtons,
 } from "../rtcs/mute_control";
 
 export default class extends Controller {
@@ -50,7 +50,7 @@ export default class extends Controller {
     const ctx = getActiveMuteCtx();
     if (!ctx) return;
 
-    syncMuteVisibilityForLocalUser(ctx);
+    showOnlyMyMuteAndReconnectButtons(ctx);
     syncMuteUi(ctx);
   }
 }

@@ -78,7 +78,7 @@ const syncLocalOnlyReconnect = (ctx) => {
   }
 };
 
-export const syncMuteVisibilityForLocalUser = (ctx) => {
+export const showOnlyMyMuteAndReconnectButtons = (ctx) => {
   syncLocalOnlyMuteButtons(ctx);
   syncLocalOnlyReconnect(ctx);
 };
@@ -115,7 +115,7 @@ export const getActiveMuteCtx = () => activeMuteCtx;
 // createRtcContextを実行するごとにsessionIDが変わるため、各場所経由で受け渡し
 export const bindMuteControls = (ctx) => {
   activeMuteCtx = ctx;
-  syncMuteVisibilityForLocalUser(ctx);
+  showOnlyMyMuteAndReconnectButtons(ctx);
   syncMuteUi(ctx);
 };
 
