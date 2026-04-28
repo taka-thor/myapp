@@ -30,10 +30,10 @@ const postMutedPresence = async (ctx) => {
 };
 
 const renderSpeakerStatus = (statusEl, muted) => {
-  statusEl.classList.toggle("text-slate-400", muted);// statusElの中身はcssセレクター。このcssセレクターを含んたclassを探し、メソッドを実行。
+  statusEl.classList.toggle("text-slate-400", muted);// 自分の音声IN/OFFの文字の色
   statusEl.classList.toggle("text-sky-500", !muted);
 
-  statusEl.querySelector("[data-rtc-speaker-on-icon]")?.classList.toggle("hidden", muted);
+  statusEl.querySelector("[data-rtc-speaker-on-icon]")?.classList.toggle("hidden", muted);//ミュート時のスピーカーアイコン表示
   statusEl.querySelector("[data-rtc-speaker-off-icon]")?.classList.toggle("hidden", !muted);
 };
 

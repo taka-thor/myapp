@@ -7,15 +7,14 @@ gem "rails", "~> 7.2.2"
 gem "sprockets-rails", "~> 3.5"
 
 # Use Postgres (Neon) in production
+# postgle接続用のgem
 gem "pg", "~> 1.6"
 
+# YAML形式rubyで読み書きできるgem
 gem "psych", "< 5.3"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.4"
-
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder", "~> 2.12"
 
 gem "rails-i18n", "~> 7.0"
 
@@ -31,6 +30,7 @@ gem "rqrcode", "~> 2.2"
 gem "turbo-rails", "~> 2.0"
 gem "redis", "~> 5.4.1"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+# timezone関連
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -42,7 +42,7 @@ group :development, :test do
   gem "byebug"
   gem "dotenv-rails"
   gem "rspec-rails", "~> 6.1"
-  gem "simplecov", require: false
+  gem "simplecov", require: false # 　テストで、どのアプリ内コードを使ったかを表示させるgem
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
