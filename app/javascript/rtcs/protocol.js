@@ -57,7 +57,7 @@ export const handleReceived = (ctx, data) => {
     case "present": {
       if (!acceptIfToMe(ctx, data)) return;
 
-      const list = Array.isArray(data.peers) ? data.peers : [];
+      const list = Array.isArray(data.peers) ? data.peers : []; //Array.isArrayで配列かどうか調べるメソッド
       console.debug("[rtc] present", list);
 
       for (const p of list) {

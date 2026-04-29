@@ -12,14 +12,14 @@ export const connectCable = (ctx) => {
   ctx.sub = consumer.subscriptions.create(
     { channel: "RtcChannel", room: ctx.roomId },
     {
-      async connected() { //connectedは接続が確立したら自動で呼ぶconnectedメソッド
+      async connected() { //connectedは、subscription接続が確立したら自動で呼ぶconnectedメソッド
         console.debug("[rtc] AC connected", {
           roomId: ctx.roomId,
           myUserId: ctx.myUserId,
           mySessionId: ctx.mySessionId,
         });
         try {
-          await prepareLocalAudio(ctx);//await:処理が完了するまで次の処理に進まない
+          await prepareLocalAudio(ctx);//await:処理が完了するまで次の処理に進まない。ユーザーの音声ストリームを取得する処理
         } catch (e) {
           console.warn("[rtc] getUserMedia failed:", e);
         }
@@ -37,6 +37,8 @@ export const connectCable = (ctx) => {
 
         if (type === "mute_changed") return;
 
+
+        // 初回購読時はfromMeは実行されず、handleReceivedを実行。
         const fromMe =
           data.from_user_id != null && //&&は左がfalsyなら右を評価せずに左を返す。 data.from_user_id != nullが１つの評価する式。これがfalseだと全体がfalseになる。
           Number(data.from_user_id) === ctx.myUserId &&
