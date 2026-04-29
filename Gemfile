@@ -34,7 +34,7 @@ gem "redis", "~> 5.4.1"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "~> 1.18", require: false
+gem "bootsnap", "~> 1.24", require: false
 
 group :development, :test do
   gem "pry-rails"
