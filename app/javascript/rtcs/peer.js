@@ -43,15 +43,16 @@ export const flushPendingIce = async (ctx, peerUserId) => {
   }
 };
 
+//　参加したユーザー1人分のctx
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
   if (ctx.localStream) {
     for (const track of ctx.localStream.getAudioTracks()) {
-      pc.addTrack(track, ctx.localStream);
+      pc.addTrack(track, ctx.localStream); //ユーザーの音声トラックをWebRTCに渡している。
     }
   } else {
-    pc.addTransceiver("audio", { direction: "recvonly" });
+    pc.addTransceiver("audio", { direction: "recvonly" }); //ブラウザやユーザー自身のマイク拒否などで、localStreamが取得できなくても相手の音声だけを受信できる枠を作る。
   }
 
   pc.onicecandidate = (e) => {

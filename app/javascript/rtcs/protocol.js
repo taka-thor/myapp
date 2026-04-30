@@ -2,6 +2,7 @@ import { atCapacity, acceptIfToMe, discard } from "./utils";
 import { newPeerConnection, flushPendingIce } from "./peer";
 import { send } from "./send";
 
+// makeOfferToで、全参加者１人ずつのuserid、sessionidをfor文で送っている。
 export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   if (atCapacity(ctx)) return;
 
@@ -56,20 +57,20 @@ export const handleReceived = (ctx, data) => {
   switch (type) {
     case "present": {
       if (!acceptIfToMe(ctx, data)) return;
-
+      ///data.peersは自分以外の参加者の情報を保持
       const list = Array.isArray(data.peers) ? data.peers : []; //Array.isArrayで配列かどうか調べるメソッド
       console.debug("[rtc] present", list);
 
       for (const p of list) {
-        if (atCapacity(ctx)) break;
-
+        if (atCapacity(ctx)) break;//接続上限に余裕があるかどうかを確認する処理
+        //適切な値を保持しているか確認する処理
         const peerUserId = Number(p.user_id);
         const peerSessionId = String(p.session_id || "");
         if (!peerUserId || !peerSessionId) continue;
         if (peerUserId === ctx.myUserId) continue;
         if (ctx.knownPeerSessions.has(peerUserId)) continue;
 
-        ctx.knownPeerSessions.set(peerUserId, peerSessionId);
+        ctx.knownPeerSessions.set(peerUserId, peerSessionId); //for文の中のctxは、同じオブジェクトのためatCapaciityのsizeが増えていく
         makeOfferTo(ctx, peerUserId, peerSessionId);
       }
       break;
