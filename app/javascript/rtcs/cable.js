@@ -16,7 +16,7 @@ export const connectCable = (ctx) => {
         console.debug("[rtc] AC connected", {
           roomId: ctx.roomId,
           myUserId: ctx.myUserId,
-          mySessionId: ctx.mySessionId,
+          mySessionIfd: ctx.mySessionId,
         });
         try {
           await prepareLocalAudio(ctx);//await:処理が完了するまで次の処理に進まない。ユーザーの音声ストリームを取得する処理

@@ -7,7 +7,7 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   if (atCapacity(ctx)) return;
 
   const entry = ctx.peers.get(peerUserId);
-  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
+  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //ペアごとの接続インスタンス
 
   try {
     const offer = await pc.createOffer({ offerToReceiveAudio: true });

@@ -43,7 +43,7 @@ export const flushPendingIce = async (ctx, peerUserId) => {
   }
 };
 
-//　参加したユーザー1人分のctx
+//　参加したユーザー1人分のctxなど(for文で人数分処理を実行)
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
@@ -55,7 +55,8 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     pc.addTransceiver("audio", { direction: "recvonly" }); //ブラウザやユーザー自身のマイク拒否などで、localStreamが取得できなくても相手の音声だけを受信できる枠を作る。
   }
 
-  pc.onicecandidate = (e) => {
+  //ICE候補を相手に渡す
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら()呼ぶイベントハンドラをRTCオブジェクトへ設置
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,
@@ -64,7 +65,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     });
   };
 
-  pc.onconnectionstatechange = () => {
+  pc.onconnectionstatechange = () => { // RTCPeerConnectionの状態が変わったら呼ばれるメソッド(failedやdisconnectなど)
     console.debug("[rtc] connectionState", peerUserId, pc.connectionState);
     if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
       closePeer(ctx, peerUserId);
