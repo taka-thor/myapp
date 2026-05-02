@@ -24,7 +24,7 @@ const startMeSpeakingSafely = (ctx) => {
 
 export const prepareLocalAudio = async (ctx) => { //ユーザーの音声ストリームを取得する処理
   console.log("[rtc] prepareLocalAudio called", {
-    hasLocalStream: !!ctx.localStream,
+    hasLocalStream: !!ctx.localStream, // !!で真偽値を返す
     myUserId: ctx.myUserId,
   });
 

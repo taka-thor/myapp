@@ -47,16 +47,16 @@ export const flushPendingIce = async (ctx, peerUserId) => {
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
-  if (ctx.localStream) {
-    for (const track of ctx.localStream.getAudioTracks()) {
-      pc.addTrack(track, ctx.localStream); //ユーザーの音声トラックをWebRTCに渡している。
+  const track = ctx.localStream?.getAudioTracks()[0]; //cable.jsでlocalstreamの有無を確認し、ある場合とない場合のどちらにもここで対応するために再度、localstreamを確認
+    if (track) {
+      pc.addTrack(track, ctx.localStream); //自分の音声トラックをWebRTCに渡している。
     }
-  } else {
-    pc.addTransceiver("audio", { direction: "recvonly" }); //ブラウザやユーザー自身のマイク拒否などで、localStreamが取得できなくても相手の音声だけを受信できる枠を作る。
-  }
+      else {
+        pc.addTransceiver("audio", { direction: "recvonly" }); //ブラウザやユーザー自身のマイク拒否などで、localStreamが取得できなくても相手の音声だけを受信できる枠を作る。
+    }
 
-  //ICE候補を相手に渡す
-  pc.onicecandidate = (e) => { //ICE候補が見つかったら()呼ぶイベントハンドラをRTCオブジェクトへ設置
+  //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら()呼ぶイベントハンドラを自分と参加者１人とのRTCオブジェクトへ設置
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,

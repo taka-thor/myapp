@@ -7,7 +7,7 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   if (atCapacity(ctx)) return;
 
   const entry = ctx.peers.get(peerUserId);
-  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //ペアごとの接続インスタンス
+  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //自分だけが保有する各参加者とのRTC接続オブジェクト
 
   try {
     const offer = await pc.createOffer({ offerToReceiveAudio: true });
@@ -57,7 +57,7 @@ export const handleReceived = (ctx, data) => {
   switch (type) {
     case "present": {
       if (!acceptIfToMe(ctx, data)) return;
-      ///data.peersは自分以外の参加者の情報を保持
+      ///data.peersは自分以外の参加者のuserID,sessionIDを保持
       const list = Array.isArray(data.peers) ? data.peers : []; //Array.isArrayで配列かどうか調べるメソッド
       console.debug("[rtc] present", list);
 
@@ -121,18 +121,18 @@ export const handleReceived = (ctx, data) => {
     case "ice": {
       if (!acceptIfToMe(ctx, data)) return;
 
-      const fromUserId = Number(data.from_user_id);
+      const fromUserId = Number(data.from_user_id); //data.from_user_idに値がなくても、NaNと処理され落ちない
       const fromSessionId = String(data.from_session_id || "");
       if (!fromUserId || !fromSessionId) return;
 
-      const known = ctx.knownPeerSessions.get(fromUserId);
+      const known = ctx.knownPeerSessions.get(fromUserId); //knownPeerSessionsは、context.jsで定めたMapオブジェクト
       if (known && known !== fromSessionId) {
         discard(ctx, "from_session_id mismatch (known)", data);
         return;
       }
 
       const entry = ctx.peers.get(fromUserId);
-      const c = data.candidate;
+      const c = data.candidate; //peer.jsのonicecandidateでブロードキャストされたもの
       if (!entry || !c || !c.candidate) return;
 
       if (!entry.pc.remoteDescription) {
@@ -148,7 +148,7 @@ export const handleReceived = (ctx, data) => {
       break;
     }
 
-    default:
+    default: //どのcaseにも該当しないときの処理
       break;
   }
 };
