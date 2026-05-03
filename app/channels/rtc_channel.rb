@@ -19,7 +19,7 @@ class RtcChannel < ApplicationCable::Channel
         .pluck(:user_id, :session_id) # pluckは配列で返す
         .map { |uid, sid| { user_id: uid, session_id: sid } } # [{uid,sid},{uid2,sid2}]
 
-      transmit({ # js側ではreceivedでデータを受け取る
+      transmit({ # js側ではreceivedでデータを受け取る(ブロードキャストではなく送信元にだけ返す)
         type: "present",
         peers: peers,
         to_user_id: current_user.id,

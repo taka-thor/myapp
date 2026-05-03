@@ -2,11 +2,12 @@ import { atCapacity, acceptIfToMe, discard } from "./utils";
 import { newPeerConnection, flushPendingIce } from "./peer";
 import { send } from "./send";
 
+// makeOfferToで、全参加者１人ずつのuserid、sessionidをfor文で送っている。
 export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   if (atCapacity(ctx)) return;
 
   const entry = ctx.peers.get(peerUserId);
-  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
+  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //自分だけが保有する各参加者とのRTC接続オブジェクト
 
   try {
     const offer = await pc.createOffer({ offerToReceiveAudio: true });
@@ -56,20 +57,20 @@ export const handleReceived = (ctx, data) => {
   switch (type) {
     case "present": {
       if (!acceptIfToMe(ctx, data)) return;
-
-      const list = Array.isArray(data.peers) ? data.peers : [];
+      ///data.peersは自分以外の参加者のuserID,sessionIDを保持
+      const list = Array.isArray(data.peers) ? data.peers : []; //Array.isArrayで配列かどうか調べるメソッド
       console.debug("[rtc] present", list);
 
       for (const p of list) {
-        if (atCapacity(ctx)) break;
-
+        if (atCapacity(ctx)) break;//接続上限に余裕があるかどうかを確認する処理
+        //適切な値を保持しているか確認する処理
         const peerUserId = Number(p.user_id);
         const peerSessionId = String(p.session_id || "");
         if (!peerUserId || !peerSessionId) continue;
         if (peerUserId === ctx.myUserId) continue;
         if (ctx.knownPeerSessions.has(peerUserId)) continue;
 
-        ctx.knownPeerSessions.set(peerUserId, peerSessionId);
+        ctx.knownPeerSessions.set(peerUserId, peerSessionId); //for文の中のctxは、同じオブジェクトのためatCapaciityのsizeが増えていく
         makeOfferTo(ctx, peerUserId, peerSessionId);
       }
       break;
@@ -117,27 +118,28 @@ export const handleReceived = (ctx, data) => {
       break;
     }
 
+    // 相手から自分宛に届いたICE候補をctxに保管(remoteDescription次第)
     case "ice": {
       if (!acceptIfToMe(ctx, data)) return;
 
-      const fromUserId = Number(data.from_user_id);
+      const fromUserId = Number(data.from_user_id); //data.from_user_idに値がなくても、NaNと処理され落ちない
       const fromSessionId = String(data.from_session_id || "");
       if (!fromUserId || !fromSessionId) return;
 
-      const known = ctx.knownPeerSessions.get(fromUserId);
-      if (known && known !== fromSessionId) {
+      const known = ctx.knownPeerSessions.get(fromUserId); //knownPeerSessionsは、context.jsで定めたMapオブジェクト
+      if (known && known !== fromSessionId) {              //sessionIDでICE候補、シグナリング情報の一意性を管理
         discard(ctx, "from_session_id mismatch (known)", data);
         return;
       }
 
       const entry = ctx.peers.get(fromUserId);
-      const c = data.candidate;
+      const c = data.candidate; //peer.jsのonicecandidateでブロードキャストされたもの
       if (!entry || !c || !c.candidate) return;
 
       if (!entry.pc.remoteDescription) {
         const arr = ctx.pendingIce.get(fromUserId) || [];
         arr.push(c);
-        ctx.pendingIce.set(fromUserId, arr);
+        ctx.pendingIce.set(fromUserId, arr); //userIDとICE候補を保管。
         return;
       }
 
@@ -147,7 +149,7 @@ export const handleReceived = (ctx, data) => {
       break;
     }
 
-    default:
+    default: //どのcaseにも該当しないときの処理
       break;
   }
 };

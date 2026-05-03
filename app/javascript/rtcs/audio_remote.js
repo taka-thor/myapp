@@ -1,3 +1,4 @@
+// 相手ごとの音声の受け皿を作る
 export const ensureAudioEl = (ctx, peerUserId) => {
   const audioId = `rtc-audio-${ctx.roomId}-${peerUserId}`;
   let el = document.getElementById(audioId);

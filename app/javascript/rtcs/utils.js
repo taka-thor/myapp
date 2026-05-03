@@ -1,9 +1,10 @@
-export const atCapacity = (ctx) => ctx.peers.size >= (ctx.MAX_PEERS - 1);
+export const atCapacity = (ctx) => ctx.peers.size >= (ctx.MAX_PEERS - 1);//接続数に余裕があれば、false
 
-export const discard = (_ctx, reason, data) => {
+export const discard = (_ctx, reason, data) => { // _ctxという書き方は、引数として受け取っているけど使わない表現
   console.debug("[rtc] discard:", reason, data);
 };
 
+// transmitで送られたdataとpresencehookで取得した自分のuserIDが一致しているかどうかを確認する処理
 export const acceptIfToMe = (ctx, data) => {
   if (data.to_user_id != null && Number(data.to_user_id) !== ctx.myUserId) {
     discard(ctx, "to_user_id mismatch", data);
@@ -13,5 +14,5 @@ export const acceptIfToMe = (ctx, data) => {
     discard(ctx, "to_session_id mismatch", data);
     return false;
   }
-  return true;
+  return true; //期待通りの処理ならtrueを返す
 };

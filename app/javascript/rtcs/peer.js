@@ -43,18 +43,20 @@ export const flushPendingIce = async (ctx, peerUserId) => {
   }
 };
 
+//　　新規ユーザーが既存参加者に対してコネクションを張る(for文で人数分処理を実行)
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
-  if (ctx.localStream) {
-    for (const track of ctx.localStream.getAudioTracks()) {
-      pc.addTrack(track, ctx.localStream);
+  const track = ctx.localStream?.getAudioTracks()[0]; //cable.jsでlocalstreamの有無を確認し、ある場合とない場合のどちらにもここで対応するために再度、localstreamを確認
+    if (track) {
+      pc.addTrack(track, ctx.localStream); //自分の音声トラックをWebRTCに渡している。
     }
-  } else {
-    pc.addTransceiver("audio", { direction: "recvonly" });
-  }
+      else {
+        pc.addTransceiver("audio", { direction: "recvonly" }); //ブラウザやユーザー自身のマイク拒否などで、localStreamが取得できなくても相手の音声だけを受信できる枠を作る。
+    }
 
-  pc.onicecandidate = (e) => {
+  //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,
@@ -63,7 +65,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     });
   };
 
-  pc.onconnectionstatechange = () => {
+  pc.onconnectionstatechange = () => { // RTCPeerConnectionの状態が変わったら呼ばれるイベントハンドラ(failedやdisconnectなど)
     console.debug("[rtc] connectionState", peerUserId, pc.connectionState);
     if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
       closePeer(ctx, peerUserId);

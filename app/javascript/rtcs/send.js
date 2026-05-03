@@ -2,7 +2,7 @@
 export const send = (ctx, type, payload = {}) => {
   if (!ctx.sub) return;
   //performは、クライアント側からサーバー側のChannelアクションを呼ぶsubscriptionオブジェクトの標準メソッド。
-  //rtc_channelにdata変数として渡す
+  //rtc_channelに、第二引数をdata変数として渡す
   //cable.jsでctx.subを代入している
   ctx.sub.perform("signal", {
     type,
