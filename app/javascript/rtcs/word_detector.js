@@ -20,6 +20,10 @@ export const startWordDetector = (ctx) => {
     console.warn("[rtc:ng] SpeechRecognition is not supported");
     return;
   }
+  if (ctx.ngDetector?.active) {
+    console.info("[rtc:ng] startWordDetector skipped (already active)");
+    return;
+  }
 
   const recognition = new SpeechRecognition(); //音声認識のインスタンス作成
   recognition.lang = "ja-JP";
@@ -34,27 +38,43 @@ export const startWordDetector = (ctx) => {
     lastSentText: "",
     lastFinalTranscript: "",
     retryTimer: null,
+    isStarting: false,
+    isRecognizing: false,
   };
 
   const scheduleRetryStart = () => {
-    if (!ctx.ngDetector?.active) return;
-    if (ctx.ngDetector.retryTimer) clearTimeout(ctx.ngDetector.retryTimer);
-    ctx.ngDetector.retryTimer = setTimeout(() => {
-      ctx.ngDetector.retryTimer = null;
+    const detector = ctx.ngDetector;
+    if (!detector?.active) return;
+    if (detector.isStarting || detector.isRecognizing) return;
+    if (detector.retryTimer) clearTimeout(detector.retryTimer);
+    detector.retryTimer = setTimeout(() => {
+      const latestDetector = ctx.ngDetector;
+      if (!latestDetector?.active) return;
+      latestDetector.retryTimer = null;
       startRecognition();
     }, 1500);
   };
 
   const startRecognition = () => {
-    if (!ctx.ngDetector?.active) return;
+    const detector = ctx.ngDetector;
+    if (!detector?.active) return;
     if (document.visibilityState !== "visible") return;
+    if (detector.isStarting || detector.isRecognizing) return;
     try {
+      detector.isStarting = true;
       console.info("[rtc:ng] recognition.start");
       recognition.start();
     } catch (e) {
+      detector.isStarting = false;
       console.warn("[rtc:ng] recognition.start failed", e);
       scheduleRetryStart();
     }
+  };
+
+  recognition.onstart = () => {
+    if (!ctx.ngDetector?.active) return;
+    ctx.ngDetector.isStarting = false;
+    ctx.ngDetector.isRecognizing = true;
   };
 
  //ブラウザの音声認識の結果が返ると、onresultが呼ばれる。そのときイベントオブジェクトが返される。
@@ -88,11 +108,19 @@ export const startWordDetector = (ctx) => {
   };
 
   recognition.onerror = (event) => {
+    if (ctx.ngDetector) {
+      ctx.ngDetector.isStarting = false;
+      ctx.ngDetector.isRecognizing = false;
+    }
     console.warn("[rtc:ng] recognition error", event?.error || event);
     scheduleRetryStart();
   };
 
   recognition.onend = () => {
+    if (ctx.ngDetector) {
+      ctx.ngDetector.isStarting = false;
+      ctx.ngDetector.isRecognizing = false;
+    }
     if (!ctx.ngDetector?.active) return;
     if (document.visibilityState !== "visible") return;
     startRecognition();
@@ -120,6 +148,8 @@ export const stopWordDetector = (ctx) => {
     clearTimeout(detector.retryTimer);
     detector.retryTimer = null;
   }
+  detector.isStarting = false;
+  detector.isRecognizing = false;
 
   try {
     detector.recognition?.stop?.();
