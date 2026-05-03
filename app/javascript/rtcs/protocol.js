@@ -118,6 +118,7 @@ export const handleReceived = (ctx, data) => {
       break;
     }
 
+    // 相手から自分宛に届いたICE候補をctxに保管(remoteDescription次第)
     case "ice": {
       if (!acceptIfToMe(ctx, data)) return;
 
@@ -138,7 +139,7 @@ export const handleReceived = (ctx, data) => {
       if (!entry.pc.remoteDescription) {
         const arr = ctx.pendingIce.get(fromUserId) || [];
         arr.push(c);
-        ctx.pendingIce.set(fromUserId, arr);
+        ctx.pendingIce.set(fromUserId, arr); //userIDとICE候補を保管。
         return;
       }
 

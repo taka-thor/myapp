@@ -43,7 +43,7 @@ export const flushPendingIce = async (ctx, peerUserId) => {
   }
 };
 
-//　参加したユーザー1人分のctxなど(for文で人数分処理を実行)
+//　　新規ユーザーが既存参加者に対してコネクションを張る(for文で人数分処理を実行)
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
@@ -56,7 +56,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     }
 
   //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
-  pc.onicecandidate = (e) => { //ICE候補が見つかったら()呼ぶイベントハンドラを自分と参加者１人とのRTCオブジェクトへ設置
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ぶメソッド。その時のイベントオブジェクトはICE候補。
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,

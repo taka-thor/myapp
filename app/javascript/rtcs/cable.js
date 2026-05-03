@@ -38,7 +38,7 @@ export const connectCable = (ctx) => {
         if (type === "mute_changed") return;
 
 
-        // 初回購読時はfromMeは実行されず、handleReceivedを実行。
+        // signal(data)when "join"などの時は、data(from_user_idなど)はtransmitされないためhandleReceivedを実行。
         const fromMe =
           data.from_user_id != null && //&&は左がfalsyなら右を評価せずに左を返す。 data.from_user_id != nullが１つの評価する式。これがfalseだと全体がfalseになる。
           Number(data.from_user_id) === ctx.myUserId &&

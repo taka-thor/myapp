@@ -14,5 +14,5 @@ export const acceptIfToMe = (ctx, data) => {
     discard(ctx, "to_session_id mismatch", data);
     return false;
   }
-  return true;
+  return true; //期待通りの処理ならtrueを返す
 };
