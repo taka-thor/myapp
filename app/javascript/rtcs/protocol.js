@@ -127,7 +127,7 @@ export const handleReceived = (ctx, data) => {
       if (!fromUserId || !fromSessionId) return;
 
       const known = ctx.knownPeerSessions.get(fromUserId); //knownPeerSessionsは、context.jsで定めたMapオブジェクト
-      if (known && known !== fromSessionId) {
+      if (known && known !== fromSessionId) {              //sessionIDでICE候補、シグナリング情報の一意性を管理
         discard(ctx, "from_session_id mismatch (known)", data);
         return;
       }

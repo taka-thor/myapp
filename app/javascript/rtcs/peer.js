@@ -56,7 +56,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     }
 
   //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
-  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ぶメソッド。その時のイベントオブジェクトはICE候補。
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,
@@ -65,7 +65,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     });
   };
 
-  pc.onconnectionstatechange = () => { // RTCPeerConnectionの状態が変わったら呼ばれるメソッド(failedやdisconnectなど)
+  pc.onconnectionstatechange = () => { // RTCPeerConnectionの状態が変わったら呼ばれるイベントハンドラ(failedやdisconnectなど)
     console.debug("[rtc] connectionState", peerUserId, pc.connectionState);
     if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
       closePeer(ctx, peerUserId);

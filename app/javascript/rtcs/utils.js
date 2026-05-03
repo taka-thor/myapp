@@ -1,6 +1,6 @@
 export const atCapacity = (ctx) => ctx.peers.size >= (ctx.MAX_PEERS - 1);//接続数に余裕があれば、false
 
-export const discard = (_ctx, reason, data) => {
+export const discard = (_ctx, reason, data) => { // _ctxという書き方は、引数として受け取っているけど使わない表現
   console.debug("[rtc] discard:", reason, data);
 };
 
