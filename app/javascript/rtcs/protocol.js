@@ -10,8 +10,8 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //自分だけが保有する各参加者とのRTC接続オブジェクト
 
   try {
-    const offer = await pc.createOffer({ offerToReceiveAudio: true });
-    await pc.setLocalDescription(offer);
+    const offer = await pc.createOffer({ offerToReceiveAudio: true }); //通信条件の提案書作成(音声のみ受け取りたい希望含み)
+    await pc.setLocalDescription(offer);// RTCオブジェクトに通信条件を乗せる
 
     send(ctx, "offer", {
       to_user_id: peerUserId,
@@ -30,7 +30,7 @@ export const answerTo = async (ctx, peerUserId, peerSessionId, remoteDesc) => {
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
 
   try {
-    await pc.setRemoteDescription(remoteDesc);
+    await pc.setRemoteDescription(remoteDesc);//相手(offer)からのSDPをRTCオブジェクトにのせる
     await flushPendingIce(ctx, peerUserId);
 
     const answer = await pc.createAnswer();
@@ -91,6 +91,7 @@ export const handleReceived = (ctx, data) => {
         ctx.knownPeerSessions.set(fromUserId, fromSessionId);
       }
 
+      // offerに対してのanswer (offerのSDPをRTCセッション記述オブジェクトに変換)
       answerTo(ctx, fromUserId, fromSessionId, new RTCSessionDescription(data.sdp));
       break;
     }
