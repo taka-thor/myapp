@@ -47,7 +47,7 @@ class RtcChannel < ApplicationCable::Channel
       normalized = NgWord.word_filter(transcript)
       Rails.logger.info("[rtc:ng] detected from_user_id=#{current_user.id} room_id=#{@room_id} normalized='#{normalized}'")
       if normalized.present?
-        validation_room = Room.new(speaking: normalized)
+        validation_room = Room.new(speaking: transcript)
         validation_room.validate
 
         if validation_room.errors.added?(:speaking, :ng_word)
