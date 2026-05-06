@@ -1,7 +1,7 @@
 class Room < ApplicationRecord
   after_commit -> { AutoTopics::BroadcastTopic.call(room_id: id) }, if: :saved_change_to_topic?
 
-  # RTC用
+  # RTC用　バリデーションに必要な引数で属性が含まれるため
   attr_accessor :speaking
 
   has_many :room_participants
