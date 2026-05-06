@@ -9,6 +9,14 @@ RSpec.describe NgWordValidator, type: :model do
       attr_accessor :text
       validates :text, ng_word: true
     end)
+
+    stub_const("DummyContextualNgRecord", Class.new do
+      include ActiveModel::Model
+      include ActiveModel::Validations
+
+      attr_accessor :text
+      validates :text, ng_word: { contextual: true }
+    end)
   end
 
   it "adds ng_word error when NgWord.ng? returns true" do
@@ -29,5 +37,13 @@ RSpec.describe NgWordValidator, type: :model do
 
     record = DummyNgRecord.new(text: "セーフ")
     expect(record).to be_valid
+  end
+
+  it "uses contextual judgment when requested" do
+    allow(NgWord).to receive(:conversation_ng?).with("口座番号を教えてください").and_return(true)
+
+    record = DummyContextualNgRecord.new(text: "口座番号を教えてください")
+    expect(record).to be_invalid
+    expect(record.errors.added?(:text, :ng_word)).to be(true)
   end
 end

@@ -4,6 +4,7 @@ RSpec.describe Room, type: :model do
   describe "validations" do
     it "is valid with normal topic and speaking" do
       allow(NgWord).to receive(:ng?).and_return(false)
+      allow(NgWord).to receive(:conversation_ng?).and_return(false)
 
       room = described_class.new(topic: "雑談しよう", speaking: "こんにちは")
       expect(room).to be_valid
@@ -11,6 +12,7 @@ RSpec.describe Room, type: :model do
 
     it "is invalid when topic is blank" do
       allow(NgWord).to receive(:ng?).and_return(false)
+      allow(NgWord).to receive(:conversation_ng?).and_return(false)
 
       room = described_class.new(topic: "", speaking: "")
       expect(room).to be_invalid
@@ -19,6 +21,7 @@ RSpec.describe Room, type: :model do
 
     it "is invalid when topic is longer than 12 chars" do
       allow(NgWord).to receive(:ng?).and_return(false)
+      allow(NgWord).to receive(:conversation_ng?).and_return(false)
 
       room = described_class.new(topic: "あいうえおかきくけこさしす")
       expect(room).to be_invalid
@@ -34,7 +37,8 @@ RSpec.describe Room, type: :model do
     end
 
     it "adds ng_word error on speaking when speaking includes ng word" do
-      allow(NgWord).to receive(:ng?) { |value| value == "危険" }
+      allow(NgWord).to receive(:ng?).and_return(false)
+      allow(NgWord).to receive(:conversation_ng?) { |value| value == "危険" }
 
       room = described_class.new(topic: "正常", speaking: "危険")
       expect(room).to be_invalid
