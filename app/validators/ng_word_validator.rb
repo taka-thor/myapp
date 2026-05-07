@@ -4,7 +4,7 @@ class NgWordValidator < ActiveModel::EachValidator
 
     checker = options[:contextual] ? :conversation_ng? : :ng?
 
-    if NgWord.public_send(checker, value) # 会話文だけは文脈込みで判定
+    if NgWord.public_send(checker, value) # NgWordクラスのpablicメソッドを呼ぶ
       record.errors.add(
         attribute, :ng_word
       )
