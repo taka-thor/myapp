@@ -35,4 +35,6 @@ flowchart TD
     ROOM_SHOW -->|"通話に参加"| RTC
     RTC -->|"退出"| ROOMS
     ROOMS -->|"戻る"| HOME
+
+    click TOP "https://github.com/taka-thor/myapp/blob/master/docs/images/top.png" _blank
 ```
