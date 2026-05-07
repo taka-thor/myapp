@@ -37,4 +37,5 @@ flowchart TD
     ROOMS -->|"戻る"| HOME
 
     click TOP "https://github.com/taka-thor/myapp/blob/master/docs/images/top.png" _blank
+    click HOME "https://github.com/taka-thor/myapp/blob/master/docs/images/home.png" _blank
 ```
