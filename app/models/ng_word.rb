@@ -1,5 +1,5 @@
 class NgWord < ApplicationRecord
-  DISCLOSURE_CONTEXT_WINDOW = 12
+  CLAUSE_SPLITTER = /(?<=。)|(?<=！)|(?<=？)|(?<=\n)|(?<=が)|(?<=けど)|(?<=けれど)/.freeze
   AFFIRMATIVE_DISCLOSURE_PATTERNS = [
     /教え(?:て(?:ください)?|てくれ|ろ|なさい|てよ)/,
     /言(?:って(?:ください)?|ってくれ|え|いなさい)/,
@@ -57,15 +57,28 @@ class NgWord < ApplicationRecord
     end
 
     def conversation_ng?(text)
-      filtered_word = word_filter(text)
-      return false if filtered_word.blank?
+      return false if text.blank?
 
-      matched_ng_words(filtered_word).any? do |matched_word|
-        disclosure_request_for?(filtered_word, matched_word)
+      ng_db_words = NgWord.pluck(:word).reject(&:blank?)
+      return false if ng_db_words.empty?
+
+      # 節ごとに分割して検査することで、NGワードと開示要求が同一節内にある場合のみ検知する
+      split_into_clauses(text).any? do |clause|
+        filtered = word_filter(clause)
+        next false if filtered.blank?
+
+        matched = ng_db_words.select { |w| filtered.include?(w) }
+        next false if matched.empty?
+
+        matched.any? { |w| disclosure_request_for?(filtered, w) }
       end
     end
 
     private
+
+    def split_into_clauses(text)
+      text.split(CLAUSE_SPLITTER).map(&:strip).reject(&:blank?)
+    end
 
     def matched_ng_words(filtered_word)
       NgWord.pluck(:word).filter_map do |db_word| # filter_mapメソッドはmapと違い、nilやfalseを中身に含めない
@@ -74,25 +87,9 @@ class NgWord < ApplicationRecord
       end
     end
 
-    def disclosure_request_for?(filtered_word, matched_word)
-      occurrence_segments(filtered_word, matched_word).any? do |segment|
-        next false if negative_disclosure?(segment)
-        affirmative_disclosure?(segment) || direct_disclosure_request?(segment, matched_word)
-      end
-    end
-
-    def occurrence_segments(filtered_word, matched_word)
-      segments = []
-      start_at = 0
-
-      while (index = filtered_word.index(matched_word, start_at))
-        from = [ index - DISCLOSURE_CONTEXT_WINDOW, 0 ].max
-        to = [ index + matched_word.length + DISCLOSURE_CONTEXT_WINDOW, filtered_word.length ].min
-        segments << filtered_word[from...to]
-        start_at = index + matched_word.length
-      end
-
-      segments
+    def disclosure_request_for?(filtered_clause, matched_word)
+      return false if negative_disclosure?(filtered_clause)
+      affirmative_disclosure?(filtered_clause) || direct_disclosure_request?(filtered_clause, matched_word)
     end
 
     def negative_disclosure?(segment)
