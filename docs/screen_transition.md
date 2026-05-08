@@ -41,6 +41,8 @@ flowchart TD
     click NICKNAME "https://github.com/taka-thor/myapp/blob/master/docs/images/nickname.png" _blank
     click ICON "https://github.com/taka-thor/myapp/blob/master/docs/images/icon.png" _blank
     click ROOMS "https://github.com/taka-thor/myapp/blob/master/docs/images/rooms.png" _blank
+    click ROOM_SHOW "https://github.com/taka-thor/myapp/blob/master/docs/images/room_show.png" _blank
+    click RTC "https://github.com/taka-thor/myapp/blob/master/docs/images/room_show.png" _blank
     click USER_EDIT "https://github.com/taka-thor/myapp/blob/master/docs/images/user_edit.png" _blank
     click HOW_TO "https://github.com/taka-thor/myapp/blob/master/docs/images/how_to_talk.png" _blank
     click CONTACT "https://github.com/taka-thor/myapp/blob/master/docs/images/contact.png" _blank
