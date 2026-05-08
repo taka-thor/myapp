@@ -24,6 +24,7 @@ flowchart TD
     ICON -->|"保存失敗"| TOP
 
     HOME -->|"通話部屋を探す"| ROOMS
+    ROOMS ---->|"戻る"| HOME
     HOME --> USER_EDIT
     HOME --> HOW_TO
     HOME --> CONTACT
@@ -32,7 +33,6 @@ flowchart TD
 
     ROOMS -->|"部屋を選択"| ROOM_SHOW
     ROOM_SHOW -->|"退出"| ROOMS
-    ROOMS -.->|"戻る"| HOME
 
     click TOP "https://github.com/taka-thor/myapp/blob/master/docs/images/top.png" _blank
     click HOME "https://github.com/taka-thor/myapp/blob/master/docs/images/home.png" _blank
