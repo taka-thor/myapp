@@ -10,13 +10,18 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //自分だけが保有する各参加者とのRTC接続オブジェクト
 
   try {
+<<<<<<< Updated upstream
     const offer = await pc.createOffer({ offerToReceiveAudio: true }); //通信条件の提案書作成(音声のみ受け取りたい希望含み)
     await pc.setLocalDescription(offer);// RTCオブジェクトに通信条件を乗せる
+=======
+    const offer = await pc.createOffer({ offerToReceiveAudio: true }); //SDPオブジェクト生成
+    await pc.setLocalDescription(offer); //ICE候補の収集開始→onicecandidateが順次発火 RTCPeerConnectionオブジェクトにICEサーバー情報を渡した後にこのメソッドでICE候補を集める
+>>>>>>> Stashed changes
 
     send(ctx, "offer", {
       to_user_id: peerUserId,
       to_session_id: peerSessionId,
-      sdp: pc.localDescription,
+      sdp: offer, //crateOfferで生成
     });
 
     console.debug("[rtc] offer sent ->", peerUserId);
@@ -24,7 +29,7 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
     console.warn("[rtc] offer error ->", peerUserId, e?.message || e);
   }
 };
-
+// type "offer"のsend後、相手ブラウザでanswerToが実行される
 export const answerTo = async (ctx, peerUserId, peerSessionId, remoteDesc) => {
   const entry = ctx.peers.get(peerUserId);
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
@@ -34,7 +39,7 @@ export const answerTo = async (ctx, peerUserId, peerSessionId, remoteDesc) => {
     await flushPendingIce(ctx, peerUserId);
 
     const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+    await pc.setLocalDescription(answer); //既存ユーザも新規ユーザーのICE候補をRTC接続オブジェクトに保管
 
     send(ctx, "answer", {
       to_user_id: peerUserId,
@@ -145,7 +150,7 @@ export const handleReceived = (ctx, data) => {
       }
 
       entry.pc
-        .addIceCandidate(new RTCIceCandidate(c))
+        .addIceCandidate(new RTCIceCandidate(c)) //相手のICE候補をRTCpeerconnectionオブジェクトに登録
         .catch((e) => console.warn("[rtc] addIceCandidate err:", e, c));
       break;
     }
