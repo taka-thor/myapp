@@ -16,7 +16,7 @@ flowchart TD
     PRIVACY["🔒 プライバシーポリシー\n/privacy_policy"]
 
     TOP -->|"「始める」ボタン"| SESSION
-    SESSION -->|"あり（既存ユーザー）"| HOME
+    SESSION ---->|"あり（既存ユーザー）"| HOME
     SESSION -->|"なし（新規ユーザー）"| NICKNAME
     NICKNAME -->|"バリデーションOK"| ICON
     NICKNAME -->|"バリデーションNG"| NICKNAME
