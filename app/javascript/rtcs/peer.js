@@ -56,7 +56,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     }
 
   //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
-  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置。setLocalDescriptionがトリガー
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,
@@ -72,14 +72,14 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     }
   };
 
-  const audioEl = ensureAudioEl(ctx, peerUserId);// 相手音声の受け皿を作成
+  const audioEl = ensureAudioEl(ctx, peerUserId);// 相手音声の受け皿をDOMに作成
 
-  // 相手音声をRTCPeerconnection経由で取得
+  // 相手音声をRTCPeerconnection経由で取得(通話開始)
   pc.ontrack = (e) => {
     const stream = e.streams[0];
     if (!stream) return;
 
-    audioEl.srcObject = stream; //音声再生を試みる
+    audioEl.srcObject = stream; //DOMにある音声の受け皿を使って音声再生を試みる
 
     // 発話リングの調整と開始の処理
     startSpeakingFromStream(ctx, peerUserId, stream, {
