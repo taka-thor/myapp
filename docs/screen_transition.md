@@ -8,8 +8,7 @@ flowchart TD
     ICON["🖼️ アイコン選択\n/user_icons/new"]
     HOME["🏡 ホーム\n/static_pages/home"]
     ROOMS["📋 部屋一覧\n/rooms"]
-    ROOM_SHOW["🚪 部屋詳細\n/rooms/:id"]
-    RTC["🎙️ 通話画面\n/rtcs/:id"]
+    ROOM_SHOW["🚪 部屋詳細 / 通話画面\n/rooms/:id"]
     USER_EDIT["👤 ユーザー情報編集\n/user/edit"]
     HOW_TO["📖 使い方\n/how_to_talk"]
     CONTACT["✉️ お問い合わせ\n/contact"]
@@ -32,8 +31,7 @@ flowchart TD
     HOME --> PRIVACY
 
     ROOMS -->|"部屋を選択"| ROOM_SHOW
-    ROOM_SHOW -->|"通話に参加"| RTC
-    RTC -->|"退出"| ROOMS
+    ROOM_SHOW -->|"退出"| ROOMS
     ROOMS -->|"戻る"| HOME
 
     click TOP "https://github.com/taka-thor/myapp/blob/master/docs/images/top.png" _blank
@@ -42,7 +40,6 @@ flowchart TD
     click ICON "https://github.com/taka-thor/myapp/blob/master/docs/images/icon.png" _blank
     click ROOMS "https://github.com/taka-thor/myapp/blob/master/docs/images/rooms.png" _blank
     click ROOM_SHOW "https://github.com/taka-thor/myapp/blob/master/docs/images/room_show.png" _blank
-    click RTC "https://github.com/taka-thor/myapp/blob/master/docs/images/room_show.png" _blank
     click USER_EDIT "https://github.com/taka-thor/myapp/blob/master/docs/images/user_edit.png" _blank
     click HOW_TO "https://github.com/taka-thor/myapp/blob/master/docs/images/how_to_talk.png" _blank
     click CONTACT "https://github.com/taka-thor/myapp/blob/master/docs/images/contact.png" _blank
