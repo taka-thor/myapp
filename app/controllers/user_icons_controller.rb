@@ -9,20 +9,14 @@ class UserIconsController < ApplicationController
 
   def create
     name = session[:name] # 仮にニックネーム設定後、ブラウザから離脱するとセッションは残るが、ここで再度セッションを上書きするため問題なし
-
+    redirect_to root_path and return if name.blank?
     icon_url = user_params[:icon_url] # user_paramsの素の状態は、ハッシュなので、その中の取得したい値を指定する必要がある。icon_urlの中身がハッシュにならないように。
-
     @user = User.new(name: name, icon_url: icon_url)
 
-    if @user.save
-      reset_session
-      session[:user_info] = @user.id
-
-      redirect_to static_pages_home_path
-    else
-      redirect_to root_path
-
-    end
+    @user.save!
+    reset_session
+    session[:user_info] = @user.id
+    redirect_to static_pages_home_path
   end
 
   private
