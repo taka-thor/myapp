@@ -14,10 +14,10 @@ class UsersController < ApplicationController
     @user.assign_attributes(user_params) # バリデーションエラー時に、入力欄に値を保持させるため
 
     if @user.save(context: :nickname_step)
-      redirect_to edit_user_path, notice: "ユーザー情報を更新しました"
+      redirect_to edit_user_path, notice: "ユーザー情報を更新しました" # flashオブジェクト{"type" => "中身"}を一時的にセッションへ保管。
     else
       @user.restore_attributes([ :name ])
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity, alert: "エンジニアっていいよね"
     end
   end
 

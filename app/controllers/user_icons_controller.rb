@@ -16,7 +16,7 @@ class UserIconsController < ApplicationController
     @user.save!
     reset_session
     session[:user_info] = @user.id
-    redirect_to static_pages_home_path
+    redirect_to static_pages_home_path, notice: "ユーザー登録が完了しました"
   end
 
   private
