@@ -17,7 +17,6 @@ class UserNicknamesController < ApplicationController
       session[:name] = @user.name
       redirect_to new_user_icons_path
     else
-      render :new, status: :unprocessable_entity
     end
   end
 
