@@ -13,10 +13,11 @@ class UserNicknamesController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.valid?(:nickname_step) # ニックネーム設定後の離脱に備えて、アイコン選択も含め２つのユーザー情報が揃って保存する。
+    if @user.valid?(:nickname_step)
       session[:name] = @user.name
       redirect_to new_user_icons_path
     else
+      render :new, status: :unprocessable_entity
     end
   end
 
