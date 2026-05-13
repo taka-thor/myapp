@@ -4,7 +4,7 @@ RSpec.describe "ユーザー登録フロー", type: :system do
   let(:icon_url) { "https://example.com/icon.png" }
 
   before do
-    driven_by :rack_test
+    driven_by :selenium_chrome_headless
     allow(Icons::GetUrlFromS3).to receive(:call).and_return([ icon_url ])
   end
 
@@ -15,8 +15,16 @@ RSpec.describe "ユーザー登録フロー", type: :system do
     click_button "決定"
 
     expect(page).to have_current_path(new_user_icons_path)
+    expect(page).to have_css("[data-controller='user-icon']")
 
-    find('[name="user[icon_url]"]', visible: :all).set(icon_url)
+    # アイコン選択: hidden inputに値をセットしsubmitボタンを表示する
+    # SeleniumとStimulusのクリックイベントの互換性問題を回避するためDOMを直接操作
+    page.execute_script(<<~JS)
+      document.querySelector('[data-user-icon-target="input"]').value = '#{icon_url}';
+      document.querySelector('[data-user-icon-target="submit"]').classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+      document.querySelector('[data-user-icon-target="form"]').classList.remove('pointer-events-none');
+    JS
+
     click_button "決定"
 
     expect(page).to have_text("ユーザー登録が完了しました")

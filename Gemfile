@@ -43,6 +43,7 @@ group :development, :test do
   gem "dotenv-rails"
   gem "rspec-rails", "~> 6.1"
   gem "capybara"
+  gem "selenium-webdriver"
   gem "simplecov", require: false # 　テストで、どのアプリ内コードを使ったかを表示させるgem
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
