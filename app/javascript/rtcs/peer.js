@@ -56,7 +56,7 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     }
 
   //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
-  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置。setLocalDescriptionがトリガー
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,
@@ -72,25 +72,28 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     }
   };
 
-  const audioEl = ensureAudioEl(ctx, peerUserId);
+  const audioEl = ensureAudioEl(ctx, peerUserId);// 相手音声の受け皿をDOMに作成
 
+  // 相手音声をRTCPeerconnection経由で取得(通話開始)
   pc.ontrack = (e) => {
-    const [stream] = e.streams;
+    const stream = e.streams[0];
     if (!stream) return;
 
-    audioEl.srcObject = stream;
+    audioEl.srcObject = stream; //DOMにある音声の受け皿を使って音声再生を試みる
 
+    // 発話リングの調整と開始の処理
     startSpeakingFromStream(ctx, peerUserId, stream, {
-      threshold: 0.02,
+      threshold: 0.02, //音量の閾値
       noiseFloor: 0.0,
-      holdMs: 450,
+      holdMs: 450,// 無音後、どれくらいspeekingringを保持させるか
       debug: true,
     });
 
+    // ブラウザの自動再生ポリシーにより、ブロックされた場合は手動再送するボタンを設置
     const forceTapToPlay = sessionStorage.getItem(FORCE_TAP_TO_PLAY_KEY) === "1";
     if (forceTapToPlay) {
       showTapToPlay(ctx, peerUserId, audioEl);
-      sessionStorage.removeItem(FORCE_TAP_TO_PLAY_KEY);
+      sessionStorage.removeItem(FORCE_TAP_TO_PLAY_KEY); //手動か自動接続の実行をこの変数で判断
       console.debug("[rtc] force tap-to-play after reconnect", { peerUserId });
       return;
     }

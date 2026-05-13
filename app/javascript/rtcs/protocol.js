@@ -6,17 +6,20 @@ import { send } from "./send";
 export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   if (atCapacity(ctx)) return;
 
+  //ここのctxは自分のもの
   const entry = ctx.peers.get(peerUserId);
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //自分だけが保有する各参加者とのRTC接続オブジェクト
 
   try {
-    const offer = await pc.createOffer({ offerToReceiveAudio: true });
+    const offer = await pc.createOffer({ offerToReceiveAudio: true }); //SDPオブジェクト(通信条件の提案書)作成(音声のみ受け取りたい希望など)
     await pc.setLocalDescription(offer);
-
+    //ICE候補の収集開始→onicecandidateが順次発火 RTCPeerConnectionオブジェクトにICEサーバー情報を渡した後にこのメソッドでICE候補を集める
+    //自分のRTCオブジェクトにcreateOfferで生成したSDPオブジェクトを保管し、SDPオブジェクトをoffer
+    //上記2つの役割を持ったメソッド
     send(ctx, "offer", {
       to_user_id: peerUserId,
       to_session_id: peerSessionId,
-      sdp: pc.localDescription,
+      sdp: offer, //crateOfferで生成
     });
 
     console.debug("[rtc] offer sent ->", peerUserId);
@@ -24,17 +27,17 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
     console.warn("[rtc] offer error ->", peerUserId, e?.message || e);
   }
 };
-
+// type "offer"のsend後、相手ブラウザでanswerToが実行される
 export const answerTo = async (ctx, peerUserId, peerSessionId, remoteDesc) => {
   const entry = ctx.peers.get(peerUserId);
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
 
   try {
-    await pc.setRemoteDescription(remoteDesc);
+    await pc.setRemoteDescription(remoteDesc);//新規ユーザーの(offer)からSDPをRTCオブジェクトに変換し保管
     await flushPendingIce(ctx, peerUserId);
 
     const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+    await pc.setLocalDescription(answer); //既存ユーザも新規ユーザーのICE候補をRTC接続オブジェクトに保管
 
     send(ctx, "answer", {
       to_user_id: peerUserId,
@@ -91,6 +94,8 @@ export const handleReceived = (ctx, data) => {
         ctx.knownPeerSessions.set(fromUserId, fromSessionId);
       }
 
+      // offerに対してのanswer (offerのSDPをRTCセッション記述オブジェクトに変換)
+      //既存ユーザーのブラウザで実行
       answerTo(ctx, fromUserId, fromSessionId, new RTCSessionDescription(data.sdp));
       break;
     }
@@ -144,7 +149,7 @@ export const handleReceived = (ctx, data) => {
       }
 
       entry.pc
-        .addIceCandidate(new RTCIceCandidate(c))
+        .addIceCandidate(new RTCIceCandidate(c)) //相手のICE候補をRTCpeerconnectionオブジェクトに登録
         .catch((e) => console.warn("[rtc] addIceCandidate err:", e, c));
       break;
     }

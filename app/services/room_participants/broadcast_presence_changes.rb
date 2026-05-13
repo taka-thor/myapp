@@ -22,9 +22,10 @@ class RoomParticipants::BroadcastPresenceChanges
     )
     Rails.logger.info("[presence:broadcast] sent participants room_id=#{rid}")
 
+  #  デバック用のrescue
   rescue => e
     Rails.logger.error("[presence:broadcast] FAILED room_id=#{rid} #{e.class}: #{e.message}")
-    Rails.logger.error(e.backtrace.take(30).join("\n"))
+    Rails.logger.error(e.backtrace.take(30).join("\n")) # スタックトレース(メソッド呼び出し履歴)を30行履歴に残す
     raise
   end
 end
