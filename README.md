@@ -2,8 +2,6 @@
 
 # 目次
 
-- [『声友』](#声友)
-- [目次](#目次)
 - [サービス概要](#サービス概要)
 - [サービスURL](#サービスurl)
     - [https://app.rails-kt.com](#httpsapprails-ktcom)
