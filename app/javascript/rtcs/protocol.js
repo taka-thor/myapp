@@ -2,20 +2,24 @@ import { atCapacity, acceptIfToMe, discard } from "./utils";
 import { newPeerConnection, flushPendingIce } from "./peer";
 import { send } from "./send";
 
+// makeOfferToで、全参加者１人ずつのuserid、sessionidをfor文で送っている。
 export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
   if (atCapacity(ctx)) return;
 
+  //ここのctxは自分のもの
   const entry = ctx.peers.get(peerUserId);
-  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
+  const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId); //自分だけが保有する各参加者とのRTC接続オブジェクト
 
   try {
-    const offer = await pc.createOffer({ offerToReceiveAudio: true });
+    const offer = await pc.createOffer({ offerToReceiveAudio: true }); //SDPオブジェクト(通信条件の提案書)作成(音声のみ受け取りたい希望など)
     await pc.setLocalDescription(offer);
-
+    //ICE候補の収集開始→onicecandidateが順次発火 RTCPeerConnectionオブジェクトにICEサーバー情報を渡した後にこのメソッドでICE候補を集める
+    //自分のRTCオブジェクトにcreateOfferで生成したSDPオブジェクトを保管し、SDPオブジェクトをoffer
+    //上記2つの役割を持ったメソッド
     send(ctx, "offer", {
       to_user_id: peerUserId,
       to_session_id: peerSessionId,
-      sdp: pc.localDescription,
+      sdp: offer, //crateOfferで生成
     });
 
     console.debug("[rtc] offer sent ->", peerUserId);
@@ -23,17 +27,17 @@ export const makeOfferTo = async (ctx, peerUserId, peerSessionId) => {
     console.warn("[rtc] offer error ->", peerUserId, e?.message || e);
   }
 };
-
+// type "offer"のsend後、相手ブラウザでanswerToが実行される
 export const answerTo = async (ctx, peerUserId, peerSessionId, remoteDesc) => {
   const entry = ctx.peers.get(peerUserId);
   const pc = entry?.pc || newPeerConnection(ctx, peerUserId, peerSessionId);
 
   try {
-    await pc.setRemoteDescription(remoteDesc);
+    await pc.setRemoteDescription(remoteDesc);//新規ユーザーの(offer)からSDPをRTCオブジェクトに変換し保管
     await flushPendingIce(ctx, peerUserId);
 
     const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
+    await pc.setLocalDescription(answer); //既存ユーザも新規ユーザーのICE候補をRTC接続オブジェクトに保管
 
     send(ctx, "answer", {
       to_user_id: peerUserId,
@@ -56,20 +60,20 @@ export const handleReceived = (ctx, data) => {
   switch (type) {
     case "present": {
       if (!acceptIfToMe(ctx, data)) return;
-
-      const list = Array.isArray(data.peers) ? data.peers : [];
+      ///data.peersは自分以外の参加者のuserID,sessionIDを保持
+      const list = Array.isArray(data.peers) ? data.peers : []; //Array.isArrayで配列かどうか調べるメソッド
       console.debug("[rtc] present", list);
 
       for (const p of list) {
-        if (atCapacity(ctx)) break;
-
+        if (atCapacity(ctx)) break;//接続上限に余裕があるかどうかを確認する処理
+        //適切な値を保持しているか確認する処理
         const peerUserId = Number(p.user_id);
         const peerSessionId = String(p.session_id || "");
         if (!peerUserId || !peerSessionId) continue;
         if (peerUserId === ctx.myUserId) continue;
         if (ctx.knownPeerSessions.has(peerUserId)) continue;
 
-        ctx.knownPeerSessions.set(peerUserId, peerSessionId);
+        ctx.knownPeerSessions.set(peerUserId, peerSessionId); //for文の中のctxは、同じオブジェクトのためatCapaciityのsizeが増えていく
         makeOfferTo(ctx, peerUserId, peerSessionId);
       }
       break;
@@ -90,6 +94,8 @@ export const handleReceived = (ctx, data) => {
         ctx.knownPeerSessions.set(fromUserId, fromSessionId);
       }
 
+      // offerに対してのanswer (offerのSDPをRTCセッション記述オブジェクトに変換)
+      //既存ユーザーのブラウザで実行
       answerTo(ctx, fromUserId, fromSessionId, new RTCSessionDescription(data.sdp));
       break;
     }
@@ -117,37 +123,38 @@ export const handleReceived = (ctx, data) => {
       break;
     }
 
+    // 相手から自分宛に届いたICE候補をctxに保管(remoteDescription次第)
     case "ice": {
       if (!acceptIfToMe(ctx, data)) return;
 
-      const fromUserId = Number(data.from_user_id);
+      const fromUserId = Number(data.from_user_id); //data.from_user_idに値がなくても、NaNと処理され落ちない
       const fromSessionId = String(data.from_session_id || "");
       if (!fromUserId || !fromSessionId) return;
 
-      const known = ctx.knownPeerSessions.get(fromUserId);
-      if (known && known !== fromSessionId) {
+      const known = ctx.knownPeerSessions.get(fromUserId); //knownPeerSessionsは、context.jsで定めたMapオブジェクト
+      if (known && known !== fromSessionId) {              //sessionIDでICE候補、シグナリング情報の一意性を管理
         discard(ctx, "from_session_id mismatch (known)", data);
         return;
       }
 
       const entry = ctx.peers.get(fromUserId);
-      const c = data.candidate;
+      const c = data.candidate; //peer.jsのonicecandidateでブロードキャストされたもの
       if (!entry || !c || !c.candidate) return;
 
       if (!entry.pc.remoteDescription) {
         const arr = ctx.pendingIce.get(fromUserId) || [];
         arr.push(c);
-        ctx.pendingIce.set(fromUserId, arr);
+        ctx.pendingIce.set(fromUserId, arr); //userIDとICE候補を保管。
         return;
       }
 
       entry.pc
-        .addIceCandidate(new RTCIceCandidate(c))
+        .addIceCandidate(new RTCIceCandidate(c)) //相手のICE候補をRTCpeerconnectionオブジェクトに登録
         .catch((e) => console.warn("[rtc] addIceCandidate err:", e, c));
       break;
     }
 
-    default:
+    default: //どのcaseにも該当しないときの処理
       break;
   }
 };

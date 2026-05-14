@@ -1,6 +1,6 @@
 <div id="flash">
-  <% messages = local_assigns[:flash_messages] || flash %>
-  <% messages.each do |message_type, message| %>
+  <% messages = local_assigns[:flash_messages] || flash %> <!--renderなどでメモリ上にあるデータを参照するために任意のローカル変数の中にキーを入れその中身を使う-->
+  <% messages.each do |message_type, message| %>          <!--flashはRailsのヘルパーメソッドで、typeと中身が対になったハッシュ-->
     <% next if message.blank? %>
 
     <% classes =

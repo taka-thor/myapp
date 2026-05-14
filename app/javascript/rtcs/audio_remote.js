@@ -1,14 +1,15 @@
+// 相手ごとの音声の受け皿を作る(受け取った音を再生するスピーカー)
 export const ensureAudioEl = (ctx, peerUserId) => {
   const audioId = `rtc-audio-${ctx.roomId}-${peerUserId}`;
   let el = document.getElementById(audioId);
 
   if (!el) {
-    el = document.createElement("audio");
+    el = document.createElement("audio"); //HTMLAudioElementを作成
     el.id = audioId;
-    el.autoplay = true;
+    el.autoplay = true;//(音声を受け取ると自動再生)
     el.playsInline = true;
     el.muted = false;
-    document.body.appendChild(el);
+    document.body.appendChild(el); //<body>の最後に追加
   }
 
   return el;

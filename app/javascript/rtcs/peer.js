@@ -43,18 +43,20 @@ export const flushPendingIce = async (ctx, peerUserId) => {
   }
 };
 
+//　　新規ユーザーが既存参加者に対してコネクションを張る(for文で人数分処理を実行)
 export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
   const pc = new RTCPeerConnection({ iceServers: ctx.ICE_SERVERS });
 
-  if (ctx.localStream) {
-    for (const track of ctx.localStream.getAudioTracks()) {
-      pc.addTrack(track, ctx.localStream);
+  const track = ctx.localStream?.getAudioTracks()[0]; //cable.jsでlocalstreamの有無を確認し、ある場合とない場合のどちらにもここで対応するために再度、localstreamを確認
+    if (track) {
+      pc.addTrack(track, ctx.localStream); //自分の音声トラックをWebRTCに渡している。
     }
-  } else {
-    pc.addTransceiver("audio", { direction: "recvonly" });
-  }
+      else {
+        pc.addTransceiver("audio", { direction: "recvonly" }); //ブラウザやユーザー自身のマイク拒否などで、localStreamが取得できなくても相手の音声だけを受信できる枠を作る。
+    }
 
-  pc.onicecandidate = (e) => {
+  //ICE候補をRTC接続オブジェクトに入れて、ブロードキャスト
+  pc.onicecandidate = (e) => { //ICE候補が見つかったら呼ばれるイベントハンドラ。その時のイベントオブジェクトはICE候補。これをpcに設置。setLocalDescriptionがトリガー
     if (!e.candidate) return;
     send(ctx, "ice", {
       to_user_id: peerUserId,
@@ -63,32 +65,35 @@ export const newPeerConnection = (ctx, peerUserId, peerSessionIdForTo) => {
     });
   };
 
-  pc.onconnectionstatechange = () => {
+  pc.onconnectionstatechange = () => { // RTCPeerConnectionの状態が変わったら呼ばれるイベントハンドラ(failedやdisconnectなど)
     console.debug("[rtc] connectionState", peerUserId, pc.connectionState);
     if (["failed", "disconnected", "closed"].includes(pc.connectionState)) {
       closePeer(ctx, peerUserId);
     }
   };
 
-  const audioEl = ensureAudioEl(ctx, peerUserId);
+  const audioEl = ensureAudioEl(ctx, peerUserId);// 相手音声の受け皿をDOMに作成
 
+  // 相手音声をRTCPeerconnection経由で取得(通話開始)
   pc.ontrack = (e) => {
-    const [stream] = e.streams;
+    const stream = e.streams[0];
     if (!stream) return;
 
-    audioEl.srcObject = stream;
+    audioEl.srcObject = stream; //DOMにある音声の受け皿を使って音声再生を試みる
 
+    // 発話リングの調整と開始の処理
     startSpeakingFromStream(ctx, peerUserId, stream, {
-      threshold: 0.02,
+      threshold: 0.02, //音量の閾値
       noiseFloor: 0.0,
-      holdMs: 450,
+      holdMs: 450,// 無音後、どれくらいspeekingringを保持させるか
       debug: true,
     });
 
+    // ブラウザの自動再生ポリシーにより、ブロックされた場合は手動再送するボタンを設置
     const forceTapToPlay = sessionStorage.getItem(FORCE_TAP_TO_PLAY_KEY) === "1";
     if (forceTapToPlay) {
       showTapToPlay(ctx, peerUserId, audioEl);
-      sessionStorage.removeItem(FORCE_TAP_TO_PLAY_KEY);
+      sessionStorage.removeItem(FORCE_TAP_TO_PLAY_KEY); //手動か自動接続の実行をこの変数で判断
       console.debug("[rtc] force tap-to-play after reconnect", { peerUserId });
       return;
     }

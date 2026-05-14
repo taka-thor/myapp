@@ -7,46 +7,45 @@ import { send } from "./send";
 // subscriptionオブジェクトを作成しctx.subに代入する部分
 // typeはjoin,mute_changed,leaveなど
 export const connectCable = (ctx) => {
-  if (ctx.sub) return;
+  if (ctx.sub) return;//一度購読していれば、ctx.subはtruthyとなりreturn.
 //ctx.subでサブスクリプションオブジェクトとして、色々な標準メソッドが使える。
   ctx.sub = consumer.subscriptions.create(
     { channel: "RtcChannel", room: ctx.roomId },
     {
-      async connected() { //接続が確立したら自動で呼ぶconnectedメソッド
+      async connected() { //connectedは、subscription接続が確立したら自動で呼ぶconnectedメソッド
         console.debug("[rtc] AC connected", {
           roomId: ctx.roomId,
           myUserId: ctx.myUserId,
-          mySessionId: ctx.mySessionId,
+          mySessionIfd: ctx.mySessionId,
         });
         try {
-          await prepareLocalAudio(ctx);
+          await prepareLocalAudio(ctx);//await:処理が完了するまで次の処理に進まない。ユーザーの音声ストリームを取得する処理
         } catch (e) {
           console.warn("[rtc] getUserMedia failed:", e);
         }
 
         send(ctx, "join", {});
-        if (ctx.pendingMuteBroadcast) {
-          send(ctx, "mute_changed", { muted: ctx.isMuted });
-          ctx.pendingMuteBroadcast = false;
-        }
       },
 
       disconnected() {
         console.debug("[rtc] AC disconnected");
       },
-      // サーバー側からのデータを受け取るとき、つまりブロードキャストの時
+      // サーバー側からのデータを受け取るとき。つまりdef signalなどの時
       received(data) {
-        const type = data?.type; //data?は、もしdataに値がなくてもエラーにならない
+        const type = data?.type; //data?.は、もしdataやtypeに値がなくてもエラーにならない
         if (!type) return;
 
         if (type === "mute_changed") return;
 
+
+        // signal(data)when "join"などの時は、data(from_user_idなど)はtransmitされないためhandleReceivedを実行。
         const fromMe =
           data.from_user_id != null && //&&は左がfalsyなら右を評価せずに左を返す。 data.from_user_id != nullが１つの評価する式。これがfalseだと全体がfalseになる。
           Number(data.from_user_id) === ctx.myUserId &&
           String(data.from_session_id || "") === ctx.mySessionId;
         if (fromMe) return;
 
+        //lifecycle.jsのsendメソッド
         if (type === "leave") {
           const fromUserId = Number(data.from_user_id);
           if (!fromUserId) return;

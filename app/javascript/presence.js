@@ -24,7 +24,7 @@ function post(url) {
     method: "POST",
     headers: {
       "X-CSRF-Token": csrfToken(),
-      Accept: "application/json",
+      Accept: "application/json", // 受け取りもjson(HTMLを使った再描画も不要で、簡単なデータのやり取りのみであるため)
     },
     credentials: "same-origin",
   });

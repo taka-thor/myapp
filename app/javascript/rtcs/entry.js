@@ -2,7 +2,7 @@ import { createRtcContext } from "./context";
 import { bindLifecycle } from "./lifecycle";
 import { connectCable } from "./cable";
 import { bindMuteControls } from "./mute_control";
-import { startLocalNgDetector } from "./local_ng_detector";
+import { startWordDetector } from "./word_detector";
 
 const LISTENER_KEY = "__rtc_entry_listener_installed__";
 
@@ -14,9 +14,9 @@ export const bootRtc = () => {
   if (!ctx) return;
 
   bindLifecycle(ctx);//bootRtc実行時にpagehideをトリガーとするイベントリスナーを設置する処理
-  bindMuteControls(ctx);
+  bindMuteControls(ctx);// ミュートボタンUIに関する処理
   connectCable(ctx);
-  startLocalNgDetector(ctx);
+  startWordDetector(ctx);
 };
 
 //turboload用のロジック(2回目以降の表示))

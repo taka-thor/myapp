@@ -9,7 +9,6 @@
   data-room-id="<%= @room.id %>"
   data-user-id="<%= @current_user.id %>"
   data-session-id="<%= @room_participant.session_id %>"
-  data-ng-words="<%= json_escape(@ng_words.to_json) %>"
   data-presence-ping-url="<%= ping_room_presence_path(@room) %>"
   data-presence-leave-url="<%= leave_room_presence_path(@room) %>"
 ></div>
@@ -29,7 +28,7 @@
                     text-center font-bold
                     shadow-sm hover:shadow-md transition" do %>
         <span class="inline-flex w-full items-center justify-center gap-2">
-          <span aria-hidden="true" class="leading-none">←</span>
+          <span class="leading-none">←</span>
           <span class="leading-none">退出</span>
         </span>
       <% end %>

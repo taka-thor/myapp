@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
+/* 無音時 */
 .rtc-avatar-ring {
   box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.6);
 }
 
+/* 発話時 */
 .rtc-avatar-ring.rtc-speaking {
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
 }
+/* 先頭につく . は、cssセレクター*/
+/* ビューで、class="rtc-avatar-ring"を書くとcssが適応される */
+/* cssセレクター.classList.toggleで、クラスの付け外しにより異なるcssを柔軟に付けられる */

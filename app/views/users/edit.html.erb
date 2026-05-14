@@ -11,7 +11,7 @@
       <div class="flex flex-col items-center gap-3">
         <% if @user.icon_url.present? %>
           <div class="w-24 h-24 rounded-full overflow-hidden bg-white shadow flex items-center justify-center">
-            <%= image_tag @user.icon_url, alt: "現在のアイコン", class: "w-[85%] h-[85%] object-contain" %>
+            <%= image_tag @user.icon_url, class: "w-[85%] h-[85%] object-contain" %>
           </div>
         <% else %>
           <div class="w-24 h-24 rounded-full bg-slate-200"></div>
@@ -32,10 +32,10 @@
           <div class="grid grid-cols-4 gap-3">
             <% Array(@icons).each do |icon| %>
               <label class="cursor-pointer block">
-                <%= f.radio_button :icon_url, icon, class: "sr-only peer" %>
+                <%= f.radio_button :icon_url, icon, class: "peer" %>
                 <div class="rounded-full p-1 ring-2 ring-transparent peer-checked:ring-sky-400 transition">
                   <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center">
-                    <%= image_tag icon, alt: "アイコン", class: "w-[85%] h-[85%] object-contain" %>
+                    <%= image_tag icon, class: "w-[85%] h-[85%] object-contain" %>
                   </div>
                 </div>
               </label>
