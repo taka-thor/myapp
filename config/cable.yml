@@ -4,9 +4,7 @@ development:
   channel_prefix: koetomo_development
 
 test:
-  adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") %>
-  channel_prefix: koetomo_test
+  adapter: async
 
 production:
   adapter: redis
