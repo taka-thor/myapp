@@ -82,7 +82,11 @@ NG ワード検知・注意喚起
 
 会話中は Web Speech API を使った音声のテキスト化と NG ワード判定を組み合わせ、
 不適切な表現や個人情報に関わる会話への注意喚起を表示できるようにしています。
+<<<<<<< Updated upstream
 安心して参加しやすい通話空間づくりを支える機能です。(NGワードは順次追加)
+=======
+安心して参加しやすい通話空間づくりを支える機能です。
+>>>>>>> Stashed changes
 
 # 技術構成について
 
@@ -104,7 +108,7 @@ NG ワード検知・注意喚起
 
 ## ER図
 
-[https://app.diagrams.net/#G1dRuVsenafISYRi8ysW3P0VrHD6K1GAiR#%7B%22pageId%22%3A%22lGxgucOKedk6m3YhQ0gJ%22%7D](https://app.diagrams.net/#G1dRuVsenafISYRi8ysW3P0VrHD6K1GAiR#%7B%22pageId%22%3A%22lGxgucOKedk6m3YhQ0gJ%22%7D)
+![alt text](ER図.png)
 
 ## 画面遷移図
 
