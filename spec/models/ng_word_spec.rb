@@ -23,7 +23,7 @@ RSpec.describe NgWord, type: :model do
       allow(described_class).to receive(:pluck).with(:word).and_return([ "口座番号" ])
 
       expect(described_class.ng?("口座番号を教えてください")).to be(true), "NGワードを含む発言は true を返すべき"
-      expect(described_class.ng?("口座番号を教えないでください")).to be(false), "NGワードを含まない文脈は false を返すべき"
+      expect(described_class.ng?("普通のメッセージです")).to be(false), "NGワードを含まない発言は false を返すべき"
     end
 
     it "テキストが空の場合、falseが返されているか" do

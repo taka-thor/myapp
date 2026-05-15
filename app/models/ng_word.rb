@@ -20,12 +20,20 @@ class NgWord < ApplicationRecord
   ].freeze
 
   before_validation :normalize_word
+  after_save    :invalidate_ng_word_cache
+  after_destroy :invalidate_ng_word_cache
 
   validates :word, presence: true, uniqueness: true # before_validationで正規化されたself.wordが:wordに該当する
   validates :word, format: { with: /\A[a-zぁ-ん\p{Han}]+\z/ }
 
   # このネスト内のメソッド全てをクラスメソッドとして扱うよってこと。self.⚪︎⚪︎って書かなくてOK
   class << self
+    def cached_words
+      Rails.cache.fetch("ng_words", expires_in: 1.hour) do
+        pluck(:word).reject(&:blank?)
+      end
+    end
+
     def word_filter(text)
       return "" if text.blank?
 
@@ -61,7 +69,7 @@ class NgWord < ApplicationRecord
     def conversation_ng?(text)
       return false if text.blank?
 
-      ng_db_words = NgWord.pluck(:word).reject(&:blank?)
+      ng_db_words = cached_words
       return false if ng_db_words.empty?
 
       # 節ごとに分割して検査することで、NGワードと開示要求が同一節内にある場合のみ検知する
@@ -83,7 +91,7 @@ class NgWord < ApplicationRecord
     end
 
     def matched_ng_words(filtered_word)
-      NgWord.pluck(:word).filter_map do |db_word| # filter_mapメソッドはmapと違い、nilやfalseを中身に含めない
+      cached_words.filter_map do |db_word| # filter_mapメソッドはmapと違い、nilやfalseを中身に含めない
         next if db_word.blank? # blankあればtrueで次の配列の中身を査定
         db_word if filtered_word.include?(db_word)
       end
@@ -112,5 +120,9 @@ class NgWord < ApplicationRecord
   # create用
   def normalize_word
     self.word = NgWord.word_filter(word)
+  end
+
+  def invalidate_ng_word_cache
+    Rails.cache.delete("ng_words")
   end
 end
