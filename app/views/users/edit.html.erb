@@ -32,7 +32,7 @@
           <div class="grid grid-cols-4 gap-3">
             <% Array(@icons).each do |icon| %>
               <label class="cursor-pointer block">
-                <%= f.radio_button :icon_url, icon, class: "peer" %>
+                <%= f.radio_button :icon_url, icon, class: "peer hidden" %>
                 <div class="rounded-full p-1 ring-2 ring-transparent peer-checked:ring-sky-400 transition">
                   <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center">
                     <%= image_tag icon, class: "w-[85%] h-[85%] object-contain" %>
