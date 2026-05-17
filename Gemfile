@@ -36,12 +36,18 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", "~> 1.18", require: false
 
+group :test do
+  gem "rack_session_access"
+end
+
 group :development, :test do
   gem "pry-rails"
   gem "pry-byebug"
   gem "byebug"
   gem "dotenv-rails"
   gem "rspec-rails", "~> 6.1"
+  gem "capybara"
+  gem "selenium-webdriver"
   gem "simplecov", require: false # 　テストで、どのアプリ内コードを使ったかを表示させるgem
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false

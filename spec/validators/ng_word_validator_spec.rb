@@ -19,7 +19,7 @@ RSpec.describe NgWordValidator, type: :model do
     end)
   end
 
-  it "adds ng_word error when NgWord.ng? returns true" do
+  it "NgWord.ng?がtrueを返すとng_wordエラーが追加される" do
     allow(NgWord).to receive(:ng?).with("危険ワード").and_return(true)
 
     record = DummyNgRecord.new(text: "危険ワード")
@@ -27,19 +27,19 @@ RSpec.describe NgWordValidator, type: :model do
     expect(record.errors.added?(:text, :ng_word)).to be(true)
   end
 
-  it "does not add error when value is blank" do
+  it "値が空の場合はエラーを追加しない" do
     record = DummyNgRecord.new(text: "")
     expect(record).to be_valid
   end
 
-  it "does not add ng_word error when NgWord.ng? returns false" do
+  it "NgWord.ng?がfalseを返すとng_wordエラーは追加されない" do
     allow(NgWord).to receive(:ng?).with("セーフ").and_return(false)
 
     record = DummyNgRecord.new(text: "セーフ")
     expect(record).to be_valid
   end
 
-  it "uses contextual judgment when requested" do
+  it "contextualオプションが指定された場合はconversation_ng?で判定する" do
     allow(NgWord).to receive(:conversation_ng?).with("口座番号を教えてください").and_return(true)
 
     record = DummyContextualNgRecord.new(text: "口座番号を教えてください")
