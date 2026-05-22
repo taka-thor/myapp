@@ -44,26 +44,23 @@ class RtcChannel < ApplicationCable::Channel
       })
     when "ng_word_detected"
       transcript = String(data["transcript"] || "")
-      normalized = NgWord.word_filter(transcript)
-      Rails.logger.info("[rtc:ng] detected from_user_id=#{current_user.id} room_id=#{@room_id} normalized='#{normalized}'")
-      if normalized.present?
-        validation_room = Room.new(speaking: transcript)
-        validation_room.validate
+      Rails.logger.info("[rtc:ng] detected from_user_id=#{current_user.id} room_id=#{@room_id} transcript='#{transcript}'")
+      validation_room = Room.new(speaking: transcript)
+      validation_room.validate
 
-        if validation_room.errors.added?(:speaking, :ng_word)
-          ng_message = validation_room.errors.full_message(
-            :speaking,
-            validation_room.errors.generate_message(:speaking, :ng_word)
-          )
+      if validation_room.errors.added?(:speaking, :ng_word)
+        ng_message = validation_room.errors.full_message(
+          :speaking,
+          validation_room.errors.generate_message(:speaking, :ng_word)
+        )
 
-          Rooms::BroadcastFlash.call(
-            room: Room.find(@room_id),
-            flash_messages: { alert: ng_message }
-          )
-          Rails.logger.info("[rtc:ng] broadcasted alert room_id=#{@room_id} message='#{ng_message}'")
-        else
-          Rails.logger.info("[rtc:ng] no_match room_id=#{@room_id}")
-        end
+        Rooms::BroadcastFlash.call(
+          room: Room.find(@room_id),
+          flash_messages: { alert: ng_message }
+        )
+        Rails.logger.info("[rtc:ng] broadcasted alert room_id=#{@room_id} message='#{ng_message}'")
+      else
+        Rails.logger.info("[rtc:ng] no_match room_id=#{@room_id}")
       end
     else
       ActionCable.server.broadcast(signaling_info, data) # data["type"]が上記のwhenに該当しなければ、ここでブロードキャスト。主にシグナリング情報が入る。
