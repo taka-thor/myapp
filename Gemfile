@@ -14,7 +14,7 @@ gem "pg", "~> 1.6"
 gem "psych", "< 5.3"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.4"
+gem "puma", "~> 8.0"
 
 gem "rails-i18n", "~> 7.0"
 
