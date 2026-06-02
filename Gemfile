@@ -11,7 +11,7 @@ gem "sprockets-rails", "~> 3.5"
 gem "pg", "~> 1.6"
 
 # YAML形式rubyで読み書きできるgem
-gem "psych", "< 5.3"
+gem "psych", "< 5.5"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.4"
