@@ -23,7 +23,7 @@ gem "mini_magick", "~> 4.13"
 
 # Frontend
 gem "jsbundling-rails", "~> 1.3"
-gem "tailwindcss-rails", "~> 4.4"
+gem "tailwindcss-rails", "~> 4.5"
 
 gem "rqrcode", "~> 2.2"
 
