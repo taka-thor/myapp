@@ -55,7 +55,7 @@ RSpec.describe RtcChannel, type: :channel do
 
         perform :signal, { "type" => "mute_changed", "muted" => true, "from_session_id" => "sess-1" }
 
-        expect(participant.reload.muted).to be(true)
+        expect(participant.reload.muted).to be(true) # performでメモリ上のオブジェクトを使って、updateを実行→DBに対して書き込み。メモリ上のオブジェクトよりDBの方が最新のためreload。muted :trueを期待するもの
       end
 
       it "BroadcastPresenceChanges が呼ばれる" do
