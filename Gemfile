@@ -19,7 +19,7 @@ gem "puma", "~> 6.4"
 gem "rails-i18n", "~> 7.0"
 
 # Image processing
-gem "mini_magick", "~> 4.13"
+gem "mini_magick", "~> 5.3"
 
 # Frontend
 gem "jsbundling-rails", "~> 1.3"
