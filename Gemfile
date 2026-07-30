@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.1.3"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails", "~> 3.5"
@@ -16,7 +16,7 @@ gem "psych", "< 5.3"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.4"
 
-gem "rails-i18n", "~> 7.0"
+gem "rails-i18n", "~> 8.1"
 
 # Image processing
 gem "mini_magick", "~> 4.13"
